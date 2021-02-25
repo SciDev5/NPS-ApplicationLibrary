@@ -1,3 +1,13 @@
-var express = require("express");
+const express = require("express");
+const app = express();
 
-console.log("hello world");
+app.set("view engine", "pug");
+app.use(express.static(__dirname+"/public/"));
+
+app.get("/",(req,res)=>{
+    res.render("index");
+})
+
+app.listen(process.env.PORT,()=>{
+    console.log(`SERVER LISTENING: [port ${process.env.PORT}]`);
+});

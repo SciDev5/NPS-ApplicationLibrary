@@ -1,0 +1,11 @@
+#apps-container {
+    padding: 5px;
+    background: #454545;
+}
+#app + #app {
+    margin-top: 5px;
+}
+#app {
+    padding: 5px;
+    background: #888888;
+}

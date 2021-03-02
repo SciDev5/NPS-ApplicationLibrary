@@ -1,6 +1,6 @@
 const APPROVAL_STATUSES = ["UNK","NOT_APPROVED","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORMED","PILOT","INSTRUCTOR_ONLY","PENDING","DENIED"];
 const PRIVACY_STATUSES = ["UNK","COMPLIENT","NONCOMPLIENT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
-const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB"]
+const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
 
 class Application {
     constructor(/** @type {{id?:number,name:string,tags:number[],platforms:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
@@ -8,10 +8,14 @@ class Application {
         this.id = id;
         this.name = name || "unnamed";
         this.url = url || "";
-        this.platforms = platforms
+        this.platforms = platforms || [];
         this.tags = tags || [];
         this.approvalStatus = approvalStatus || APPROVAL_STATUSES[0];
         this.privacyStatus = privacyStatus || APPROVAL_STATUSES[0];
+    }
+    static parse(/** @type {{id:number,name:string,tags:string,platforms:string,url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
+        var {id,name,tags,platforms,url,approvalStatus,privacyStatus} = obj;
+        return new Application({id,url,name,tags:tags.split(",").map(v=>parseInt(v)).filter(v=>v),platforms:platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v),approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]})
     }
 
     addTag(tagId) {
@@ -52,9 +56,27 @@ class Application {
     }
 
     toJSON() {
-        return {name:this.name,url:this.url,tags:this.tags,approvalStatus:this.approvalStatus,privacyStatus:this.privacyStatus};
+        return {
+            name: this.name,
+            url: this.url,
+            tags: this.tags.join(),
+            approvalStatus: APPROVAL_STATUSES.indexOf(this.approvalStatus),
+            privacyStatus: PRIVACY_STATUSES.indexOf(this.privacyStatus),
+            platforms: this.platforms.map(v=>PLATFORMS.indexOf(v)).filter(v=>v>=0).join()
+        };
+    }
+
+    toString() {
+        return JSON.stringify({
+            name: this.name,
+            url: this.url,
+            tags: this.tags,
+            approvalStatus: this.approvalStatus,
+            privacyStatus: this.privacyStatus,
+            platforms: this.platforms
+        });
     }
 }
 
 
-export { Application, APPROVAL_STATUSES, PRIVACY_STATUSES };
+export { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS };

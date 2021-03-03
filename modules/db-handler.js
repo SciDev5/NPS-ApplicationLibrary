@@ -1,9 +1,10 @@
 import { deepFreeze } from "./utils.js";
-import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, Application } from "./application.js";
+import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, Application } from "../public/application.js";
 import sqlite3 from "sqlite3";
 const sqlite = sqlite3.verbose();
 const db = new sqlite.Database(":memory:");
 
+var allAppsCache = undefined;
 
 const APP_TABLE = {
     NAME:"applications",
@@ -28,6 +29,7 @@ deepFreeze([APP_TABLE,TAG_TABLE]);
 
 
 function asyncCMD(cmd,query,params) {
+    if (/^(UPDATE|INSERT)/i.test(query)) allAppsCache = undefined;
     return new Promise((res,rej)=>{
         db[cmd](query,params,(err,data)=>{
             if (err) rej(err);
@@ -50,7 +52,7 @@ function tableColsStr(cols) {
     return `(${slst.join(", ")})`;
 }
 
-function getAppValidKVPairs(app) {
+function getAppValidKVPairs(/**@type {Application}*/app) {
     var keys = [], values = [], appjson = app.toJSON(); const allowedKeys = ["name","url","tags","approvalStatus","privacyStatus","platforms"];
     for (var key in appjson) if (allowedKeys.includes(key)) {
         keys.push(key);
@@ -58,7 +60,7 @@ function getAppValidKVPairs(app) {
     }
     return {keys,values};
 }
-async function updtApp(appId,app) {
+async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
     return await asyncCMD("run","UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
 }
@@ -70,7 +72,7 @@ async function getApp(appId) {
     return new Application(await asyncCMD("get","SELECT * FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]));
 }
 async function searchApps(searchQuery) {
-    var {name,tags,platforms,approvalStatuses,privacyStatuses} = searchQuery;
+    var {name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = searchQuery;
     var queryParams = [];
     var query = "SELECT * FROM "+APP_TABLE.NAME;
     var append = (qstr,qprm)=>{
@@ -79,29 +81,33 @@ async function searchApps(searchQuery) {
         if (qprm) queryParams.push(qprm);
     };
     if (name) append("name LIKE ?",`%${name}%`)
-    
-    if (tags && tags.length && tags.every(v=>Number.isSafeInteger(v))) append(`(SELECT COUNT(*) FROM (
-        WITH split(word, str) AS (
-            SELECT '', tags||','
-            UNION ALL SELECT
-            substr(str, 0, instr(str, ',')),
-            substr(str, instr(str, ',')+1)
-            FROM split WHERE str!=''
-        ) SELECT word FROM split WHERE word!='') WHERE word in ('${tags.join("','")}')) == ${tags.length}`);
-    if (platforms && platforms.length && platforms.every(v=>Number.isSafeInteger(v))) append(`(SELECT COUNT(*) FROM (
-        WITH split(word, str) AS (
-            SELECT '', platforms||','
-            UNION ALL SELECT
-            substr(str, 0, instr(str, ',')),
-            substr(str, instr(str, ',')+1)
-            FROM split WHERE str!=''
-        ) SELECT word FROM split WHERE word!='') WHERE word in ('${platforms.join("','")}')) == ${platforms.length}`);
-    if (approvalStatuses && approvalStatuses.length) append("approvalStatus in ?",approvalStatuses)
-    if (privacyStatuses && privacyStatuses.length) append("privacyStatus in ?",privacyStatuses)
-    console.log(query,queryParams)
+    if (tags && tags.length && tags.every(v=>Number.isSafeInteger(v))) 
+        append(`(SELECT COUNT(*) FROM (
+            WITH split(word, str) AS (
+                SELECT '', tags||','
+                UNION ALL SELECT
+                substr(str, 0, instr(str, ',')),
+                substr(str, instr(str, ',')+1)
+                FROM split WHERE str!=''
+            ) SELECT word FROM split WHERE word!='') WHERE word in ('${tags.join("','")}')) `+(tagsRequireAll?`== ${tags.length}`:"> 0"));
+    if (platforms && platforms.length && platforms.every(v=>Number.isSafeInteger(v)))
+        append(`(SELECT COUNT(*) FROM (
+            WITH split(word, str) AS (
+                SELECT '', platforms||','
+                UNION ALL SELECT
+                substr(str, 0, instr(str, ',')),
+                substr(str, instr(str, ',')+1)
+                FROM split WHERE str!=''
+            ) SELECT word FROM split WHERE word!='') WHERE word in ('${platforms.join("','")}')) `+(platformsRequireAll?`== ${platforms.length}`:"> 0"));
+    if (approvalStatus && approvalStatus.length && approvalStatus.every(v=>Number.isSafeInteger(v))) 
+        append(`approvalStatus in ('${approvalStatus.join("','")}')`);
+    if (privacyStatus && privacyStatus.length && privacyStatus.every(v=>Number.isSafeInteger(v))) 
+        append(`privacyStatus in ('${privacyStatus.join("','")}')`);
     return (await asyncCMD("all",query,queryParams)).map(v=>Application.parse(v));
-
-    // TODO: CLEAN tags AND platforms
+}
+async function allApps() {
+    if (allAppsCache) return allAppsCache;
+    else return allAppsCache = await asyncCMD("all",`SELECT * FROM ${APP_TABLE.NAME}`);
 }
 
 
@@ -123,4 +129,4 @@ async function tryInitDB() {
     //await new Promise(res=>setTimeout(()=>{db.close();res()},4000));
 })();
 
-export {asyncCMD,searchApps}
+export {asyncCMD,searchApps,getApp,updateApp,addApp,allApps}

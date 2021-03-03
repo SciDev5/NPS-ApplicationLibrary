@@ -1,12 +1,9 @@
 html
     head 
         title yeet
-        script(src="index.js")
+        script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
     body 
         h1 NPS Software Info Library
         div#apps-container
-            each val in yeet
-                div#app
-                    p= `val ${val} f`
-                    p app lol
+            

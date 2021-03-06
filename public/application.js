@@ -1,4 +1,4 @@
-const APPROVAL_STATUSES = ["UNK","NOT_APPROVED","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORMED","PILOT","INSTRUCTOR_ONLY","PENDING","DENIED"];
+const APPROVAL_STATUSES = ["UNK","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORMED","PILOT","INSTRUCTOR_ONLY","PENDING","DENIED"];
 const PRIVACY_STATUSES = ["UNK","COMPLIENT","NONCOMPLIENT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
 const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
 
@@ -13,9 +13,11 @@ class Application {
         this.approvalStatus = approvalStatus || APPROVAL_STATUSES[0];
         this.privacyStatus = privacyStatus || APPROVAL_STATUSES[0];
     }
-    static parse(/** @type {{id:number,name:string,tags:string,platforms:string,url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
+    static parse(/** @type {{id:number,name:string,tags:string|number[],platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
         var {id,name,tags,platforms,url,approvalStatus,privacyStatus} = obj;
-        return new Application({id,url,name,tags:tags.split(",").map(v=>parseInt(v)).filter(v=>v),platforms:platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v),approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]})
+        if (typeof(tags)=="string") tags = tags.split(",").map(v=>parseInt(v)).filter(v=>v);
+        if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
+        return new Application({id,url,name,tags,platforms,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]})
     }
 
     addTag(tagId) {
@@ -55,14 +57,16 @@ class Application {
             this.url = url;
     }
 
-    toJSON() {
+    toJSON(keepArraysSeparate) {
+        var platformIds = this.platforms.map(v=>PLATFORMS.indexOf(v)).filter(v=>v>=0);
         return {
+            id: this.id,
             name: this.name,
             url: this.url,
-            tags: this.tags.join(),
+            tags: keepArraysSeparate?this.tags:this.tags.join(),
             approvalStatus: APPROVAL_STATUSES.indexOf(this.approvalStatus),
             privacyStatus: PRIVACY_STATUSES.indexOf(this.privacyStatus),
-            platforms: this.platforms.map(v=>PLATFORMS.indexOf(v)).filter(v=>v>=0).join()
+            platforms: keepArraysSeparate?platformIds.join():platformIds
         };
     }
 

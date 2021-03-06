@@ -1,7 +1,7 @@
 import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS } from "./application.js";
 import domWorker from "./dom-worker.js";
 
-async function searchApp(/**@type {{name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll}}*/query) {
+async function searchApps(/**@type {{name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll}}*/query) {
     var {name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = query;
     var queryOut = {}
     if(name)queryOut.name=name;
@@ -11,10 +11,25 @@ async function searchApp(/**@type {{name,tags,platforms,approvalStatus,privacySt
     if(privacyStatus)queryOut.privacyStatus=JSON.stringify(privacyStatus);
     queryOut.tagsRequireAll=!!tagsRequireAll;
     queryOut.platformsRequireAll=!!platformsRequireAll;
-    return await paramFetch("/apps/search",queryOut);
+    return (await paramFetch("/apps/search",queryOut)).map(v=>Application.parse(v));
 }
 async function getAllApps() {
-    return await (await fetch("/apps/all")).json();
+    return (await (await fetch("/apps/all")).json()).map(v=>Application.parse(v));
+}
+async function getApp(id) {
+    return Application.parse(await (await fetch("/apps/get/"+id)).json());
+}
+async function searchTags(/**@type {{name}}*/query) {
+    var {name} = query;
+    var queryOut = {}
+    if(name)queryOut.name=name;
+    return await paramFetch("/tags/search",queryOut);
+}
+async function getAllTags() {
+    return await (await fetch("/tags/all")).json();
+}
+async function getTag(id) {
+    return await (await fetch("/tags/get/"+id)).json();
 }
 async function paramFetch(uri,obj) {
     var params = new URLSearchParams();
@@ -24,12 +39,13 @@ async function paramFetch(uri,obj) {
 
 
 addEventListener("load",async e=>{
-    var allApps = (await getAllApps()).map(v=>Application.parse(v));
+    var allApps = await getAllApps();
     console.log(allApps);
-    var appContainer = document.getElementById("apps-container");
+    console.log(await getAllTags());
+    var appContainer = document.getElementById("apps-list");
     for (var i = 0; i < allApps.length; i++) {
         appContainer.appendChild(domWorker.createAppDiv(allApps[i]));
     }
 });
 
-window.f = {searchApp,getAllApps,paramFetch}
+window.f = {searchApps,getAllApps,paramFetch,getApp, searchTags,getAllTags,getTag}

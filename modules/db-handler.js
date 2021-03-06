@@ -1,10 +1,12 @@
+import lpcsvUtil from "../modules/map-lpcsv-to-apparr.js";
+
 import { deepFreeze } from "./utils.js";
 import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, Application } from "../public/application.js";
 import sqlite3 from "sqlite3";
 const sqlite = sqlite3.verbose();
 const db = new sqlite.Database(":memory:");
 
-var allAppsCache = undefined;
+var allAppsCache = undefined, allTagsCache = undefined;
 
 const APP_TABLE = {
     NAME:"applications",
@@ -29,7 +31,10 @@ deepFreeze([APP_TABLE,TAG_TABLE]);
 
 
 function asyncCMD(cmd,query,params) {
-    if (/^(UPDATE|INSERT)/i.test(query)) allAppsCache = undefined;
+    if (/^(UPDATE|INSERT)/i.test(query)) {
+        if (new RegExp(APP_TABLE.NAME).test(query)) allAppsCache = undefined;
+        if (new RegExp(TAG_TABLE.NAME).test(query)) allTagsCache = undefined;
+    }
     return new Promise((res,rej)=>{
         db[cmd](query,params,(err,data)=>{
             if (err) rej(err);
@@ -71,6 +76,9 @@ async function addApp(/**@type {Application}*/app) {
 async function getApp(appId) {
     return new Application(await asyncCMD("get","SELECT * FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]));
 }
+async function delApp(appId) {
+    return await asyncCMD("run","DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]);
+}
 async function searchApps(searchQuery) {
     var {name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = searchQuery;
     var queryParams = [];
@@ -106,8 +114,31 @@ async function searchApps(searchQuery) {
     return (await asyncCMD("all",query,queryParams)).map(v=>Application.parse(v));
 }
 async function allApps() {
-    if (allAppsCache) return allAppsCache;
-    else return allAppsCache = await asyncCMD("all",`SELECT * FROM ${APP_TABLE.NAME}`);
+    if (allAppsCache) return allAppsCache.map(v=>Application.parse(v));
+    else return (allAppsCache = await asyncCMD("all",`SELECT * FROM ${APP_TABLE.NAME}`)).map(v=>Application.parse(v));
+}
+
+
+
+
+async function updateTag(/**@type {string}*/tagId,/**@type {string}*/tagName) {
+    return await asyncCMD("run","UPDATE "+TAG_TABLE.NAME+" SET name=? WHERE id=?",[tagName,tagId]);
+}
+async function addTag(/**@type {string}*/tagName) {
+    return await asyncCMD("run","INSERT INTO "+TAG_TABLE.NAME+" (name) VALUES (?)",tagName);
+}
+async function getTag(/**@type {string}*/id) {
+    return new Application(await asyncCMD("get","SELECT * FROM "+TAG_TABLE.NAME+" WHERE id=?",[id]));
+}
+async function searchTags(/**@type {string}*/tagName) {
+    return (await asyncCMD("all","SELECT * FROM "+TAG_TABLE.NAME+" WHERE name LIKE ?",[`%${tagName}%`])).map(v=>Application.parse(v));
+}
+async function allTags() {
+    if (allTagsCache) return allTagsCache;
+    else return allTagsCache = await asyncCMD("all",`SELECT * FROM ${TAG_TABLE.NAME}`);
+}
+async function delTag(/**@type {string}*/tagId) {
+    return await asyncCMD("run","DELETE FROM "+TAG_TABLE.NAME+" WHERE id=?",[tagId]);
 }
 
 
@@ -123,10 +154,33 @@ async function tryInitDB() {
 
 (async()=>{
     await tryInitDB();
-    await addApp(new Application({approvalStatus:"APPROVED",privacyStatus:"COMPLIENT",name:"helloworld",tags:[1,2],platforms:["WEB","WINDOWS"]}));
-    await addApp(new Application({approvalStatus:"APPROVED",privacyStatus:"NONCOMPLIENT",name:"anotherone",tags:[3,4],platforms:["WEB","MACOS","intentionally wrong value"]}));
-    await addApp(new Application({approvalStatus:"APPROVED",privacyStatus:"NONCOMPLIENT",name:"yeet",tags:[1,2,3],platforms:[]}));
-    //await new Promise(res=>setTimeout(()=>{db.close();res()},4000));
+    
+    var promises = [];
+    for (var k of lpcsvUtil.convertLPCSV(lpcsvUtil.getLPCSV_test()))
+        promises.push(addApp(k));
+    await Promise.all(promises); promises = [];
+    for (var k of ["eyy","bee","see","d"])
+        promises.push(addTag(k));
+    await Promise.all(promises);
+
 })();
 
-export {asyncCMD,searchApps,getApp,updateApp,addApp,allApps}
+export default {
+    sql: asyncCMD, 
+    apps: {
+        search:searchApps,
+        get:getApp,
+        getAll:allApps,
+        add:addApp,
+        del:delApp,
+        update:updateApp
+    }, 
+    tags: {
+        search:searchTags,
+        get:getTag,
+        getAll:allTags,
+        add:addTag,
+        del:delTag,
+        update:updateTag
+    }
+}

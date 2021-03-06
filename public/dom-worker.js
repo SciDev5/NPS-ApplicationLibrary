@@ -10,7 +10,6 @@ function createElement(type,content,params) {
 
 
 function createAppDiv(/**@type {Application}*/app) {
-    console.log(app);
     var appDiv = createElement("div",[
         createElement("h1",app.name,{className:"name"}),
         createElement("p",JSON.stringify(app.tags),{className:"tags"}),

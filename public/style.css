@@ -1,11 +1,110 @@
-#apps-container {
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;700&family=Montserrat:wght@200;400;700&family=Ubuntu+Mono:wght@400;700&display=swap');
+
+/*
+font-family: 'Barlow', sans-serif;
+font-family: 'Montserrat', sans-serif;
+font-family: 'Ubuntu Mono', monospace;
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+#apps-list {
     padding: 5px;
-    background: #454545;
+    background: #f1f1f1;
 }
 #app + #app {
     margin-top: 5px;
 }
 #app {
     padding: 5px;
+    background: #ffffff;
+}
+
+.search-container > .list + .list, .search-container > input + .list {
+    margin-right: 0px;
+}
+.search-container > input {
+    margin-right: 0px;
+}
+
+input {
+    width: 300px;
+    height: 40px;
+    line-height: 30px;
+    padding: 4px 9px;
+    border: 1px solid #b5b5b5;
+    border-radius: 5px;
+    margin: 5px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+}
+
+.list {
+    --col: #46c596;
+    background: #ffffff;
+    color: var(--col);
+    width: 150px;
+    height: 40px;
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    padding: 4px 9px;
+    padding-left: 27px;
+    border-radius: 5px;
+    border: 1px solid #b5b5b5;
+    margin: 5px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+}
+
+.list:after {content: "";display: block;width: 10px;height: 10px;background: var(--col);position: absolute;top: 14px;left: 10px;clip-path: polygon(0% 70%, 100% 70%, 50% 0%);transition: transform .3s;}
+
+.list.open:after {transform: rotate(180deg);}
+
+.list.open {
+    border: 1px solid var(--col);
+}
+.list-contents {
+    display: none;
+    background: #ffffff;
+    color: #6f6f6f;
+    position: absolute;
+    width: 213px;
+    z-index: 1;
+    left: -1px;
+    top: 45px;
+    border: 0px solid #d8d8d8;
+    overflow: hidden;
+    box-shadow: 0 0 7px 0px;
+}
+.list-title {
+    font-weight: bold;
+}
+
+.list.open > .list-contents {
+    display: block;
+}
+
+.list-elt {padding: 2px 13px;padding-left: 35px;position: relative;}
+
+.list-elt:after {
+    box-sizing: border-box;
+    content:"";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #888888;
+    left: 8px;
+    top: 9px;
+}
+
+.list-elt.sel:after {
     background: #888888;
+}
+
+.search-container {
+    background: #f3f3f3;
 }

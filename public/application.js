@@ -2,6 +2,11 @@ const APPROVAL_STATUSES = ["UNK","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORM
 const PRIVACY_STATUSES = ["UNK","COMPLIENT","NONCOMPLIENT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
 const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
 
+const APPROVAL_STATUSES_NAME = ["Unknown","Approved","14 w/ Parental Consent","Parent Informed Use","Active Pilot","Instructor Use Only","Pending","Reviewed and Denied"];
+const PRIVACY_STATUSES_NAME = ["Unknown","Complient","Noncomplient","Parental Consent Required","Instructor Use Only","No Information Collected","Not Applicable"];
+const PLATFORMS_NAME = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
+
+
 class Application {
     constructor(/** @type {{id?:number,name:string,tags:number[],platforms:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
         var {id,name,tags,platforms,url,approvalStatus,privacyStatus} = obj;
@@ -83,4 +88,4 @@ class Application {
 }
 
 
-export { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS };
+export { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME};

@@ -1,5 +1,5 @@
 import database from "./modules/db-handler.js";
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS } from "./public/application.js";
+import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME } from "./public/application.js";
 import bodyParser from "body-parser";
 import express from "express";
 const app = express();
@@ -10,7 +10,12 @@ app.use(express.static("./public/"));
 app.use(bodyParser.json({strict:false}))
 
 app.get("/",(req,res)=>{
-    res.render("index",{yeet:[1,2,4,2]});
+    var searchParams = []; // [{id:"p",name:"P",options:[{id:"1",name:"one"}]}]
+    searchParams.push({id:"approval",name:"Approval Status",options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))});
+    searchParams.push({id:"privacy",name:"Privacy Status",options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
+    searchParams.push({id:"platform",name:"Platforms",options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))});
+
+    res.render("index",{searchParams});
 })
 
 app.post("/sql",async(req,res)=>{
@@ -25,6 +30,8 @@ app.get("/apps/search",async(req,res)=>{
         if (platforms) platforms = JSON.parse(platforms);
         if (approvalStatus) approvalStatus = JSON.parse(approvalStatus);
         if (privacyStatus) privacyStatus = JSON.parse(privacyStatus);
+        tagsRequireAll = tagsRequireAll=="true"||tagsRequireAll==true;
+        platformsRequireAll = platformsRequireAll=="true"||platformsRequireAll==true;
         res.send(await database.apps.search({name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll}));
     } catch (e) {
         res.status(400);

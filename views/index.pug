@@ -8,27 +8,13 @@ html
             h1 NPS Application Library
         .search-container
             input#name-search(name="name-search", placeholder="Name")
-            .list
-                .list-title List A
-                .list-contents
-                    .list-elt(value="1") Option 1
-                    .list-elt.sel(value="2") Option 2
-                    .list-elt(value="3") Option 3
-                    .list-elt(value="4") Option 4
-            .list.open
-                .list-title List B
-                .list-contents
-                    .list-elt(value="1") Option 1
-                    .list-elt.sel(value="2") Option 2
-                    .list-elt.sel(value="3") Option 3
-                    .list-elt(value="4") Option 4
-            .list
-                .list-title List C
-                .list-contents
-                    .list-elt(value="1") Option 1
-                    .list-elt(value="2") Option 2
-                    .list-elt(value="3") Option 3
-                    .list-elt(value="4") Option 4
+            each sp in searchParams
+                .selectlist(name=sp.id)
+                    .selectlist-title= sp.name
+                    .selectlist-contents
+                        each option in sp.options
+                            .selectlist-elt(name=option.id)= option.name
+            
         .apps-container
             #search-refresh-popup
                 button#search-refresh-button Refresh Search

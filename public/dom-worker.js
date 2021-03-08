@@ -1,4 +1,4 @@
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS } from "./application.js" 
+import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PLATFORMS_NAME } from "./application.js" 
 
 function createElement(type,content,params) {
     var elt = document.createElement(type);
@@ -21,4 +21,93 @@ function createAppDiv(/**@type {Application}*/app) {
     return appDiv;
 }
 
-export default {createAppDiv};
+/**@type {(HTMLDivElement|{name:string,value:()=>{name:string,value:boolean}[]})[]}*/
+var selectListElts = [], last = {};
+function interactifySelectList(/**@type {HTMLDivElement|{name:string,value:()=>{name:string,value:boolean}[]}}*/selectListElt) {
+    selectListElts.push(selectListElt);
+    selectListElt.addEventListener("click",e=>{
+        if (!e.isTrusted) return;
+
+        /**@type {HTMLDivElement}}*/
+        var cp = e.composedPath().filter(v=>v.classList&&v.classList.contains("selectlist-elt"))[0];
+        if (cp) {
+            if (cp.classList.contains("sel"))
+                cp.classList.remove("sel");
+            else cp.classList.add("sel");
+            onSearchDomUpdate();
+        } else {
+            var doOpen = !selectListElt.classList.contains("open");
+            selectListElt.classList.add("revanim");
+            selectListElts.forEach(v=>v.classList.remove("open"));
+                
+            if (doOpen)
+                selectListElt.classList.add("open");
+            
+        }
+    });
+    let se = selectListElt;
+    selectListElt.value = ()=>{
+        var elts = se.getElementsByClassName("selectlist-elt");
+        var res = [];
+        for (var elt of elts) res.push({name:elt.getAttribute("name"),value:elt.classList.contains("sel")});
+        return res;
+    };
+    selectListElt.name = se.getAttribute("name");
+}
+addEventListener("click",e=>{
+    if (!e.isTrusted) return;
+
+    if (e.composedPath().filter(v=>v.classList&&v.classList.contains("selectlist")).length)
+        return;
+    selectListElts.forEach(v=>v.classList.remove("open"));
+});
+
+var searchNameInput;
+addEventListener("load",e=>{
+    for (var elt of document.getElementsByClassName("selectlist"))
+        interactifySelectList(elt);
+    searchNameInput = document.getElementById("name-search");
+    searchNameInput.addEventListener("input",e=>{
+        onSearchDomUpdate();
+    });
+});
+
+function getSearch() {
+    var name = searchNameInput.value;
+    var approvalStatus = selectListElts[0].value().filter(v=>v.value).map(v=>APPROVAL_STATUSES.indexOf(v.name));
+    var privacyStatus = selectListElts[1].value().filter(v=>v.value).map(v=>PRIVACY_STATUSES.indexOf(v.name));
+    var platforms = selectListElts[2].value().filter(v=>v.value).map(v=>PLATFORMS.indexOf(v.name));
+    var m = {};
+    if (name) m.name = name.trim();
+    if (approvalStatus && approvalStatus.length) m.approvalStatus = approvalStatus;
+    if (privacyStatus && privacyStatus.length) m.privacyStatus = privacyStatus;
+    if (platforms && platforms.length) m.platforms = platforms;
+    return m;
+}
+function compareArr(a,b) {
+    if (a == null && b == null) return true;
+    if (a == null && b != null || a != null && b == null) return false;
+    if (a.length != b.length) return false;
+    return a.map((_,i)=>a[i]==b[i]).filter(v=>!v).length==0;
+}
+function getSearchChanged() {
+    var current = getSearch();
+    return current.name != last.name || 
+    !compareArr(current.approvalStatus, last.approvalStatus) || 
+    !compareArr(current.privacyStatus, last.privacyStatus) ||
+    !compareArr(current.platforms, last.platforms)
+}
+function onSearchDomUpdate() {
+    var changed = getSearchChanged();
+    console.log("SEARCH UPDATE ", changed);
+    var srp = document.getElementById("search-refresh-popup");
+    if (changed)
+        srp.classList.add("open");
+    else srp.classList.remove("open");
+}
+function onSearch() {
+    last = getSearch();
+    onSearchDomUpdate();
+}
+
+export default {createAppDiv,onSearch,getSearch,getSearchChanged};

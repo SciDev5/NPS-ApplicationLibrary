@@ -43,9 +43,16 @@ addEventListener("load",async e=>{
     console.log(allApps);
     console.log(await getAllTags());
     var appContainer = document.getElementById("apps-list");
-    for (var i = 0; i < allApps.length; i++) {
+    for (var i = 0; i < allApps.length; i++)
         appContainer.appendChild(domWorker.createAppDiv(allApps[i]));
-    }
+    document.getElementById("search-refresh-button").addEventListener("click",async e=>{
+        var search = domWorker.getSearch();
+        domWorker.onSearch();
+        var apps = await searchApps(search);
+        appContainer.innerHTML = "";
+        for (var i = 0; i < apps.length; i++)
+            appContainer.appendChild(domWorker.createAppDiv(apps[i]));
+    });
 });
 
 window.f = {searchApps,getAllApps,paramFetch,getApp, searchTags,getAllTags,getTag}

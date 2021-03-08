@@ -83,8 +83,9 @@ async function searchApps(searchQuery) {
     var {name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = searchQuery;
     var queryParams = [];
     var query = "SELECT * FROM "+APP_TABLE.NAME;
+    var n = 0;
     var append = (qstr,qprm)=>{
-        if (queryParams.length == 0) query += " WHERE "+qstr;
+        if (n++ == 0) query += " WHERE "+qstr;
         else query += " AND "+qstr;
         if (qprm) queryParams.push(qprm);
     };
@@ -156,6 +157,9 @@ async function tryInitDB() {
     await tryInitDB();
     
     var promises = [];
+    promises.push(addApp(new Application({name:"A",tags:[1,2]})))
+    promises.push(addApp(new Application({name:"B",tags:[3,4]})))
+    promises.push(addApp(new Application({name:"B",tags:[1,2,3]})))
     for (var k of lpcsvUtil.convertLPCSV(lpcsvUtil.getLPCSV_test()))
         promises.push(addApp(k));
     await Promise.all(promises); promises = [];

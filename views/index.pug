@@ -3,7 +3,7 @@ html
         title NPS Application Library
         script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
-    body
+    body.theme-light
         div 
             h1 NPS Application Library
         .search-container
@@ -18,7 +18,10 @@ html
         .apps-container
             #search-refresh-popup
                 button#search-refresh-button Refresh Search
+            #search-loading-popup
+                | LOADING
 
 
             #apps-list
+                #apps-empty No Results
             

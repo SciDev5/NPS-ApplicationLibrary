@@ -40,19 +40,16 @@ async function paramFetch(uri,obj) {
 
 addEventListener("load",async e=>{
     var allApps = await getAllApps();
-    console.log(allApps);
-    console.log(await getAllTags());
-    var appContainer = document.getElementById("apps-list");
-    for (var i = 0; i < allApps.length; i++)
-        appContainer.appendChild(domWorker.createAppDiv(allApps[i]));
+    var allTags = await getAllTags();
+    console.log(allApps,allTags);
+    domWorker.populateApps(allApps);
     document.getElementById("search-refresh-button").addEventListener("click",async e=>{
+        if (!e.isTrusted) return;
         var search = domWorker.getSearch();
         domWorker.onSearch();
         var apps = await searchApps(search);
-        appContainer.innerHTML = "";
-        for (var i = 0; i < apps.length; i++)
-            appContainer.appendChild(domWorker.createAppDiv(apps[i]));
+        domWorker.onSearchEnd(apps);
     });
 });
 
-window.f = {searchApps,getAllApps,paramFetch,getApp, searchTags,getAllTags,getTag}
+window.f = {searchApps, getAllApps, paramFetch, getApp, searchTags, getAllTags, getTag}

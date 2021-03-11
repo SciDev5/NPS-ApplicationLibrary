@@ -17,7 +17,7 @@ function createAppDiv(/**@type {Application}*/app) {
         createElement("p",app.privacyStatus,{className:"status"}),
         createElement("p",app.platforms.join(", "),{className:"platforms"}),
         createElement("p",JSON.stringify({url:app.url,id:app.id}),{className:""})
-    ],{id:"app"});
+    ],{className:"app"});
     return appDiv;
 }
 
@@ -108,6 +108,26 @@ function onSearchDomUpdate() {
 function onSearch() {
     last = getSearch();
     onSearchDomUpdate();
+    document.getElementById("search-loading-popup").classList.add("open");
+    depopulateApps();
+}
+function onSearchEnd(apps) {
+    document.getElementById("search-loading-popup").classList.remove("open");
+    populateApps(apps);
+}
+function depopulateApps() {
+    var appContainer = document.getElementById("apps-list");
+    var destroyedAppDomElts = [];
+    for (var elt of appContainer.children) if (elt.id!="apps-empty") destroyedAppDomElts.push(elt);
+    for (var elt of destroyedAppDomElts) elt.remove();
+}
+function populateApps(apps) {
+    var appContainer = document.getElementById("apps-list");
+    var emptyText = document.getElementById("apps-empty");
+    if (apps.length == 0) emptyText.classList.add("visible");
+    else emptyText.classList.remove("visible");
+    for (var i = 0; i < apps.length; i++)
+        appContainer.appendChild(createAppDiv(apps[i]));
 }
 
-export default {createAppDiv,onSearch,getSearch,getSearchChanged};
+export default {createAppDiv,onSearch,getSearch,getSearchChanged,onSearchEnd,populateApps,depopulateApps};

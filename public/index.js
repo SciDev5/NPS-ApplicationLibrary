@@ -52,7 +52,9 @@ addEventListener("load",async e=>{
     console.log(allApps,allTags);
     domWorker.populateApps(allApps);
     document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));
-    document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseover",searchEvHandler));
+    //document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseenter",searchEvHandler));
+    document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("click",searchEvHandler));
+    document.getElementById("name-search").addEventListener("keyup",e1=>{console.log(e1);if (e1.key=="Enter")searchEvHandler(e1)});
 });
 
 window.f = {searchApps, getAllApps, paramFetch, getApp, searchTags, getAllTags, getTag}

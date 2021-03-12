@@ -11,12 +11,12 @@ function createElement(type,content,params) {
 
 function createAppDiv(/**@type {Application}*/app) {
     var appDiv = createElement("div",[
-        createElement("h1",app.name,{className:"name"}),
-        createElement("p",JSON.stringify(app.tags),{className:"tags"}),
-        createElement("p",app.approvalStatus,{className:"status"}),
-        createElement("p",app.privacyStatus,{className:"status"}),
-        createElement("p",app.platforms.join(", "),{className:"platforms"}),
-        createElement("p",JSON.stringify({url:app.url,id:app.id}),{className:""})
+        createElement("div",app.name,{className:"name"}),
+        createElement("div",JSON.stringify(app.tags),{className:"tags"}),
+        createElement("div",app.approvalStatus,{className:"status"}),
+        createElement("div",app.privacyStatus,{className:"status"}),
+        createElement("div",app.platforms.join(", "),{className:"platforms"})
+        //createElement("div",JSON.stringify({url:app.url,id:app.id}),{className:""})
     ],{className:"app"});
     return appDiv;
 }

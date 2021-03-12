@@ -84,8 +84,8 @@ app.get("/tags/search",async(req,res)=>{
 });
 
 
-app.listen(process.env.PORT,()=>{
-    console.log(`SERVER LISTENING: [port ${process.env.PORT}]`);
+app.listen(process.env.PORT||80,()=>{
+    console.log(`SERVER LISTENING: [port ${process.env.PORT||80}]`);
 });
 
 

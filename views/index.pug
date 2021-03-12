@@ -4,9 +4,9 @@ html
         script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
     body.theme-light
-        div 
-            h1 NPS Application Library
+        .header NPS Application Library
         .search-container
+            .search-title Search
             input#name-search(name="name-search", placeholder="Name")
             each sp,n in searchParams
                 .selectlist(name=sp.id,tabindex=0)
@@ -18,7 +18,7 @@ html
             
         .apps-container
             #search-refresh-popup
-                | Refresh Search
+                | Click to Refresh Search
             #search-loading-popup
                 | LOADING
 

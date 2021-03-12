@@ -60,7 +60,7 @@ font-family: 'Ubuntu Mono', monospace;
     margin-right: 0px;
 }
 
-input {
+input, #search-refresh-button-inline {
     width: 300px;
     height: 40px;
     line-height: 30px;
@@ -70,6 +70,19 @@ input {
     margin: 5px;
     font-family: 'Barlow', sans-serif;
     font-size: 15px;
+}
+#search-refresh-button-inline {
+    color: var(--fg-inv);
+    background: var(--bg-inv);
+    border: 1px solid var(--bg-inv);
+    width: fit-content;
+    padding: 0px 21px;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+#search-refresh-button-inline:disabled {
+    background: var(--bg);
+    color: var(--fg);
+    border-color: var(--fg);
 }
 
 .selectlist {
@@ -209,11 +222,11 @@ input {
     text-align: center;
     padding: 50px 0px;
     opacity: 0;
-    font-size: large;
+    font-size: larger;
     font-family: "Montserrat", sans-serif;
 }
 #search-refresh-popup {
-    transition: opacity 0.4s;
+    transition: opacity 0.2s;
 }
 #search-refresh-popup.open {
     opacity: 0.8;
@@ -223,6 +236,7 @@ input {
     opacity: 0.8;
     display: block;
 }
+/*
 #search-refresh-button {
     width: 300px;
     font-size: large;
@@ -232,4 +246,4 @@ input {
     border: none;
     border-radius: 3px;
     padding: 10px;
-}
+}*/

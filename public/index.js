@@ -1,4 +1,4 @@
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS } from "./application.js";
+import { Application } from "./application.js";
 import domWorker from "./dom-worker.js";
 
 async function searchApps(/**@type {{name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll}}*/query) {
@@ -37,19 +37,22 @@ async function paramFetch(uri,obj) {
     return await (await fetch(uri+"?"+params,{method:"get"})).json();
 }
 
+async function searchEvHandler(e) {
+    if (!e.isTrusted) return;
+    if (!domWorker.getSearchChanged()) return;
+    var search = domWorker.getSearch();
+    domWorker.onSearch();
+    var apps = await searchApps(search);
+    domWorker.onSearchEnd(apps);
+}
 
 addEventListener("load",async e=>{
     var allApps = await getAllApps();
     var allTags = await getAllTags();
     console.log(allApps,allTags);
     domWorker.populateApps(allApps);
-    document.getElementById("search-refresh-button").addEventListener("click",async e=>{
-        if (!e.isTrusted) return;
-        var search = domWorker.getSearch();
-        domWorker.onSearch();
-        var apps = await searchApps(search);
-        domWorker.onSearchEnd(apps);
-    });
+    document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));
+    document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseover",searchEvHandler));
 });
 
 window.f = {searchApps, getAllApps, paramFetch, getApp, searchTags, getAllTags, getTag}

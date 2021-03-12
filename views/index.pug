@@ -8,16 +8,17 @@ html
             h1 NPS Application Library
         .search-container
             input#name-search(name="name-search", placeholder="Name")
-            each sp in searchParams
-                .selectlist(name=sp.id)
+            each sp,n in searchParams
+                .selectlist(name=sp.id,tabindex=0)
                     .selectlist-title= sp.name
                     .selectlist-contents
                         each option in sp.options
                             .selectlist-elt(name=option.id)= option.name
+            button#search-refresh-button-inline(disabled) Refresh Search
             
         .apps-container
             #search-refresh-popup
-                button#search-refresh-button Refresh Search
+                | Refresh Search
             #search-loading-popup
                 | LOADING
 

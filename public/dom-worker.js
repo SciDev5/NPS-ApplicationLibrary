@@ -1,4 +1,4 @@
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PLATFORMS_NAME } from "./application.js" 
+import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS } from "./application.js" 
 
 function createElement(type,content,params) {
     var elt = document.createElement(type);
@@ -44,6 +44,11 @@ function interactifySelectList(/**@type {HTMLDivElement|{name:string,value:()=>{
                 selectListElt.classList.add("open");
             
         }
+    });
+    selectListElt.getElementsByClassName("selectlist-contents")[0].addEventListener("mouseleave",e=>{
+        selectListElt.classList.add("revanim");
+        selectListElts.forEach(v=>v.classList.remove("open"));
+        console.log("yeet")
     });
     let se = selectListElt;
     selectListElt.value = ()=>{
@@ -104,6 +109,7 @@ function onSearchDomUpdate() {
     if (changed)
         srp.classList.add("open");
     else srp.classList.remove("open");
+    document.getElementById("search-refresh-button-inline").disabled = !changed;
 }
 function onSearch() {
     last = getSearch();
@@ -113,6 +119,7 @@ function onSearch() {
 }
 function onSearchEnd(apps) {
     document.getElementById("search-loading-popup").classList.remove("open");
+    document.getElementById("search-refresh-button-inline").disabled = true;
     populateApps(apps);
 }
 function depopulateApps() {

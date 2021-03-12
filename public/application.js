@@ -4,7 +4,7 @@ const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","I
 
 const APPROVAL_STATUSES_NAME = ["Unknown","Approved","14 w/ Parental Consent","Parent Informed Use","Active Pilot","Instructor Use Only","Pending","Reviewed and Denied"];
 const PRIVACY_STATUSES_NAME = ["Unknown","Complient","Noncomplient","Parental Consent Required","Instructor Use Only","No Information Collected","Not Applicable"];
-const PLATFORMS_NAME = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
+const PLATFORMS_NAME = ["Windows","Macos","Linux","Android Phone","Android Tablet","iPhone","iPad","Web","Chromebook"]
 
 
 class Application {

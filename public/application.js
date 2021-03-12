@@ -1,9 +1,9 @@
 const APPROVAL_STATUSES = ["UNK","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORMED","PILOT","INSTRUCTOR_ONLY","PENDING","DENIED"];
-const PRIVACY_STATUSES = ["UNK","COMPLIENT","NONCOMPLIENT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
+const PRIVACY_STATUSES = ["UNK","COMPLIANT","NONCOMPLIANT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
 const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
 
 const APPROVAL_STATUSES_NAME = ["Unknown","Approved","14 w/ Parental Consent","Parent Informed Use","Active Pilot","Instructor Use Only","Pending","Reviewed and Denied"];
-const PRIVACY_STATUSES_NAME = ["Unknown","Complient","Noncomplient","Parental Consent Required","Instructor Use Only","No Information Collected","Not Applicable"];
+const PRIVACY_STATUSES_NAME = ["Unknown","Compliant","Noncompliant","Parental Consent Required","Instructor Use Only","No Information Collected","Not Applicable"];
 const PLATFORMS_NAME = ["Windows","Macos","Linux","Android Phone","Android Tablet","iPhone","iPad","Web","Chromebook"]
 
 

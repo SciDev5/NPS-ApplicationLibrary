@@ -12,7 +12,6 @@ function createElement(type,content,params) {
 function createAppDiv(/**@type {Application}*/app) {
     var appDiv = createElement("div",[
         createElement("div",app.name,{className:"name"}),
-        createElement("div",JSON.stringify(app.tags),{className:"tags"}),
         createElement("div",app.approvalStatus,{className:"status"}),
         createElement("div",app.privacyStatus,{className:"status"}),
         createElement("div",app.platforms.join(", "),{className:"platforms"})

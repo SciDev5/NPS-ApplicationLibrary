@@ -24,9 +24,8 @@ app.post("/sql",async(req,res)=>{
 
 app.get("/apps/search",async(req,res)=>{
     try {
-        var {name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = req.query;
-        if (!name&&!tags&&!platforms&&!approvalStatus&&!privacyStatus&&!tagsRequireAll&&!platformsRequireAll) {res.send(await database.apps.getAll()); return}
-        if (tags) tags = JSON.parse(tags);
+        var {name,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = req.query;
+        if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!tagsRequireAll&&!platformsRequireAll) {res.send(await database.apps.getAll()); return}
         if (platforms) platforms = JSON.parse(platforms);
         if (approvalStatus) approvalStatus = JSON.parse(approvalStatus);
         if (privacyStatus) privacyStatus = JSON.parse(privacyStatus);
@@ -55,33 +54,6 @@ app.get("/apps/get/:id",async(req,res)=>{
     }
 });
 
-
-app.get("/tags/all",async(req,res)=>{
-    try {
-        res.send(await database.tags.getAll());
-    } catch (e) {
-        res.status(400);
-        res.send(e);
-    }
-});
-app.get("/tags/get/:id",async(req,res)=>{
-    try {
-        res.send(await database.tags.get(req.params["id"]));
-    } catch (e) {
-        res.status(400);
-        res.send(e);
-    }
-});
-app.get("/tags/search",async(req,res)=>{
-    try {
-        var {name} = req.query;
-        if (!name) {res.send(await database.tags.getAll()); return}
-        res.send(await database.tags.search({name}));
-    } catch (e) {
-        res.status(400);
-        res.send(e);
-    }
-});
 
 
 app.listen(process.env.PORT||80,()=>{

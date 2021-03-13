@@ -8,33 +8,21 @@ const PLATFORMS_NAME = ["Windows","Macos","Linux","Android Phone","Android Table
 
 
 class Application {
-    constructor(/** @type {{id?:number,name:string,tags:number[],platforms:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
-        var {id,name,tags,platforms,url,approvalStatus,privacyStatus} = obj;
+    constructor(/** @type {{id?:number,name:string,platforms:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
+        var {id,name,platforms,url,approvalStatus,privacyStatus} = obj;
         this.id = id;
         this.name = name || "unnamed";
         this.url = url || "";
         this.platforms = platforms || [];
-        this.tags = tags || [];
         this.approvalStatus = approvalStatus || APPROVAL_STATUSES[0];
         this.privacyStatus = privacyStatus || APPROVAL_STATUSES[0];
     }
-    static parse(/** @type {{id:number,name:string,tags:string|number[],platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
-        var {id,name,tags,platforms,url,approvalStatus,privacyStatus} = obj;
-        if (typeof(tags)=="string") tags = tags.split(",").map(v=>parseInt(v)).filter(v=>v);
+    static parse(/** @type {{id:number,name:string,platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
+        var {id,name,platforms,url,approvalStatus,privacyStatus} = obj;
         if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
-        return new Application({id,url,name,tags,platforms,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]})
+        return new Application({id,url,name,platforms,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]});
     }
-
-    addTag(tagId) {
-        if (!this.tags.includes(tagId)) this.tags.push(tagId);
-    }
-    removeTag(tagId) {
-        var i = this.tags.indexOf(tagId);
-        if (i != -1) this.tags.splice(i,1);
-    }
-    clearTags() {
-        this.tags.splice(0);
-    }
+    
 
     addPlatform(platform) {
         if (PLATFORMS.includes(platform) && !this.platforms.includes(platform)) this.platforms.push(platform);
@@ -68,7 +56,6 @@ class Application {
             id: this.id,
             name: this.name,
             url: this.url,
-            tags: keepArraysSeparate?this.tags:this.tags.join(),
             approvalStatus: APPROVAL_STATUSES.indexOf(this.approvalStatus),
             privacyStatus: PRIVACY_STATUSES.indexOf(this.privacyStatus),
             platforms: keepArraysSeparate?platformIds.join():platformIds
@@ -79,7 +66,6 @@ class Application {
         return JSON.stringify({
             name: this.name,
             url: this.url,
-            tags: this.tags,
             approvalStatus: this.approvalStatus,
             privacyStatus: this.privacyStatus,
             platforms: this.platforms

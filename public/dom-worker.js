@@ -14,7 +14,9 @@ function createAppDiv(/**@type {Application}*/app) {
         createElement("div",app.name,{className:"name"}),
         createElement("div",app.approvalStatus,{className:"status"}),
         createElement("div",app.privacyStatus,{className:"status"}),
-        createElement("div",app.platforms.join(", "),{className:"platforms"})
+        createElement("div","P:"+app.platforms.join(", "),{className:"platforms"}),
+        createElement("div","S:"+app.subjects.join(", "),{className:"subjects"}),
+        createElement("div","G:"+app.gradeLevels.join(", "),{className:"gradelevels"})
         //createElement("div",JSON.stringify({url:app.url,id:app.id}),{className:""})
     ],{className:"app"});
     return appDiv;
@@ -47,7 +49,6 @@ function interactifySelectList(/**@type {HTMLDivElement|{name:string,value:()=>{
     selectListElt.getElementsByClassName("selectlist-contents")[0].addEventListener("mouseleave",e=>{
         selectListElt.classList.add("revanim");
         selectListElts.forEach(v=>v.classList.remove("open"));
-        console.log("yeet")
     });
     let se = selectListElt;
     selectListElt.value = ()=>{

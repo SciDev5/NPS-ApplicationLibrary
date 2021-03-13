@@ -8,6 +8,7 @@ function getLPCSV_test() {
     return fs.readFileSync("./.data/lp_apps.csv",{encoding:"utf-8"});
 }
 
+/**@returns {Application[]}*/
 function convertLPCSV(lp_csv) {
     var s = lp_csv.trim();
     s = s.split("\n").map(v=>v.trim().split(",")); 

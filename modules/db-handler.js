@@ -1,7 +1,7 @@
 import lpcsvUtil from "../modules/map-lpcsv-to-apparr.js";
 
 import { deepFreeze } from "./utils.js";
-import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, Application } from "../public/application.js";
+import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
 import sqlite3 from "sqlite3";
 const sqlite = sqlite3.verbose();
 const db = new sqlite.Database(":memory:");
@@ -16,7 +16,9 @@ const APP_TABLE = {
         {name:"url", type:"TEXT"},
         {name:"approvalStatus", type:"INT", enum:APPROVAL_STATUSES, notNull:true, default: 0},
         {name:"privacyStatus", type:"INT", enum:PRIVACY_STATUSES, notNull:true, default: 0},
-        {name:"platforms", type:"TEXT", arrEnum:PLATFORMS, notNull:true, default: 0}
+        {name:"platforms", type:"TEXT", arrEnum:PLATFORMS, notNull:true, default: ""},
+        {name:"gradeLevels", type:"TEXT", arrEnum:GRADE_LEVELS, notNull:true, default: ""},
+        {name:"subjects", type:"TEXT", arrEnum:SUBJECTS, notNull:true, default: ""}
     ]
 };
 deepFreeze([APP_TABLE]);
@@ -49,7 +51,7 @@ function tableColsStr(cols) {
 }
 
 function getAppValidKVPairs(/**@type {Application}*/app) {
-    var keys = [], values = [], appjson = app.toJSON(); const allowedKeys = ["name","url","approvalStatus","privacyStatus","platforms"];
+    var keys = [], values = [], appjson = app.toJSON(); const allowedKeys = ["name","url","approvalStatus","privacyStatus","platforms","subjects","gradeLevels"];
     for (var key in appjson) if (allowedKeys.includes(key)) {
         keys.push(key);
         values.push(appjson[key]);
@@ -71,7 +73,7 @@ async function delApp(appId) {
     return await asyncCMD("run","DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]);
 }
 async function searchApps(searchQuery) {
-    var {name,platforms,approvalStatus,privacyStatus,platformsRequireAll} = searchQuery;
+    var {name,approvalStatus,privacyStatus,platforms,platformsRequireAll,gradeLevels,gradeLevelsRequireAll,subjects,subjectsRequireAll} = searchQuery;
     var queryParams = [];
     var query = "SELECT * FROM "+APP_TABLE.NAME;
     var n = 0;
@@ -80,20 +82,28 @@ async function searchApps(searchQuery) {
         else query += " AND "+qstr;
         if (qprm) queryParams.push(qprm);
     };
+    var appendArr = (pname,arr,reqAll)=>append(`(SELECT COUNT(*) FROM (
+        WITH split(word, str) AS (
+            SELECT '', ${pname}||','
+            UNION ALL SELECT
+            substr(str, 0, instr(str, ',')),
+            substr(str, instr(str, ',')+1)
+            FROM split WHERE str!=''
+        ) SELECT word FROM split WHERE word!='') WHERE word in ('${arr.join("','")}')) `+(reqAll?`== ${arr.length}`:"> 0")
+    );
+    
     if (name) append("name LIKE ?",`%${name}%`)
     if (platforms && platforms.length && platforms.every(v=>Number.isSafeInteger(v)))
-        append(`(SELECT COUNT(*) FROM (
-            WITH split(word, str) AS (
-                SELECT '', platforms||','
-                UNION ALL SELECT
-                substr(str, 0, instr(str, ',')),
-                substr(str, instr(str, ',')+1)
-                FROM split WHERE str!=''
-            ) SELECT word FROM split WHERE word!='') WHERE word in ('${platforms.join("','")}')) `+(platformsRequireAll?`== ${platforms.length}`:"> 0"));
+        appendArr("platforms",platforms,platformsRequireAll);
+    if (gradeLevels && gradeLevels.length && gradeLevels.every(v=>Number.isSafeInteger(v)))
+        appendArr("gradeLevels",gradeLevels,gradeLevelsRequireAll);
+    if (subjects && subjects.length && subjects.every(v=>Number.isSafeInteger(v)))
+        appendArr("subjects",subjects,subjectsRequireAll);
     if (approvalStatus && approvalStatus.length && approvalStatus.every(v=>Number.isSafeInteger(v))) 
         append(`approvalStatus in ('${approvalStatus.join("','")}')`);
     if (privacyStatus && privacyStatus.length && privacyStatus.every(v=>Number.isSafeInteger(v))) 
         append(`privacyStatus in ('${privacyStatus.join("','")}')`);
+
     return (await asyncCMD("all",query,queryParams)).map(v=>Application.parse(v));
 }
 async function allApps() {
@@ -113,8 +123,12 @@ async function tryInitDB() {
     await tryInitDB();
     
     var promises = [];
-    for (var k of lpcsvUtil.convertLPCSV(lpcsvUtil.getLPCSV_test()))
+    for (var k of lpcsvUtil.convertLPCSV(lpcsvUtil.getLPCSV_test())) {
+        for (var i = 0; Math.random()>0.3; i++) k.addPlatform(PLATFORMS[Math.floor(Math.random()*PLATFORMS.length)]);
+        for (var i = 0; Math.random()>0.3; i++) k.addSubject(SUBJECTS[Math.floor(Math.random()*SUBJECTS.length)]);
+        for (var i = 0; Math.random()>0.3; i++) k.addGradeLevel(GRADE_LEVELS[Math.floor(Math.random()*GRADE_LEVELS.length)]);
         promises.push(addApp(k));
+    }
     await Promise.all(promises);
 
 })();

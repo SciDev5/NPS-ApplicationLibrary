@@ -1,39 +1,60 @@
 const APPROVAL_STATUSES = ["UNK","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORMED","PILOT","INSTRUCTOR_ONLY","PENDING","DENIED"];
 const PRIVACY_STATUSES = ["UNK","COMPLIANT","NONCOMPLIANT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
-const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"]
+const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"];
+const GRADE_LEVELS = ["PRE_K","ELEMENTARY","MIDDLE","HIGH"];
+const SUBJECTS = ["COOL_STUFF","NOT_COOL_STUFF"];
 
 const APPROVAL_STATUSES_NAME = ["Unknown","Approved","14 w/ Parental Consent","Parent Informed Use","Active Pilot","Instructor Use Only","Pending","Reviewed and Denied"];
 const PRIVACY_STATUSES_NAME = ["Unknown","Compliant","Noncompliant","Parental Consent Required","Instructor Use Only","No Information Collected","Not Applicable"];
 const PLATFORMS_NAME = ["Windows","Macos","Linux","Android Phone","Android Tablet","iPhone","iPad","Web","Chromebook"]
-
+const GRADE_LEVELS_NAME = ["Pre K","Elementary School","Middle School","High School"];
+const SUBJECTS_NAME = ["Cool Stuff", "Uncool stuff"];
 
 class Application {
-    constructor(/** @type {{id?:number,name:string,platforms:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
-        var {id,name,platforms,url,approvalStatus,privacyStatus} = obj;
+    constructor(/** @type {{id?:number,name:string,platforms:string[],gradeLevels:string[],subjects:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
+        var {id,name,platforms,gradeLevels,subjects,url,approvalStatus,privacyStatus} = obj;
         this.id = id;
         this.name = name || "unnamed";
         this.url = url || "";
         this.platforms = platforms || [];
+        this.gradeLevels = gradeLevels || [];
+        this.subjects = subjects || [];
         this.approvalStatus = approvalStatus || APPROVAL_STATUSES[0];
         this.privacyStatus = privacyStatus || APPROVAL_STATUSES[0];
     }
     static parse(/** @type {{id:number,name:string,platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
-        var {id,name,platforms,url,approvalStatus,privacyStatus} = obj;
+        var {id,name,platforms,subjects,gradeLevels,url,approvalStatus,privacyStatus} = obj;
         if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
-        return new Application({id,url,name,platforms,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]});
+        if (typeof(platforms[0])=="number") platforms = platforms.map(v=>PLATFORMS[v]).filter(v=>v);
+        if (typeof(gradeLevels)=="string") gradeLevels = gradeLevels.split(",").map(v=>GRADE_LEVELS[v]).filter(v=>v);
+        if (typeof(gradeLevels[0])=="number") gradeLevels = gradeLevels.map(v=>GRADE_LEVELS[v]).filter(v=>v);
+        if (typeof(subjects)=="string") subjects = subjects.split(",").map(v=>SUBJECTS[v]).filter(v=>v);
+        if (typeof(subjects[0])=="number") subjects = subjects.map(v=>SUBJECTS[v]).filter(v=>v);
+        return new Application({id,url,name,platforms,subjects,gradeLevels,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]});
     }
     
 
-    addPlatform(platform) {
-        if (PLATFORMS.includes(platform) && !this.platforms.includes(platform)) this.platforms.push(platform);
-    }
+    addPlatform(platform) { if (PLATFORMS.includes(platform) && !this.platforms.includes(platform)) this.platforms.push(platform); }
     removePlatform(platform) {
         var i = this.platforms.indexOf(platform);
         if (i != -1) this.platforms.splice(i,1);
     }
-    clearPlatforms() {
-        this.platforms.splice(0);
+    clearPlatforms() { this.platforms.splice(0); }
+
+    addSubject(subject) { if (SUBJECTS.includes(subject) && !this.subjects.includes(subject)) this.subjects.push(subject); }
+    removeSubject(subject) {
+        var i = this.subjects.indexOf(subject);
+        if (i != -1) this.subjects.splice(i,1);
     }
+    clearSubjects() { this.subjects.splice(0); }
+
+    addGradeLevel(gradeLevel) { if (GRADE_LEVELS.includes(gradeLevel) && !this.gradeLevels.includes(gradeLevel)) this.gradeLevels.push(gradeLevel); }
+    removeGradeLevel(gradeLevel) {
+        var i = this.gradeLevels.indexOf(gradeLevel);
+        if (i != -1) this.gradeLevels.splice(i,1);
+    }
+    clearGradeLevels() { this.gradeLevels.splice(0); }
+
 
     setStatus(approvalStatus,privacyStatus) {
         if (approvalStatus && APPROVAL_STATUSES.includes(approvalStatus))
@@ -52,13 +73,17 @@ class Application {
 
     toJSON(keepArraysSeparate) {
         var platformIds = this.platforms.map(v=>PLATFORMS.indexOf(v)).filter(v=>v>=0);
+        var gradeLevelIds = this.gradeLevels.map(v=>GRADE_LEVELS.indexOf(v)).filter(v=>v>=0);
+        var subjectIds = this.subjects.map(v=>SUBJECTS.indexOf(v)).filter(v=>v>=0);
         return {
             id: this.id,
             name: this.name,
             url: this.url,
             approvalStatus: APPROVAL_STATUSES.indexOf(this.approvalStatus),
             privacyStatus: PRIVACY_STATUSES.indexOf(this.privacyStatus),
-            platforms: keepArraysSeparate?platformIds.join():platformIds
+            platforms: keepArraysSeparate?platformIds:platformIds.join(),
+            subjects: keepArraysSeparate?subjectIds:subjectIds.join(),
+            gradeLevels: keepArraysSeparate?gradeLevelIds:gradeLevelIds.join()
         };
     }
 
@@ -68,10 +93,24 @@ class Application {
             url: this.url,
             approvalStatus: this.approvalStatus,
             privacyStatus: this.privacyStatus,
-            platforms: this.platforms
+            platforms: this.platforms,
+            gradeLevels: this.gradeLevels,
+            subjects: this.subjects
         });
     }
 }
 
 
-export { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME};
+export { 
+    Application,
+    APPROVAL_STATUSES,
+    PRIVACY_STATUSES,
+    PLATFORMS,
+    GRADE_LEVELS,
+    SUBJECTS,
+    APPROVAL_STATUSES_NAME,
+    PRIVACY_STATUSES_NAME,
+    PLATFORMS_NAME,
+    GRADE_LEVELS_NAME,
+    SUBJECTS_NAME
+};

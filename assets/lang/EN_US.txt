@@ -1,0 +1,7 @@
+index.title=NPS Application Library
+index.body.title=NPS Application Library
+index.body.search.title=Search
+index.body.search.refreshbutton=Refresh Search
+index.body.search.refreshpopup=Click to Refresh Search
+index.body.search.loadingpopup=Loading...
+index.body.search.noresults=No Results

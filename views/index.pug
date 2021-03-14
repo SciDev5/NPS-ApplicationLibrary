@@ -1,28 +1,28 @@
-html
+html(lang=lang)
     head 
-        title NPS Application Library
+        title= translation["index.pageTitle"]
         script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
     body.theme-light
-        .header NPS Application Library
+        .header= translation["index.header.title"]
         .search-container
-            .search-title Search
-            input#name-search(name="name-search", placeholder="Name")
+            .search-title= translation["index.search.title"]
+            input#name-search(name="name-search", placeholder=translation["index.search.namePlaceholder"])
             each sp,n in searchParams
                 .selectlist(name=sp.id,tabindex=0)
-                    .selectlist-title= sp.name
+                    .selectlist-title= translation[sp.name]
                     .selectlist-contents
                         each option in sp.options
-                            .selectlist-elt(name=option.id)= option.name
-            button#search-refresh-button-inline(disabled) Refresh Search
+                            .selectlist-elt(name=option.id)= translation[option.name]
+            button#search-refresh-button-inline(disabled)= translation["index.search.refreshButton"]
             
         .apps-container
             #search-refresh-popup
-                | Click to Refresh Search
+                = translation["index.search.refreshPopup"]
             #search-loading-popup
-                | LOADING
+                = translation["index.search.loadingPopup"]
 
 
             #apps-list
-                #apps-empty No Results
+                #apps-empty= translation["index.search.noResults"]
             

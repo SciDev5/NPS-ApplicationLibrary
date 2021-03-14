@@ -1,0 +1,53 @@
+index.pageTitle = Colección de aplicaciones NPS
+index.header.title = Colección de aplicaciones NPS
+index.search.title = Búscalo
+index.search.refreshButton = Actualizar búsqueda
+index.search.refreshPopup = Clic para actualizar la búsqueda
+index.search.loadingPopup = Cargando...
+index.search.noResults = No hay resultados
+index.search.namePlaceholder = Nombre
+
+# Nombres de estados de aprobación
+application.approvalStatus = Estado de aprobación
+application.approvalStatus.unk        = Desconocido
+application.approvalStatus.approved   = Aprobado
+application.approvalStatus.14parent   = 14 + consentimiento de los padres
+application.approvalStatus.parentInfo = Uso informado por los padres
+application.approvalStatus.pilot      = Piloto activo
+application.approvalStatus.instructor = Solo para uso del instructor
+application.approvalStatus.pending    = Pendiente
+application.approvalStatus.denied     = Revisado y negado
+
+# Nombres de estado de privacidad
+application.privacyStatus = Estado de privacidad
+application.privacyStatus.unk         = Desconocido
+application.privacyStatus.compliant   = Obediente
+application.privacyStatus.noncompliant= No conforme
+application.privacyStatus.parent      = Se requiere consentimiento de los padres
+application.privacyStatus.instructor  = Solo para uso del instructor
+application.privacyStatus.noInfo      = No se recopiló información
+application.privacyStatus.na          = No aplica
+
+# Nombres de plataforma
+application.platform = Plataforma
+application.platform.windows          = Windows
+application.platform.mac              = Macos
+application.platform.linux            = Linux
+application.platform.androidPhone     = Teléfono Android
+application.platform.androidTablet    = Tableta Android
+application.platform.applePhone       = iPhone
+application.platform.appleTablet      = iPad
+application.platform.web              = Web
+application.platform.chromebook       = Chromebook
+
+# Nombres de nivel de grado
+application.gradeLevel = Nivel de grado
+application.gradeLevel.preK           = Pre K
+application.gradeLevel.elementary     = Escuela primaria
+application.gradeLevel.middle         = Escuela intermedia
+application.gradeLevel.high           = Escuela secundaria
+
+# Nombres de tema
+application.subject = Tema
+application.subject.cool              = Cosas interesantes
+application.subject.uncool            = Cosas no interesantes

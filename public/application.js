@@ -4,11 +4,11 @@ const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","I
 const GRADE_LEVELS = ["PRE_K","ELEMENTARY","MIDDLE","HIGH"];
 const SUBJECTS = ["COOL_STUFF","NOT_COOL_STUFF"];
 
-const APPROVAL_STATUSES_NAME = ["Unknown","Approved","14 w/ Parental Consent","Parent Informed Use","Active Pilot","Instructor Use Only","Pending","Reviewed and Denied"];
-const PRIVACY_STATUSES_NAME = ["Unknown","Compliant","Noncompliant","Parental Consent Required","Instructor Use Only","No Information Collected","Not Applicable"];
-const PLATFORMS_NAME = ["Windows","Macos","Linux","Android Phone","Android Tablet","iPhone","iPad","Web","Chromebook"]
-const GRADE_LEVELS_NAME = ["Pre K","Elementary School","Middle School","High School"];
-const SUBJECTS_NAME = ["Cool Stuff", "Uncool stuff"];
+const APPROVAL_STATUSES_NAME = ["unk","approved","14parent","parentInfo","pilot","instructor","pending","denied"].map(v=>"application.approvalStatus."+v);
+const PRIVACY_STATUSES_NAME = ["unk","compliant","noncompliant","parent","instructor","noInfo","na"].map(v=>"application.privacyStatus."+v);
+const PLATFORMS_NAME = ["windows","mac","linux","androidPhone","androidTablet","applePhone","appleTablet","web","chromebook"].map(v=>"application.platform."+v);
+const GRADE_LEVELS_NAME = ["preK","elementary","middle","high"].map(v=>"application.gradeLevel."+v);
+const SUBJECTS_NAME = ["cool", "uncool"].map(v=>"application.subject."+v);
 
 class Application {
     constructor(/** @type {{id?:number,name:string,platforms:string[],gradeLevels:string[],subjects:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {

@@ -2,6 +2,7 @@ import database from "./modules/db-handler.js";
 import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME } from "./public/application.js";
 import bodyParser from "body-parser";
 import express from "express";
+import {getTranslationMap,DEFAULT_LANG} from "./modules/lang.js";
 const app = express();
 
 app.set("view engine", "pug");
@@ -9,31 +10,38 @@ app.use(express.static("./public/"));
 
 app.use(bodyParser.json({strict:false}))
 
-app.get("/",(req,res)=>{
+
+app.get("/",async (req,res)=>{
     var searchParams = []; // [{id:"p",name:"P",options:[{id:"1",name:"one"}]}]
-    searchParams.push({id:"approval",name:"Approval Status",options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))});
-    searchParams.push({id:"privacy",name:"Privacy Status",options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
-    searchParams.push({id:"platform",name:"Platforms",options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))});
-
-    res.render("index",{searchParams});
-})
-
-app.post("/sql",async(req,res)=>{
-    res.send(await database.sql("all",req.body["sql"],req.body["params"]||[]));
+    searchParams.push({id:"approval",name:"application.approvalStatus",options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))});
+    searchParams.push({id:"privacy",name:"application.privacyStatus",options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
+    searchParams.push({id:"platform",name:"application.platform",options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))});
+    var lang = req.query["lang"] || DEFAULT_LANG;
+    var translation = await getTranslationMap(lang);
+    res.render("index",{searchParams,lang,translation});
+});
+app.get("/lang/:lang",async (req,res)=>{
+    res.json(await getTranslationMap(req.params["lang"]));
 });
 
+
 app.get("/apps/search",async(req,res)=>{
+    console.log("YEET");
     try {
-        var {name,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll} = req.query;
-        if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!tagsRequireAll&&!platformsRequireAll) {res.send(await database.apps.getAll()); return}
+        var {name,platforms,subjects,gradeLevels,approvalStatus,privacyStatus,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll} = req.query;
+        if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!platformsRequireAll) {res.send(await database.apps.getAll()); return}
         if (platforms) platforms = JSON.parse(platforms);
+        if (gradeLevels) gradeLevels = JSON.parse(gradeLevels);
+        if (subjects) subjects = JSON.parse(subjects);
         if (approvalStatus) approvalStatus = JSON.parse(approvalStatus);
         if (privacyStatus) privacyStatus = JSON.parse(privacyStatus);
-        tagsRequireAll = tagsRequireAll=="true"||tagsRequireAll==true;
         platformsRequireAll = platformsRequireAll=="true"||platformsRequireAll==true;
-        res.send(await database.apps.search({name,tags,platforms,approvalStatus,privacyStatus,tagsRequireAll,platformsRequireAll}));
+        gradeLevelsRequireAll = gradeLevelsRequireAll=="true"||gradeLevelsRequireAll==true;
+        subjectsRequireAll = subjectsRequireAll=="true"||subjectsRequireAll==true;
+        res.send(await database.apps.search({name,platforms,gradeLevels,subjects,approvalStatus,privacyStatus,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll}));
     } catch (e) {
         res.status(400);
+        console.error(e);
         res.send(e);
     }
 });

@@ -1,8 +1,8 @@
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS } from "./application.js" 
+import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, SUBJECTS_NAME, GRADE_LEVELS_NAME, APPROVAL_STATUSES_NAME, SUBJECTS, GRADE_LEVELS } from "./application.js";
 
 function createElement(type,content,params) {
     var elt = document.createElement(type);
-    if (typeof(content)=="string") elt.innerText = content;
+    if (typeof(content)!="object"||!(content instanceof Array)) elt.innerText = content;
     else for (var subelt of content) elt.appendChild(subelt);
     for (var i in params) elt[i] = params[i];
     return elt;
@@ -10,13 +10,14 @@ function createElement(type,content,params) {
 
 
 function createAppDiv(/**@type {Application}*/app) {
+    const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
     var appDiv = createElement("div",[
         createElement("div",app.name,{className:"name"}),
-        createElement("div",app.approvalStatus,{className:"status"}),
-        createElement("div",app.privacyStatus,{className:"status"}),
-        createElement("div","P:"+app.platforms.join(", "),{className:"platforms"}),
-        createElement("div","S:"+app.subjects.join(", "),{className:"subjects"}),
-        createElement("div","G:"+app.gradeLevels.join(", "),{className:"gradelevels"})
+        createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status"}),
+        createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status"}),
+        createElement("div","P:"+app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(", "),{className:"platforms"}),
+        createElement("div","S:"+app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(", "),{className:"subjects"}),
+        createElement("div","G:"+app.gradeLevels.map(v=>translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME)).join(", "),{className:"gradelevels"})
         //createElement("div",JSON.stringify({url:app.url,id:app.id}),{className:""})
     ],{className:"app"});
     return appDiv;

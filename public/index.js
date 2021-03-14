@@ -22,6 +22,10 @@ async function paramFetch(uri,obj) {
     for (var i in obj) params.set(i,obj[i]);
     return await (await fetch(uri+"?"+params,{method:"get"})).json();
 }
+async function getTranslationMap() {
+    return await fetch("/lang/"+document.getElementsByTagName("html")[0].lang).then(r=>r.json());
+}
+
 
 async function searchEvHandler(e) {
     if (!e.isTrusted) return;
@@ -34,6 +38,7 @@ async function searchEvHandler(e) {
 
 addEventListener("load",async e=>{
     var allApps = await getAllApps();
+    Object.defineProperty(window,"lang",{writable:false,value:Object.freeze(await getTranslationMap())});
     console.log(allApps);
     domWorker.populateApps(allApps);
     document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));

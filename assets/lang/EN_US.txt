@@ -1,7 +1,53 @@
-index.title=NPS Application Library
-index.body.title=NPS Application Library
-index.body.search.title=Search
-index.body.search.refreshbutton=Refresh Search
-index.body.search.refreshpopup=Click to Refresh Search
-index.body.search.loadingpopup=Loading...
-index.body.search.noresults=No Results
+index.pageTitle = NPS Application Library
+index.header.title = NPS Application Library
+index.search.title = Search
+index.search.refreshButton = Refresh search
+index.search.refreshPopup = Click to refresh search.
+index.search.loadingPopup = Loading...
+index.search.noResults = No Results
+index.search.namePlaceholder = Name
+
+# Approval Statuses
+application.approvalStatus = Approval Status
+application.approvalStatus.unk        = Unknown
+application.approvalStatus.approved   = Approved
+application.approvalStatus.14parent   = 14 w/ parental consent
+application.approvalStatus.parentInfo = Parent informed use
+application.approvalStatus.pilot      = Active pilot
+application.approvalStatus.instructor = Instructor use only
+application.approvalStatus.pending    = Pending
+application.approvalStatus.denied     = Reviewed and denied
+
+# Privacy Statuses
+application.privacyStatus = Privacy Status
+application.privacyStatus.unk         = Unknown
+application.privacyStatus.compliant   = Compliant
+application.privacyStatus.noncompliant= Noncompliant
+application.privacyStatus.parent      = Parental consent required
+application.privacyStatus.instructor  = Instructor use only
+application.privacyStatus.noInfo      = No info collected
+application.privacyStatus.na          = Not applicable
+
+# Platform Names
+application.platform = Platform
+application.platform.windows          = Windows
+application.platform.mac              = Macos
+application.platform.linux            = Linux
+application.platform.androidPhone     = Android Phone
+application.platform.androidTablet    = Android Tablet
+application.platform.applePhone       = iPhone
+application.platform.appleTablet      = iPad
+application.platform.web              = Web
+application.platform.chromebook       = Chromebook
+
+# Grade Levels Name
+application.gradeLevel = Grade Level
+application.gradeLevel.preK           = Pre K
+application.gradeLevel.elementary     = Elementary school
+application.gradeLevel.middle         = Middle school
+application.gradeLevel.high           = High school
+
+# Subject Names
+application.subject = Subject
+application.subject.cool              = Cool stuff
+application.subject.uncool            = Uncool stuff

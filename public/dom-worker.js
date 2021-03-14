@@ -13,8 +13,8 @@ function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
     var appDiv = createElement("div",[
         createElement("div",app.name,{className:"name"}),
-        createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status"}),
-        createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status"}),
+        createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
+        createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
         createElement("div","P:"+app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(", "),{className:"platforms"}),
         createElement("div","S:"+app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(", "),{className:"subjects"}),
         createElement("div","G:"+app.gradeLevels.map(v=>translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME)).join(", "),{className:"gradelevels"})

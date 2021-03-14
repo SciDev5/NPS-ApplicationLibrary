@@ -17,14 +17,51 @@ body {
 
 .theme-light {
     
-    --fg-em: #696969;
-    --fg: #b5b5b5;
+    --fg-em: #4d4d4d;
+    --fg: #888888;
     --fg-inv: #ffffff;
 
-    --bg-em: #f0f0f0;
+    --bg-em: #f8f8f8;
     --bg: #ffffff;
     --bg-darkened: #f7f7f7;
     --bg-inv: #3f3f3f;
+
+    --status-none: #e7e7e7;
+    --status-ok: #7affad;
+    --status-ok-light: #f6fffb;
+    --status-not-ok: #ffb093;
+    --status-not-ok-light: #fff8f4;
+    --status-neut: #ffff91;
+    --status-neut-light: #fffff1;
+    --status-limited: #ca97fa;
+    --status-limited-light: #faf5ff;
+    --status-pending: #9d9df0;
+    --status-pending-light: #f4f4ff;
+
+    background: var(--bg);
+}
+.theme-dark {
+    
+    --fg-em: #c0c0c0;
+    --fg: #ffffff;
+    --fg-inv: #272727;
+
+    --bg-em: #3a3a3a;
+    --bg: #1a1a1a;
+    --bg-darkened: #1f1f1f;
+    --bg-inv: #ffffff;
+
+    --status-none: #353535;
+    --status-ok: #00bd6b;
+    --status-ok-light: #022f1b;
+    --status-not-ok: #df3b00;
+    --status-not-ok-light: #3b1905;
+    --status-neut: #838300;
+    --status-neut-light: #313101;
+    --status-limited: #6b00cd;
+    --status-limited-light: #2b0551;
+    --status-pending: #0505c7;
+    --status-pending-light: #0d0d50;
 
     background: var(--bg);
 }
@@ -59,16 +96,39 @@ body {
     vertical-align: top;
     margin: 5px;
     font-family: 'Barlow';
-    border-radius: 5px;
+    border-radius: 8px;
 }
 .app > .name {
+    color: var(--fg-em);
     font-size: 1.5em;
     font-weight: bold;
-    padding: 5px 10px;
+    padding: 10px 15px;
+    /*border-bottom: 2px solid var(--bg-darkened);*/
 }
-.app > .tags, .app > .status, .app > .platforms {
+.app > .status, .app > .platforms, .app > .subjects, .app > .gradelevels {
+    color: var(--fg-em);
     padding: 5px 15px;
 }
+.app > .as-UNK, .app > .as-APPROVED, .app > .as-14_PARENTAL_CONSENT, .app > .as-PARENT_INFORMED, .app > .as-PILOT,
+.app > .as-INSTRUCTOR_ONLY, .app > .as-PENDING, .app > .as-DENIED, .app > .ps-UNK, .app > .ps-COMPLIANT,
+.app > .ps-NONCOMPLIANT, .app > .ps-PARENTAL_CONSENT, .app > .ps-INSTRUCTOR_ONLY, .app > .ps-NO_INFO_COLLECTED,
+.app > .ps-NOT_APPLICABLE {
+    border: 1px solid var(--status-none);
+    border-width: 0px 20px;
+}
+.app > .as-APPROVED                                        { border-color: var(--status-ok);      background: var(--status-ok-light);}
+.app > .as-DENIED                                          { border-color: var(--status-not-ok);  background: var(--status-not-ok-light);}
+.app > .as-14_PARENTAL_CONSENT, .app > .as-PARENT_INFORMED { border-color: var(--status-neut);    background: var(--status-neut-light);}
+.app > .as-PILOT, .app > .as-PENDING                       { border-color: var(--status-pending); background: var(--status-pending-light);}
+.app > .as-INSTRUCTOR_ONLY                                 { border-color: var(--status-limited); background: var(--status-limited-light);}
+
+.app > .ps-COMPLIANT, .app > .ps-NO_INFO_COLLECTED { border-color: var(--status-ok);      background: var(--status-ok-light);}
+.app > .ps-NONCOMPLIANT                            { border-color: var(--status-not-ok);  background: var(--status-not-ok-light);}
+.app > .ps-INSTRUCTOR_ONLY                         { border-color: var(--status-limited); background: var(--status-limited-light);}
+.app > .ps-PARENTAL_CONSENT                        { border-color: var(--status-neut);    background: var(--status-neut-light);}
+
+
+
 
 #apps-empty {
     display: none;
@@ -77,6 +137,7 @@ body {
     font-size: large;
     font-weight: bold;
     color: var(--fg-em);
+    font-family: "Barlow", sans-serif;
 }
 #apps-empty.visible {
     display: block;
@@ -91,6 +152,8 @@ body {
 }
 
 input, #search-refresh-button-inline {
+    color: var(--fg);
+    background: var(--bg);
     width: 300px;
     height: 40px;
     line-height: 30px;

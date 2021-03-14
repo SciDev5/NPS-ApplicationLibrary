@@ -11,11 +11,11 @@ index.search.namePlaceholder = Nombre
 application.approvalStatus = Estado de aprobación
 application.approvalStatus.unk        = Desconocido
 application.approvalStatus.approved   = Aprobado
-application.approvalStatus.14parent   = 14 + consentimiento de los padres
+application.approvalStatus.14parent   = 14+ y consentimiento de los padres
 application.approvalStatus.parentInfo = Uso informado por los padres
 application.approvalStatus.pilot      = Piloto activo
 application.approvalStatus.instructor = Solo para uso del instructor
-application.approvalStatus.pending    = Pendiente
+application.approvalStatus.pending    = Esperando una decisión
 application.approvalStatus.denied     = Revisado y negado
 
 # Nombres de estado de privacidad

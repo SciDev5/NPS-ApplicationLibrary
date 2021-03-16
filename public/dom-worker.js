@@ -76,6 +76,21 @@ addEventListener("load",e=>{
     searchNameInput.addEventListener("input",e=>{
         onSearchDomUpdate();
     });
+
+    const lc = document.getElementById("language-container");
+    document.querySelector(".language-list > .language-option:nth-child(1)").addEventListener("click",e=>{
+        lc.classList.remove("open");
+    });
+    document.getElementById("translate-button").addEventListener("click",e=>{
+        lc.classList.add("open");
+    });
+    for (var elt of document.querySelectorAll(".language-list > .language-option:not(:nth-child(1))"))
+        elt.addEventListener("click",e=>{
+            var srch = new URLSearchParams(window.location.search);
+            srch.set("lang",e.path[0].getAttribute("value"));
+            window.location.search = srch.toString();
+        });
+
 });
 
 function getSearch() {

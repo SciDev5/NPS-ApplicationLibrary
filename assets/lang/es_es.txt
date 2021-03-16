@@ -1,3 +1,5 @@
+lang = Español (ES)
+
 index.pageTitle = Colección de aplicaciones NPS
 index.header.title = Colección de aplicaciones NPS
 index.search.title = Búscalo

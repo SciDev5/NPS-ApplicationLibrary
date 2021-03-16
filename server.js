@@ -2,7 +2,7 @@ import database from "./modules/db-handler.js";
 import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME } from "./public/application.js";
 import bodyParser from "body-parser";
 import express from "express";
-import {getTranslationMap,DEFAULT_LANG} from "./modules/lang.js";
+import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY} from "./modules/lang.js";
 const app = express();
 
 app.set("view engine", "pug");
@@ -18,7 +18,8 @@ app.get("/",async (req,res)=>{
     searchParams.push({id:"platform",name:"application.platform",options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))});
     var lang = req.query["lang"] || DEFAULT_LANG;
     var translation = await getTranslationMap(lang);
-    res.render("index",{searchParams,lang,translation});
+    await LANGUAGE_INTERNAL_NAMES_READY;
+    res.render("index",{searchParams,lang,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 app.get("/lang/:lang",async (req,res)=>{
     res.json(await getTranslationMap(req.params["lang"]));
@@ -26,7 +27,6 @@ app.get("/lang/:lang",async (req,res)=>{
 
 
 app.get("/apps/search",async(req,res)=>{
-    console.log("YEET");
     try {
         var {name,platforms,subjects,gradeLevels,approvalStatus,privacyStatus,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll} = req.query;
         if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!platformsRequireAll) {res.send(await database.apps.getAll()); return}

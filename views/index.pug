@@ -4,7 +4,10 @@ html(lang=lang)
         script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
     body.theme-light
+        button#translate-button
+            include includes/lang-symbol.pug
         .header= translation["index.header.title"]
+            
         .search-container
             .search-title= translation["index.search.title"]
             input#name-search(name="name-search", placeholder=translation["index.search.namePlaceholder"])
@@ -25,4 +28,12 @@ html(lang=lang)
 
             #apps-list
                 #apps-empty= translation["index.search.noResults"]
+        
+        #language-container
+            .bg
+            .language-list
+                .language-option= (langNames.filter(v=>v.lang==lang)[0]||{}).name
+                each langName in langNames
+                    if langName.lang!=lang
+                        .language-option(value=langName.lang)= langName.name
             

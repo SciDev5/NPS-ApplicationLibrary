@@ -1,3 +1,5 @@
+lang = English [US]
+
 index.pageTitle = NPS Application Library
 index.header.title = NPS Application Library
 index.search.title = Search

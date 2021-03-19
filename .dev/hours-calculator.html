@@ -1,0 +1,38 @@
+<script defer>
+var kIn, kOut;
+function wl(s) {
+	kOut.innerText = kOut.innerText+"\n"+s;
+}
+function roundToWeekStart(d) {
+	return roundToDay(new Date(d.getTime()-d.getDay()*1000*24*60*60));
+}
+function roundToDay(d) {
+	return new Date(d.toDateString());
+}
+function run() {
+	var k = kIn.value;
+	try { k = JSON.parse(k); } catch (e) { kOut.innerText = "JSON INVALID"; return; }
+	k = k.map(v=>[parseFloat(v.start),parseFloat(v.end)]).map(v=>[new Date(v[0]*1000),v[1]-v[0]]);
+	kOut.innerText = "";
+	var n = 0; for (var z of k) n+=z[1];
+	wl("TOTAL HOURS:"+(n/60/60).toFixed(2)+"hrs");
+	var wn = 0, st = roundToWeekStart(k[0][0]), ht=0;
+	for (var z of k) {
+		var cwn = Math.floor((roundToDay(z[0])-st)/1000/60/60/24/7);
+		if (cwn != wn) {wl("WEEK #"+wn+" TOTAL: "+ht.toFixed(2)+"hrs");wn=cwn;ht=0;}
+		ht+=z[1]/60/60;
+		wl(z[0].toLocaleDateString()+": "+(z[1]/60/60).toFixed(2)+"hrs");
+	}
+	wl("WEEK #"+wn+" TOTAL: "+ht.toFixed(2)+"hrs");
+}
+window.addEventListener("load",e=>{
+	kIn = document.getElementById("kIn")
+	kOut = document.getElementById("kOut")
+	console.log(kIn,kOut);
+
+	kIn.addEventListener("input",e=>setTimeout(run));
+});
+</script>
+
+<textarea id="kIn" placeholder="data here"></textarea>
+<p id="kOut" style="font-family:monospace;"></p>

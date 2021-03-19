@@ -9,6 +9,12 @@ index.search.loadingPopup = Loading...
 index.search.noResults = No Results
 index.search.namePlaceholder = Name
 
+
+# Application
+application.display.moreInfoButton = View details
+application.display.moreInfoUrl = More info
+application.display.closeInfoPopup = Close
+
 # Approval Statuses
 application.approvalStatus = Approval Status
 application.approvalStatus.unk        = Unknown

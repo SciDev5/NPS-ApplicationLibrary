@@ -11,14 +11,27 @@ function createElement(type,content,params) {
 
 function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
+    const translateSingle = (key) => window.lang[key]||key;
+    const moreInfoButton = createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
+    const moreInfoPopupCloseButton = createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
+    const moreInfoPopup = createElement("div",[
+        createElement("div",[],{className:"bg"}),
+        createElement("div",[
+            createElement("p",app.gradeLevels.map(v=>translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME)).join(),{}),
+            createElement("p",app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(),{}),
+            createElement("p",app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(),{}),
+            createElement("a",translateSingle("application.display.moreInfoUrl"),{href:app.url}),
+            moreInfoPopupCloseButton
+        ],{className:"content"})
+    ],{className:"more-info-popup"});
+    moreInfoButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.add("open")});
+    moreInfoPopupCloseButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.remove("open")});
     var appDiv = createElement("div",[
         createElement("div",app.name,{className:"name"}),
         createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
         createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
-        createElement("div","P:"+app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(", "),{className:"platforms"}),
-        createElement("div","S:"+app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(", "),{className:"subjects"}),
-        createElement("div","G:"+app.gradeLevels.map(v=>translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME)).join(", "),{className:"gradelevels"})
-        //createElement("div",JSON.stringify({url:app.url,id:app.id}),{className:""})
+        moreInfoButton,
+        moreInfoPopup
     ],{className:"app"});
     return appDiv;
 }

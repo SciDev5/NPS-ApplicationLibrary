@@ -18,10 +18,10 @@ body {
 .theme-light {
     
     --fg-em: #4d4d4d;
-    --fg: #888888;
+    --fg: #a3a3a3;
     --fg-inv: #ffffff;
 
-    --bg-em: #f8f8f8;
+    --bg-em: #f3f3f3;
     --bg: #ffffff;
     --bg-darkened: #f7f7f7;
     --bg-inv: #3f3f3f;
@@ -42,7 +42,7 @@ body {
 }
 .theme-dark {
     
-    --fg-em: #c0c0c0;
+    --fg-em: #a8a8a8;
     --fg: #ffffff;
     --fg-inv: #272727;
 
@@ -110,11 +110,14 @@ body {
 }
 #language-container.open {display: block;}
 .bg {
+    top: 0px;
+    left: 0px;
     width: 100%;
     height: 100%;
     position: fixed;
     opacity: 0.3;
     background: #000000;
+    z-index: 3;
 }
 .language-list {
     position: fixed;
@@ -128,6 +131,7 @@ body {
     border-radius: 6px;
     overflow: hidden;
     overflow-y: scroll;
+    z-index: 4;
 }
 .language-option {
     text-align: center;
@@ -173,9 +177,33 @@ body {
     padding: 10px 15px;
     /*border-bottom: 2px solid var(--bg-darkened);*/
 }
-.app > .status, .app > .platforms, .app > .subjects, .app > .gradelevels {
+.app > .status {
     color: var(--fg-em);
     padding: 5px 15px;
+}
+.app > .more-info {
+    color: var(--fg-em);
+    background: var(--bg);
+    border: 1px solid var(--fg);
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px 5px;
+    transition: color 0.2s, background 0.2s, border 0.2s;
+}
+.app > .more-info:hover {
+    border: 1px solid var(--bg-inv);
+    background: var(--bg-inv);
+    color: var(--fg-inv);
+}
+.app > .more-info-popup { display: none; }
+.app > .more-info-popup.open { display: block; }
+.app > .more-info-popup > .content {
+    position: fixed;
+    left: calc(50% - 100px);
+    width: 200px;
+    top: 50px;
+    background: var(--bg);
+    z-index: 4;
 }
 .app > .as-UNK, .app > .as-APPROVED, .app > .as-14_PARENTAL_CONSENT, .app > .as-PARENT_INFORMED, .app > .as-PILOT,
 .app > .as-INSTRUCTOR_ONLY, .app > .as-PENDING, .app > .as-DENIED, .app > .ps-UNK, .app > .ps-COMPLIANT,

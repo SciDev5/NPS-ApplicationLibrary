@@ -110,12 +110,12 @@ function getSearch() {
     var name = searchNameInput.value;
     var approvalStatus = selectListElts[0].value().filter(v=>v.value).map(v=>APPROVAL_STATUSES.indexOf(v.name));
     var privacyStatus = selectListElts[1].value().filter(v=>v.value).map(v=>PRIVACY_STATUSES.indexOf(v.name));
-    var platforms = selectListElts[2].value().filter(v=>v.value).map(v=>PLATFORMS.indexOf(v.name));
+    var gradeLevels = selectListElts[2].value().filter(v=>v.value).map(v=>GRADE_LEVELS.indexOf(v.name));
     var m = {};
     if (name) m.name = name.trim();
     if (approvalStatus && approvalStatus.length) m.approvalStatus = approvalStatus;
     if (privacyStatus && privacyStatus.length) m.privacyStatus = privacyStatus;
-    if (platforms && platforms.length) m.platforms = platforms;
+    if (gradeLevels && gradeLevels.length) m.gradeLevels = gradeLevels;
     return m;
 }
 function compareArr(a,b) {
@@ -129,7 +129,7 @@ function getSearchChanged() {
     return current.name != last.name || 
     !compareArr(current.approvalStatus, last.approvalStatus) || 
     !compareArr(current.privacyStatus, last.privacyStatus) ||
-    !compareArr(current.platforms, last.platforms)
+    !compareArr(current.gradeLevels, last.gradeLevels)
 }
 function onSearchDomUpdate() {
     var changed = getSearchChanged();

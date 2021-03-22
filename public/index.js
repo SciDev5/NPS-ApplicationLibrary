@@ -1,14 +1,14 @@
 import { Application } from "./application.js";
 import domWorker from "./dom-worker.js";
 
-async function searchApps(/**@type {{name,platforms,approvalStatus,privacyStatus,platformsRequireAll}}*/query) {
-    var {name,platforms,approvalStatus,privacyStatus,platformsRequireAll} = query;
+async function searchApps(/**@type {{name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll}}*/query) {
+    var {name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll} = query;
     var queryOut = {}
     if(name)queryOut.name=name;
-    if(platforms)queryOut.platforms=JSON.stringify(platforms);
+    if(gradeLevels)queryOut.gradeLevels=JSON.stringify(gradeLevels);
     if(approvalStatus)queryOut.approvalStatus=JSON.stringify(approvalStatus);
     if(privacyStatus)queryOut.privacyStatus=JSON.stringify(privacyStatus);
-    queryOut.platformsRequireAll=!!platformsRequireAll;
+    queryOut.gradeLevelsRequireAll=!!gradeLevelsRequireAll;
     return (await paramFetch("/apps/search",queryOut)).map(v=>Application.parse(v));
 }
 async function getAllApps() {

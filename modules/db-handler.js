@@ -11,7 +11,7 @@ var allAppsCache = undefined;
 const APP_TABLE = {
     NAME:"applications",
     COLS:[
-        {name:"id", type:"INT", primaryKey:true, default: "random()"},
+        {name:"id", type:"TEXT", primaryKey:true, default: "random()"},
         {name:"name", type:"TEXT", notNull:true},
         {name:"url", type:"TEXT"},
         {name:"approvalStatus", type:"INT", enum:APPROVAL_STATUSES, notNull:true, default: 0},
@@ -25,7 +25,7 @@ deepFreeze([APP_TABLE]);
 
 
 function asyncCMD(cmd,query,params) {
-    if (/^(UPDATE|INSERT)/i.test(query)) {
+    if (/^(UPDATE|INSERT|DELETE)/i.test(query)) {
         if (new RegExp(APP_TABLE.NAME).test(query)) allAppsCache = undefined;
     }
     return new Promise((res,rej)=>{
@@ -60,17 +60,20 @@ function getAppValidKVPairs(/**@type {Application}*/app) {
 }
 async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
-    return await asyncCMD("run","UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
+    await asyncCMD("run","UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
+    return;
 }
 async function addApp(/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
-    return await asyncCMD("run","INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values);
+    await asyncCMD("run","INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values);
+    return;
 }
 async function getApp(appId) {
-    return new Application(await asyncCMD("get","SELECT * FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]));
+    var v = await asyncCMD("get","SELECT * FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]);
+    return v?Application.parse(v):null;
 }
 async function delApp(appId) {
-    return await asyncCMD("run","DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]);
+    await asyncCMD("run","DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]); return;
 }
 async function searchApps(searchQuery) {
     var {name,approvalStatus,privacyStatus,platforms,platformsRequireAll,gradeLevels,gradeLevelsRequireAll,subjects,subjectsRequireAll} = searchQuery;

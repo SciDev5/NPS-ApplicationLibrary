@@ -12,6 +12,7 @@ const SUBJECTS_NAME = ["cool", "uncool"].map(v=>"application.subject."+v);
 
 class Application {
     constructor(/** @type {{id?:number,name:string,platforms:string[],gradeLevels:string[],subjects:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
+        if (obj == null) throw new Error("Application constructed with null params.");
         var {id,name,platforms,gradeLevels,subjects,url,approvalStatus,privacyStatus} = obj;
         this.id = id;
         this.name = name || "unnamed";
@@ -23,6 +24,7 @@ class Application {
         this.privacyStatus = privacyStatus || APPROVAL_STATUSES[0];
     }
     static parse(/** @type {{id:number,name:string,platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
+        if (obj == null) throw new Error("Application constructed with null params.");
         var {id,name,platforms,subjects,gradeLevels,url,approvalStatus,privacyStatus} = obj;
         if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
         if (typeof(platforms[0])=="number") platforms = platforms.map(v=>PLATFORMS[v]).filter(v=>v);

@@ -51,9 +51,19 @@ application.platform.chromebook       = Chromebook
 # Grade Levels Name
 application.gradeLevel = Grade Level
 application.gradeLevel.preK           = Pre K
-application.gradeLevel.elementary     = Elementary school
-application.gradeLevel.middle         = Middle school
-application.gradeLevel.high           = High school
+application.gradeLevel.k              = Kindergarden
+application.gradeLevel.1              = 1st Grade
+application.gradeLevel.2              = 2nd Grade
+application.gradeLevel.3              = 3rd Grade
+application.gradeLevel.4              = 4th Grade
+application.gradeLevel.5              = 5th Grade
+application.gradeLevel.6              = 6th Grade
+application.gradeLevel.7              = 7th Grade
+application.gradeLevel.8              = 8th Grade
+application.gradeLevel.9              = 9th / Freshmen
+application.gradeLevel.10             = 10th / Sophmore
+application.gradeLevel.11             = 11th / Junior
+application.gradeLevel.12             = 12th / Senior
 
 # Subject Names
 application.subject = Subject

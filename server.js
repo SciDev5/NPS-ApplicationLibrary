@@ -3,6 +3,7 @@ import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_S
 import bodyParser from "body-parser";
 import express from "express";
 import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY} from "./modules/lang.js";
+import { authenticateEdit } from "./modules/auth.js";
 const app = express();
 
 app.set("view engine", "pug");
@@ -19,7 +20,15 @@ app.get("/",async (req,res)=>{
     var lang = req.query["lang"] || DEFAULT_LANG;
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-    res.render("index",{searchParams,lang,translation,langNames:LANGUAGE_INTERNAL_NAMES});
+    res.render("index",{searchParams,lang,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:authenticateEdit(req)});
+});
+app.get("/editor/:id",async (req,res)=>{
+    var app = await database.apps.get(req.params["id"]);
+    if (app == null || !authenticateEdit(req)) { res.redirect("back"); return; }
+    var lang = req.query["lang"] || DEFAULT_LANG;
+    var translation = await getTranslationMap(lang);
+    await LANGUAGE_INTERNAL_NAMES_READY;
+    res.render("app",{app:app.toJSON(true),lang,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 app.get("/lang/:lang",async (req,res)=>{
     res.json(await getTranslationMap(req.params["lang"]));
@@ -29,7 +38,7 @@ app.get("/lang/:lang",async (req,res)=>{
 app.get("/apps/search",async(req,res)=>{
     try {
         var {name,platforms,subjects,gradeLevels,approvalStatus,privacyStatus,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll} = req.query;
-        if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!platformsRequireAll) {res.send(await database.apps.getAll()); return}
+        if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!gradeLevels&&!subjects) {res.send(await database.apps.getAll()); return}
         if (platforms) platforms = JSON.parse(platforms);
         if (gradeLevels) gradeLevels = JSON.parse(gradeLevels);
         if (subjects) subjects = JSON.parse(subjects);
@@ -59,6 +68,36 @@ app.get("/apps/get/:id",async(req,res)=>{
     } catch (e) {
         res.status(400);
         res.send(e);
+    }
+});
+app.post("/apps/edit/:id",async(req,res)=>{
+    if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    try {
+        await database.apps.update(req.params["id"],Application.parse(req.body));
+        res.json({success:true});
+    } catch (error) {
+        res.status(400);
+        res.json({sucess:false,reason:"error",error});
+    }
+});
+app.post("/apps/del/:id",async(req,res)=>{
+    if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    try {
+        await database.apps.del(req.params["id"]);
+        res.json({success:true});
+    } catch (error) {
+        res.status(400);
+        res.json({sucess:false,reason:"error",error:error.stack});
+    }
+});
+app.post("/apps/add/",async(req,res)=>{
+    if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    try {
+        await database.apps.add(Application.parse(req.body));
+        res.json({success:true});
+    } catch (error) {
+        res.status(400);
+        res.json({sucess:false,reason:"error",error});
     }
 });
 

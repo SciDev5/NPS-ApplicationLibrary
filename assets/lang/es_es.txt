@@ -51,9 +51,19 @@ application.platform.chromebook       = Chromebook
 # Nombres de nivel de grado
 application.gradeLevel = Nivel de grado
 application.gradeLevel.preK           = Pre K
-application.gradeLevel.elementary     = Escuela primaria
-application.gradeLevel.middle         = Escuela intermedia
-application.gradeLevel.high           = Escuela secundaria
+application.gradeLevel.k              = K
+application.gradeLevel.1              = 1
+application.gradeLevel.2              = 2
+application.gradeLevel.3              = 3
+application.gradeLevel.4              = 4
+application.gradeLevel.5              = 5
+application.gradeLevel.6              = 6
+application.gradeLevel.7              = 7
+application.gradeLevel.8              = 8
+application.gradeLevel.9              = 9
+application.gradeLevel.10             = 10
+application.gradeLevel.11             = 11
+application.gradeLevel.12             = 12
 
 # Nombres de tema
 application.subject = Tema

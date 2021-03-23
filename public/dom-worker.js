@@ -21,7 +21,7 @@ function createAppDiv(/**@type {Application}*/app) {
             createElement("p",app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(),{}),
             createElement("p",app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(),{}),
             createElement("a",translateSingle("application.display.moreInfoUrl"),{href:app.url}),
-            createElement("a",translateSingle("application.display.editOrDelete"),{href:"/editor/"+app.id}),
+            createElement("a",translateSingle("application.display.editOrDelete"),{href:"/editor/"+app.id+"?lang="+window.langId}),
             moreInfoPopupCloseButton
         ],{className:"content"})
     ],{className:"more-info-popup"});
@@ -41,16 +41,29 @@ function createAppDiv(/**@type {Application}*/app) {
 var selectListElts = [], last = {};
 function interactifySelectList(/**@type {HTMLDivElement|{name:string,value:()=>{name:string,value:boolean}[]}}*/selectListElt) {
     selectListElts.push(selectListElt);
+    var options = selectListElt.getElementsByClassName("selectlist-elt"), useMany = !!selectListElt.getAttribute("many"), initState = JSON.parse(selectListElt.getAttribute("initialstate"));
+    console.log(initState)
+    if (useMany && (initState instanceof Array)) {
+        for (var state of initState)
+            options[state].classList.add("sel");
+    } else if (!useMany && Number.isInteger(initState)) {
+        options[initState].classList.add("sel");
+    }
     selectListElt.addEventListener("click",e=>{
         if (!e.isTrusted) return;
 
         /**@type {HTMLDivElement}}*/
         var cp = e.composedPath().filter(v=>v.classList&&v.classList.contains("selectlist-elt"))[0];
         if (cp) {
-            if (cp.classList.contains("sel"))
-                cp.classList.remove("sel");
-            else cp.classList.add("sel");
-            onSearchDomUpdate();
+            if (useMany) {
+                if (cp.classList.contains("sel"))
+                    cp.classList.remove("sel");
+                else cp.classList.add("sel");
+            } else {
+                for (var elt of options) elt.classList.remove("sel");
+                cp.classList.add("sel");
+            }
+            if (handleSearch) onSearchDomUpdate();
         } else {
             var doOpen = !selectListElt.classList.contains("open");
             selectListElt.classList.add("revanim");
@@ -72,6 +85,10 @@ function interactifySelectList(/**@type {HTMLDivElement|{name:string,value:()=>{
         for (var elt of elts) res.push({name:elt.getAttribute("name"),value:elt.classList.contains("sel")});
         return res;
     };
+    selectListElt.valueSingle = ()=>{
+        var v = selectListElt.value().filter(z=>z.value);
+        return v[0].name;
+    };
     selectListElt.name = se.getAttribute("name");
 }
 addEventListener("click",e=>{
@@ -82,12 +99,13 @@ addEventListener("click",e=>{
     selectListElts.forEach(v=>v.classList.remove("open"));
 });
 
-var searchNameInput;
+var searchNameInput, handleSearch = false;
 addEventListener("load",e=>{
     for (var elt of document.getElementsByClassName("selectlist"))
         interactifySelectList(elt);
     searchNameInput = document.getElementById("name-search");
-    if (searchNameInput) searchNameInput.addEventListener("input",e=>{
+    handleSearch = !!searchNameInput;
+    if (handleSearch) searchNameInput.addEventListener("input",e=>{
         onSearchDomUpdate();
     });
 

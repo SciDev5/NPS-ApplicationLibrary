@@ -2,26 +2,40 @@
 html(lang=lang)
     head 
         title= translate("index.pageTitle")
-        script(src="/index.js", type="module")
+        script(src="/editor.js", type="module")
         link(rel="stylesheet", href="/style.css") 
     body.theme-light
-        .param#p-name
-            = translate("editor.param.name")
-            input(id="name-in",value=app.name)
-        .param#p-url
-            = translate("editor.param.url")
-            input(id="url-in",value=app.url,type="url")
-        .param#p-approval
-            = translate("editor.param.approvalStatus")
-            - var sp = appInfoLists.approval
-            include includes/dropdown.pug
-        .param#p-privacy
-            = translate("editor.param.privacyStatus")
-            - var sp = appInfoLists.privacy
-            include includes/dropdown.pug
-        .param#p-gradeLevel
-            = translate("editor.param.gradeLevel")
-            - var sp = appInfoLists.gradeLevel
-            include includes/dropdown.pug
+        .header= translate("editor.header.title")
+        a(href="/?lang="+lang)= translate("editor.backToIndex")
+        #editor
+            #issaved
+                .label= translate("editor.isSaved")
+                .value= translate("editor.noChanges")
+            .param#p-name
+                .label= translate("editor.param.name")
+                input(id="name-in",value=app.name)
+            .param#p-url
+                .label= translate("editor.param.url")
+                input(id="url-in",value=app.url,type="url")
+            .param#p-approval
+                .label= translate("editor.param.approvalStatus")
+                - var sp = appInfoLists.approval
+                include includes/dropdown.pug
+            .param#p-privacy
+                .label= translate("editor.param.privacyStatus")
+                - var sp = appInfoLists.privacy
+                include includes/dropdown.pug
+            .param#p-gradeLevel
+                .label= translate("editor.param.gradeLevel")
+                - var sp = appInfoLists.gradeLevel
+                include includes/dropdown.pug
+            .param#p-subject
+                .label= translate("editor.param.subject")
+                - var sp = appInfoLists.subject
+                include includes/dropdown.pug
+            .param#p-platform
+                .label= translate("editor.param.platform")
+                - var sp = appInfoLists.platform
+                include includes/dropdown.pug
     
         include includes/lang-container.pug

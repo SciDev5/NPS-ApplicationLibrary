@@ -1,5 +1,5 @@
-.selectlist(name=sp.id,tabindex=0)
+.selectlist(name=sp.id,tabindex=0,many=sp.many,initialstate=JSON.stringify(sp.initialState)||null)
     .selectlist-title= translate(sp.name)
-        .selectlist-contents
-            each option in sp.options
-                .selectlist-elt(name=option.id)= translate(option.name)
+    .selectlist-contents
+        each option in sp.options
+            .selectlist-elt(name=option.id)= translate(option.name)

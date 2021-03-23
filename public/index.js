@@ -39,6 +39,7 @@ async function searchEvHandler(e) {
 addEventListener("load",async e=>{
     var allApps = await getAllApps();
     Object.defineProperty(window,"lang",{writable:false,value:Object.freeze(await getTranslationMap())});
+    Object.defineProperty(window,"langId",{writable:false,value:document.getElementsByTagName("html")[0].lang});
     console.log(allApps);
     domWorker.populateApps(allApps);
     document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));
@@ -46,5 +47,3 @@ addEventListener("load",async e=>{
     document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("click",searchEvHandler));
     document.getElementById("name-search").addEventListener("keyup",e1=>{console.log(e1);if (e1.key=="Enter")searchEvHandler(e1)});
 });
-
-window.f = {searchApps, getAllApps, paramFetch, getApp}

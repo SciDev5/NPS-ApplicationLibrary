@@ -5,19 +5,13 @@ html(lang=lang,editor=editor)
         script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
     body.theme-light
-        button#translate-button
-            include includes/lang-symbol.pug
         .header= translate("index.header.title")
             
         .search-container
             .search-title= translate("index.search.title")
             input#name-search(name="name-search", placeholder=translate("index.search.namePlaceholder"))
             each sp,n in searchParams
-                .selectlist(name=sp.id,tabindex=0)
-                    .selectlist-title= translate(sp.name)
-                    .selectlist-contents
-                        each option in sp.options
-                            .selectlist-elt(name=option.id)= translate(option.name)
+                include includes/dropdown.pug
             button#search-refresh-button-inline(disabled)= translate("index.search.refreshButton")
             
         .apps-container

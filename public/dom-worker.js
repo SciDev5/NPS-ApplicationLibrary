@@ -21,6 +21,7 @@ function createAppDiv(/**@type {Application}*/app) {
             createElement("p",app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(),{}),
             createElement("p",app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(),{}),
             createElement("a",translateSingle("application.display.moreInfoUrl"),{href:app.url}),
+            createElement("a",translateSingle("application.display.editOrDelete"),{href:"/editor/"+app.id}),
             moreInfoPopupCloseButton
         ],{className:"content"})
     ],{className:"more-info-popup"});
@@ -86,7 +87,7 @@ addEventListener("load",e=>{
     for (var elt of document.getElementsByClassName("selectlist"))
         interactifySelectList(elt);
     searchNameInput = document.getElementById("name-search");
-    searchNameInput.addEventListener("input",e=>{
+    if (searchNameInput) searchNameInput.addEventListener("input",e=>{
         onSearchDomUpdate();
     });
 

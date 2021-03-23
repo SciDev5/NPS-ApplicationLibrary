@@ -1,0 +1,7 @@
+#language-container
+    .bg
+    .language-list
+        .language-option= (langNames.filter(v=>v.lang==lang)[0]||{}).name
+        each langName in langNames
+            if langName.lang!=lang
+                .language-option(value=langName.lang)= langName.name

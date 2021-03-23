@@ -1,39 +1,32 @@
-html(lang=lang)
+- translate = (e)=>translation[e]||e;
+html(lang=lang,editor=editor)
     head 
-        title= translation["index.pageTitle"]||"index.pageTitle"
+        title= translate("index.pageTitle")
         script(src="index.js", type="module")
         link(rel="stylesheet", href="style.css") 
     body.theme-light
         button#translate-button
             include includes/lang-symbol.pug
-        .header= translation["index.header.title"]||"index.header.title"
+        .header= translate("index.header.title")
             
         .search-container
-            .search-title= translation["index.search.title"]||"index.search.title"
-            input#name-search(name="name-search", placeholder=translation["index.search.namePlaceholder"]||"index.search.namePlaceholder")
+            .search-title= translate("index.search.title")
+            input#name-search(name="name-search", placeholder=translate("index.search.namePlaceholder"))
             each sp,n in searchParams
                 .selectlist(name=sp.id,tabindex=0)
-                    .selectlist-title= translation[sp.name]||sp.name
+                    .selectlist-title= translate(sp.name)
                     .selectlist-contents
                         each option in sp.options
-                            .selectlist-elt(name=option.id)= translation[option.name]||option.name
-            button#search-refresh-button-inline(disabled)= translation["index.search.refreshButton"]||"index.search.refreshButton"
+                            .selectlist-elt(name=option.id)= translate(option.name)
+            button#search-refresh-button-inline(disabled)= translate("index.search.refreshButton")
             
         .apps-container
             #search-refresh-popup
-                = translation["index.search.refreshPopup"]||"index.search.refreshPopup"
+                = translate("index.search.refreshPopup")
             #search-loading-popup
-                = translation["index.search.loadingPopup"]||"index.search.loadingPopup"
-
-
+                = translate("index.search.loadingPopup")
             #apps-list
-                #apps-empty= translation["index.search.noResults"]||"index.search.noResults"
+                #apps-empty= translate("index.search.noResults")
         
-        #language-container
-            .bg
-            .language-list
-                .language-option= (langNames.filter(v=>v.lang==lang)[0]||{}).name
-                each langName in langNames
-                    if langName.lang!=lang
-                        .language-option(value=langName.lang)= langName.name
+        include includes/lang-container.pug
             

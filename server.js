@@ -1,5 +1,5 @@
 import database from "./modules/db-handler.js";
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, GRADE_LEVELS, GRADE_LEVELS_NAME } from "./public/application.js";
+import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, GRADE_LEVELS, GRADE_LEVELS_NAME, SUBJECTS, SUBJECTS_NAME } from "./public/application.js";
 import bodyParser from "body-parser";
 import express from "express";
 import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY} from "./modules/lang.js";
@@ -28,7 +28,15 @@ app.get("/editor/:id",async (req,res)=>{
     var lang = req.query["lang"] || DEFAULT_LANG;
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-    res.render("app",{app:app.toJSON(true),lang,translation,langNames:LANGUAGE_INTERNAL_NAMES});
+
+    var appInfoLists = {};
+    appInfoLists.approval = {name:"application.approvalStatus",many:false,options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))};
+    appInfoLists.privacy = {name:"application.privacyStatus",many:false,options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))};
+    appInfoLists.gradeLevel = {name:"application.gradeLevel",many:true,options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))};
+    appInfoLists.subject = {name:"application.subject",many:true,options:new Array(SUBJECTS.length).fill().map((_,i)=>({id:SUBJECTS[i],name:SUBJECTS_NAME[i]}))};
+    appInfoLists.platform = {name:"application.platform",many:true,options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))};
+
+    res.render("app",{app:app.toJSON(true),lang,translation,langNames:LANGUAGE_INTERNAL_NAMES,appInfoLists});
 });
 app.get("/lang/:lang",async (req,res)=>{
     res.json(await getTranslationMap(req.params["lang"]));

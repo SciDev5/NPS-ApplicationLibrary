@@ -1,7 +1,27 @@
+- translate = (e)=>translation[e]||e;
 html(lang=lang)
     head 
-        title= translation["index.pageTitle"]||"index.pageTitle"
-        script(src="index.js", type="module")
-        link(rel="stylesheet", href="style.css") 
+        title= translate("index.pageTitle")
+        script(src="/index.js", type="module")
+        link(rel="stylesheet", href="/style.css") 
     body.theme-light
-        = `NAME: ${app.name}; ID: ${app.id}` 
+        .param#p-name
+            = translate("editor.param.name")
+            input(id="name-in",value=app.name)
+        .param#p-url
+            = translate("editor.param.url")
+            input(id="url-in",value=app.url,type="url")
+        .param#p-approval
+            = translate("editor.param.approvalStatus")
+            - var sp = appInfoLists.approval
+            include includes/dropdown.pug
+        .param#p-privacy
+            = translate("editor.param.privacyStatus")
+            - var sp = appInfoLists.privacy
+            include includes/dropdown.pug
+        .param#p-gradeLevel
+            = translate("editor.param.gradeLevel")
+            - var sp = appInfoLists.gradeLevel
+            include includes/dropdown.pug
+    
+        include includes/lang-container.pug

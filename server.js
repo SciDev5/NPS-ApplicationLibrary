@@ -24,7 +24,7 @@ app.get("/",async (req,res)=>{
 });
 app.get("/editor/:id",async (req,res)=>{
     var app = await database.apps.get(req.params["id"]);
-    if (app == null || !authenticateEdit(req)) { res.redirect("back"); return; }
+    if (app == null || !authenticateEdit(req)) { res.redirect("/"); return; }
     var lang = req.query["lang"] || DEFAULT_LANG;
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;

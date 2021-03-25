@@ -1,23 +1,37 @@
 lang = English [US]
 
-index.pageTitle = NPS Application Library
-index.header.title = NPS Application Library
-index.search.title = Search
-index.search.refreshButton = Refresh search
-index.search.refreshPopup = Click to refresh search.
-index.search.loadingPopup = Loading...
-index.search.noResults = No Results
+index.pageTitle              = NPS Application Library
+index.header.title           = NPS Application Library
+index.search.title           = Search
+index.search.refreshButton   = Refresh search
+index.search.refreshPopup    = Click to refresh search.
+index.search.loadingPopup    = Loading...
+index.search.noResults       = No Results
 index.search.namePlaceholder = Name
 
 
 # Application
 application.display.moreInfoButton = View details
-application.display.moreInfoUrl = More info
+application.display.moreInfoUrl    = More info
 application.display.closeInfoPopup = Close
-application.display.editOrDelete = Edit / Delete
+application.display.editOrDelete   = Edit / Delete
+
+editor.pageTitle = Edit Application
+editor.header.title = Edit Application
+editor.backToIndex  = Back to list
+editor.isSaved.saving = Saving...
+editor.isSaved.saved = Saved
+
+editor.param.name           = Name
+editor.param.url            = URL
+editor.param.approvalStatus = Approval Status
+editor.param.privacyStatus  = Privacy Status
+editor.param.gradeLevel     = Grade Levels
+editor.param.subject        = Subjects
+editor.param.platform       = Platform
 
 # Approval Statuses
-application.approvalStatus = Approval Status
+application.approvalStatus            = Approval Status
 application.approvalStatus.unk        = Unknown
 application.approvalStatus.approved   = Approved
 application.approvalStatus.14parent   = 14+ w/ parental consent
@@ -28,45 +42,45 @@ application.approvalStatus.pending    = Pending
 application.approvalStatus.denied     = Reviewed and denied
 
 # Privacy Statuses
-application.privacyStatus = Privacy Status
-application.privacyStatus.unk         = Unknown
-application.privacyStatus.compliant   = Compliant
-application.privacyStatus.noncompliant= Noncompliant
-application.privacyStatus.parent      = Parental consent required
-application.privacyStatus.instructor  = Instructor use only
-application.privacyStatus.noInfo      = No info collected
-application.privacyStatus.na          = Not applicable
+application.privacyStatus              = Privacy Status
+application.privacyStatus.unk          = Unknown
+application.privacyStatus.compliant    = Compliant
+application.privacyStatus.noncompliant = Noncompliant
+application.privacyStatus.parent       = Parental consent required
+application.privacyStatus.instructor   = Instructor use only
+application.privacyStatus.noInfo       = No info collected
+application.privacyStatus.na           = Not applicable
 
 # Platform Names
-application.platform = Platform
-application.platform.windows          = Windows
-application.platform.mac              = Macos
-application.platform.linux            = Linux
-application.platform.androidPhone     = Android Phone
-application.platform.androidTablet    = Android Tablet
-application.platform.applePhone       = iPhone
-application.platform.appleTablet      = iPad
-application.platform.web              = Web
-application.platform.chromebook       = Chromebook
+application.platform               = Platform
+application.platform.windows       = Windows
+application.platform.mac           = Macos
+application.platform.linux         = Linux
+application.platform.androidPhone  = Android Phone
+application.platform.androidTablet = Android Tablet
+application.platform.applePhone    = iPhone
+application.platform.appleTablet   = iPad
+application.platform.web           = Web
+application.platform.chromebook    = Chromebook
 
 # Grade Levels Name
-application.gradeLevel = Grade Level
-application.gradeLevel.preK           = Pre K
-application.gradeLevel.k              = Kindergarden
-application.gradeLevel.1              = 1st Grade
-application.gradeLevel.2              = 2nd Grade
-application.gradeLevel.3              = 3rd Grade
-application.gradeLevel.4              = 4th Grade
-application.gradeLevel.5              = 5th Grade
-application.gradeLevel.6              = 6th Grade
-application.gradeLevel.7              = 7th Grade
-application.gradeLevel.8              = 8th Grade
-application.gradeLevel.9              = 9th / Freshmen
-application.gradeLevel.10             = 10th / Sophmore
-application.gradeLevel.11             = 11th / Junior
-application.gradeLevel.12             = 12th / Senior
+application.gradeLevel      = Grade Level
+application.gradeLevel.preK = Pre K
+application.gradeLevel.k    = Kindergarden
+application.gradeLevel.1    = 1st Grade
+application.gradeLevel.2    = 2nd Grade
+application.gradeLevel.3    = 3rd Grade
+application.gradeLevel.4    = 4th Grade
+application.gradeLevel.5    = 5th Grade
+application.gradeLevel.6    = 6th Grade
+application.gradeLevel.7    = 7th Grade
+application.gradeLevel.8    = 8th Grade
+application.gradeLevel.9    = 9th / Freshmen
+application.gradeLevel.10   = 10th / Sophmore
+application.gradeLevel.11   = 11th / Junior
+application.gradeLevel.12   = 12th / Senior
 
 # Subject Names
-application.subject = Subject
-application.subject.cool              = Cool stuff
-application.subject.uncool            = Uncool stuff
+application.subject        = Subject
+application.subject.cool   = Cool stuff
+application.subject.uncool = Uncool stuff

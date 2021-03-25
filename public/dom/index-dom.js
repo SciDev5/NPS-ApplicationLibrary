@@ -1,17 +1,21 @@
-import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, SUBJECTS_NAME, GRADE_LEVELS_NAME, APPROVAL_STATUSES_NAME, SUBJECTS, GRADE_LEVELS } from "./application.js";
+import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, SUBJECTS_NAME, GRADE_LEVELS_NAME, APPROVAL_STATUSES_NAME, SUBJECTS, GRADE_LEVELS } from "../application.js";
+import dom from "./dom.js";
+const { createElement, selectListElts } = dom;
 
-function createElement(type,content,params) {
-    var elt = document.createElement(type);
-    if (typeof(content)!="object"||!(content instanceof Array)) elt.innerText = content;
-    else for (var subelt of content) elt.appendChild(subelt);
-    for (var i in params) elt[i] = params[i];
-    return elt;
+var searchNameInput, last = {};
+function init () {
+    for (var elt of document.getElementsByClassName("selectlist"))
+        elt.callback = onSearchDomUpdate;
+    searchNameInput = document.getElementById("name-search");
+    searchNameInput.addEventListener("input",e=>{
+        onSearchDomUpdate();
+    });
 }
 
 
 function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
-    const translateSingle = (key) => window.lang[key]||key;
+    const translateSingle = dom.translate;
     const moreInfoButton = createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
     const moreInfoPopupCloseButton = createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
     const moreInfoPopup = createElement("div",[
@@ -36,94 +40,6 @@ function createAppDiv(/**@type {Application}*/app) {
     ],{className:"app"});
     return appDiv;
 }
-
-/**@type {(HTMLDivElement|{name:string,value:()=>{name:string,value:boolean}[]})[]}*/
-var selectListElts = [], last = {};
-function interactifySelectList(/**@type {HTMLDivElement|{name:string,value:()=>{name:string,value:boolean}[]}}*/selectListElt) {
-    selectListElts.push(selectListElt);
-    var options = selectListElt.getElementsByClassName("selectlist-elt"), useMany = !!selectListElt.getAttribute("many"), initState = JSON.parse(selectListElt.getAttribute("initialstate"));
-    console.log(initState)
-    if (useMany && (initState instanceof Array)) {
-        for (var state of initState)
-            options[state].classList.add("sel");
-    } else if (!useMany && Number.isInteger(initState)) {
-        options[initState].classList.add("sel");
-    }
-    selectListElt.addEventListener("click",e=>{
-        if (!e.isTrusted) return;
-
-        /**@type {HTMLDivElement}}*/
-        var cp = e.composedPath().filter(v=>v.classList&&v.classList.contains("selectlist-elt"))[0];
-        if (cp) {
-            if (useMany) {
-                if (cp.classList.contains("sel"))
-                    cp.classList.remove("sel");
-                else cp.classList.add("sel");
-            } else {
-                for (var elt of options) elt.classList.remove("sel");
-                cp.classList.add("sel");
-            }
-            if (handleSearch) onSearchDomUpdate();
-        } else {
-            var doOpen = !selectListElt.classList.contains("open");
-            selectListElt.classList.add("revanim");
-            selectListElts.forEach(v=>v.classList.remove("open"));
-                
-            if (doOpen)
-                selectListElt.classList.add("open");
-            
-        }
-    });
-    selectListElt.getElementsByClassName("selectlist-contents")[0].addEventListener("mouseleave",e=>{
-        selectListElt.classList.add("revanim");
-        selectListElts.forEach(v=>v.classList.remove("open"));
-    });
-    let se = selectListElt;
-    selectListElt.value = ()=>{
-        var elts = se.getElementsByClassName("selectlist-elt");
-        var res = [];
-        for (var elt of elts) res.push({name:elt.getAttribute("name"),value:elt.classList.contains("sel")});
-        return res;
-    };
-    selectListElt.valueSingle = ()=>{
-        var v = selectListElt.value().filter(z=>z.value);
-        return v[0].name;
-    };
-    selectListElt.name = se.getAttribute("name");
-}
-addEventListener("click",e=>{
-    if (!e.isTrusted) return;
-
-    if (e.composedPath().filter(v=>v.classList&&v.classList.contains("selectlist")).length)
-        return;
-    selectListElts.forEach(v=>v.classList.remove("open"));
-});
-
-var searchNameInput, handleSearch = false;
-addEventListener("load",e=>{
-    for (var elt of document.getElementsByClassName("selectlist"))
-        interactifySelectList(elt);
-    searchNameInput = document.getElementById("name-search");
-    handleSearch = !!searchNameInput;
-    if (handleSearch) searchNameInput.addEventListener("input",e=>{
-        onSearchDomUpdate();
-    });
-
-    const lc = document.getElementById("language-container");
-    document.querySelector(".language-list > .language-option:nth-child(1)").addEventListener("click",e=>{
-        lc.classList.remove("open");
-    });
-    document.getElementById("translate-button").addEventListener("click",e=>{
-        lc.classList.add("open");
-    });
-    for (var elt of document.querySelectorAll(".language-list > .language-option:not(:nth-child(1))"))
-        elt.addEventListener("click",e=>{
-            var srch = new URLSearchParams(window.location.search);
-            srch.set("lang",e.path[0].getAttribute("value"));
-            window.location.search = srch.toString();
-        });
-
-});
 
 function getSearch() {
     var name = searchNameInput.value;
@@ -185,4 +101,4 @@ function populateApps(apps) {
         appContainer.appendChild(createAppDiv(apps[i]));
 }
 
-export default {createAppDiv,onSearch,getSearch,getSearchChanged,onSearchEnd,populateApps,depopulateApps};
+export default {init,createAppDiv,onSearch,getSearch,getSearchChanged,onSearchEnd,populateApps,depopulateApps};

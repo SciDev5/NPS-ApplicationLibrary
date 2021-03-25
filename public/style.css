@@ -447,3 +447,55 @@ input, #search-refresh-button-inline {
     border-radius: 3px;
     padding: 10px;
 }*/
+
+
+/* EDITOR STYLES */
+
+#editor > .param {
+    margin: 10px 5px;
+}
+
+#editor > .param > .label {
+    display: inline-block;
+    width: calc(50% - 100px);
+    text-align: right;
+    padding: 10px;
+}
+
+#editor > .param > .selectlist, #editor > .param > input {
+    vertical-align: unset;
+}
+
+#issaved {
+    padding: 5px;
+    text-align: center;
+    color: var(--fg);
+    transition: background-color 0.2s, color 0.2s;
+}
+#issaved.warn {
+    text-align: center;
+    background: var(--bg-inv);
+    color: var(--fg-inv);
+}
+
+#editor {
+    font-family: 'Barlow';
+    color: var(--fg-em);
+}
+
+#backToIndexButton {
+    padding: 5px 0 6px 0;
+    display: block;
+    margin: 10px calc(50% - 100px);
+    text-align: center;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid;
+    border-radius: 10px;
+    font-family: 'Barlow';
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+#backToIndexButton:hover {
+    background: var(--bg-darkened);
+}

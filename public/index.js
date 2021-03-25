@@ -1,5 +1,6 @@
 import { Application } from "./application.js";
-import domWorker from "./dom-worker.js";
+import dom from "./dom/dom.js";
+import indexDom from "./dom/index-dom.js";
 
 async function searchApps(/**@type {{name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll}}*/query) {
     var {name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll} = query;
@@ -29,19 +30,20 @@ async function getTranslationMap() {
 
 async function searchEvHandler(e) {
     if (!e.isTrusted) return;
-    if (!domWorker.getSearchChanged()) return;
-    var search = domWorker.getSearch();
-    domWorker.onSearch();
+    if (!indexDom.getSearchChanged()) return;
+    var search = indexDom.getSearch();
+    indexDom.onSearch();
     var apps = await searchApps(search);
-    domWorker.onSearchEnd(apps);
+    indexDom.onSearchEnd(apps);
 }
 
 addEventListener("load",async e=>{
+    indexDom.init();
     var allApps = await getAllApps();
     Object.defineProperty(window,"lang",{writable:false,value:Object.freeze(await getTranslationMap())});
     Object.defineProperty(window,"langId",{writable:false,value:document.getElementsByTagName("html")[0].lang});
     console.log(allApps);
-    domWorker.populateApps(allApps);
+    indexDom.populateApps(allApps);
     document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));
     //document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseenter",searchEvHandler));
     document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("click",searchEvHandler));

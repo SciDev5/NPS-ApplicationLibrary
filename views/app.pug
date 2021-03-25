@@ -1,22 +1,20 @@
 - translate = (e)=>translation[e]||e;
 html(lang=lang)
     head 
-        title= translate("index.pageTitle")
+        title= translate("header.pageTitle")
         script(src="/editor.js", type="module")
         link(rel="stylesheet", href="/style.css") 
     body.theme-light
         .header= translate("editor.header.title")
-        a(href="/?lang="+lang)= translate("editor.backToIndex")
+        a#backToIndexButton(href="/?lang="+lang)= translate("editor.backToIndex")
         #editor
-            #issaved
-                .label= translate("editor.isSaved")
-                .value= translate("editor.noChanges")
+            #issaved= translate("editor.isSaved.saved")
             .param#p-name
                 .label= translate("editor.param.name")
-                input(id="name-in",value=app.name)
+                input#name-in(value=app.name)
             .param#p-url
                 .label= translate("editor.param.url")
-                input(id="url-in",value=app.url,type="url")
+                input#url-in(value=app.url,type="url")
             .param#p-approval
                 .label= translate("editor.param.approvalStatus")
                 - var sp = appInfoLists.approval

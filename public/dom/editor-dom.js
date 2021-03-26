@@ -2,14 +2,45 @@ import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PRIVACY_ST
 import dom from "./dom.js";
 const {createElement,selectListElts} = dom;
 
-var nameInput, urlInput, callback = {v:async()=>{}};
+var nameInput, urlInput, callback = {edit:async()=>{},del:async()=>{}};
 function init () {
     for (var elt of document.getElementsByClassName("selectlist"))
         elt.callback = onEdit;
-    nameInput = document.getElementById("p-name");
-    urlInput = document.getElementById("p-url");
-    for (var elt of document.querySelectorAll("#p-name,#p-url")) 
+    nameInput = document.getElementById("name-in");
+    urlInput = document.getElementById("url-in");
+    for (var elt of document.querySelectorAll("#name-in,#url-in")) 
         elt.addEventListener("input",e=>onEdit());
+    ;
+    document.getElementById("delete-app-button").addEventListener("click",e=>{
+        if (e.isTrusted) document.getElementById("confirm-delete-popup").classList.add("open");
+    });
+    document.getElementById("confirm-delete-button").addEventListener("click",async e=>{
+        if (e.isTrusted) {
+            await callback.del();
+            window.location.pathname = "/";
+        }
+    });
+    document.getElementById("cancel-delete-button").addEventListener("click",e=>{
+        if (e.isTrusted) document.getElementById("confirm-delete-popup").classList.remove("open");
+    });
+    document.querySelector("#confirm-delete-popup > .bg").addEventListener("click",e=>{
+        if (e.isTrusted) document.getElementById("confirm-delete-popup").classList.remove("open");
+    });
+}
+
+function updateApp() {
+    /**@type {Application}*/
+    var app = window.app;
+    console.log(nameInput,nameInput.value);
+    app.setName(nameInput.value);
+    app.setURL(urlInput.value);
+    app.setStatus(selectListElts[0].valueSingle(),selectListElts[1].valueSingle());
+    app.clearSubjects(); 
+    app.clearGradeLevels(); 
+    app.clearPlatforms(); 
+    selectListElts[2].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addGradeLevel(v)); // grade
+    selectListElts[3].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addSubject(v)); // subject
+    selectListElts[4].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addPlatform(v)); // platform
 }
 
 function showSavingStatus(saved) {
@@ -19,8 +50,10 @@ function showSavingStatus(saved) {
 }
 
 async function onEdit() {
+    console.log("YEET");
     showSavingStatus(false);
-    await callback.v();
+    updateApp();
+    await callback.edit();
     showSavingStatus(true);
 }
 

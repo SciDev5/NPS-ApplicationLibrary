@@ -6,7 +6,13 @@ html(lang=lang)
         link(rel="stylesheet", href="/style.css") 
     body.theme-light
         .header= translate("editor.header.title")
-        a#backToIndexButton(href="/?lang="+lang)= translate("editor.backToIndex")
+        a#back-to-index-button(href="/?lang="+lang)= translate("editor.backToIndex")
+        #delete-app-button(href="/?lang="+lang)= translate("editor.delete")
+        #confirm-delete-popup
+            .bg 
+            .confirm-delete
+                button#confirm-delete-button= translate("editor.confirmDelete")
+                button#cancel-delete-button= translate("editor.cancelDelete")
         #editor
             #issaved= translate("editor.isSaved.saved")
             .param#p-name

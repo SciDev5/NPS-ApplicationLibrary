@@ -85,7 +85,7 @@ app.post("/apps/edit/:id",async(req,res)=>{
         res.json({success:true});
     } catch (error) {
         res.status(400);
-        res.json({sucess:false,reason:"error",error});
+        res.json({sucess:false,reason:"error",error:error.stack});
     }
 });
 app.post("/apps/del/:id",async(req,res)=>{

@@ -22,6 +22,10 @@ editor.backToIndex  = Back to list
 editor.isSaved.saving = Saving...
 editor.isSaved.saved = Saved
 
+editor.delete = Delete
+editor.confirmDelete = DELETE APP
+editor.cancelDelete = Cancel
+
 editor.param.name           = Name
 editor.param.url            = URL
 editor.param.approvalStatus = Approval Status

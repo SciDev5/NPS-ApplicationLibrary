@@ -8,11 +8,14 @@ font-family: 'Ubuntu Mono', monospace;
 
 * {
     box-sizing: border-box;
-    
 }
 
 body {
     margin: 0px;
+}
+
+button {
+    font-family: "Barlow", sans-serif;
 }
 
 .theme-light {
@@ -38,6 +41,11 @@ body {
     --status-pending: #9d9df0;
     --status-pending-light: #f4f4ff;
 
+    --bg-warn: #f5f5f5;
+    --fg-warn: #c40000;
+    --bg-warn-em: #dd0000;
+    --fg-warn-em: #ffffff;
+
     background: var(--bg);
 }
 .theme-dark {
@@ -62,6 +70,11 @@ body {
     --status-limited-light: #2b0551;
     --status-pending: #0505c7;
     --status-pending-light: #0d0d50;
+
+    --bg-warn: #490000;
+    --fg-warn: #ffffff;
+    --bg-warn-em: #9c0000;
+    --fg-warn-em: #ffffff;
 
     background: var(--bg);
 }
@@ -483,7 +496,7 @@ input, #search-refresh-button-inline {
     color: var(--fg-em);
 }
 
-#backToIndexButton {
+#back-to-index-button, #delete-app-button {
     padding: 5px 0 6px 0;
     display: block;
     margin: 10px calc(50% - 100px);
@@ -496,6 +509,49 @@ input, #search-refresh-button-inline {
     text-decoration: none;
     transition: background-color 0.2s;
 }
-#backToIndexButton:hover {
+#delete-app-button {
+    background: var(--bg-warn);
+    color: var(--fg-warn);
+    border-color: var(--fg-warn);
+}
+#back-to-index-button:hover {
     background: var(--bg-darkened);
+}
+#delete-app-button:hover { 
+    background: var(--bg-warn-em);
+    color: var(--fg-warn-em);
+    border-color: var(--bg-warn-em);
+}
+#confirm-delete-popup { display: none; }
+#confirm-delete-popup.open { display: block; }
+.confirm-delete {
+    position: fixed;
+    width: 250px;
+    padding: 5px 10px;
+    background: var(--bg);
+    top: 30px;
+    left: calc(50% - 250px/2);
+    z-index: 4;
+    text-align: center;
+}
+#confirm-delete-button, #cancel-delete-button {
+    width: 100%;
+    margin: 5px 0px;
+    color: var(--fg-em);
+    background: var(--bg);
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 5px;
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+}
+#confirm-delete-button { background: var(--bg-warn); color: var(--fg-warn)}
+#confirm-delete-button:hover {
+    background: var(--bg-warn-em);
+    color: var(--fg-warn-em);
+    border-color: var(--bg-warn-em);
+}
+#cancel-delete-button:hover {
+    background: var(--bg-inv);
+    color: var(--fg-inv);
+    border-color: var(--bg-inv);
 }

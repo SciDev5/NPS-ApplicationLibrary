@@ -60,6 +60,7 @@ function getAppValidKVPairs(/**@type {Application}*/app) {
 }
 async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
+    values.push(appId);
     await asyncCMD("run","UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
     return;
 }

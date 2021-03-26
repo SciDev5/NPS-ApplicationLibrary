@@ -10,12 +10,11 @@ function translate(key) {
     return window.lang[key]||key;
 }
 
-/**@type {(HTMLDivElement|{name:string,value:()=>{name:string,value:boolean}[]})[]}*/
+/**@type {(HTMLDivElement&{name:string,valueSingle:()=>string,value:()=>{name:string,value:boolean}[]})[]}*/
 var selectListElts = [];
-function interactifySelectList(/**@type {HTMLDivElement&{callback:()=>void,name:string,value:()=>{name:string,value:boolean}[]}}*/selectListElt) {
+function interactifySelectList(/**@type {HTMLDivElement&{callback:()=>void,name:string,valueSingle:()=>string,value:()=>{name:string,value:boolean}[]}}*/selectListElt) {
     selectListElts.push(selectListElt);
     var options = selectListElt.getElementsByClassName("selectlist-elt"), useMany = !!selectListElt.getAttribute("many"), initState = JSON.parse(selectListElt.getAttribute("initialstate"));
-    console.log(initState)
     if (useMany && (initState instanceof Array)) {
         for (var state of initState)
             options[state].classList.add("sel");
@@ -36,7 +35,6 @@ function interactifySelectList(/**@type {HTMLDivElement&{callback:()=>void,name:
                 for (var elt of options) elt.classList.remove("sel");
                 cp.classList.add("sel");
             }
-            console.log(selectListElt,selectListElt.callback)
             if (selectListElt.callback) selectListElt.callback();
             else console.log("Callback unbound: ",selectListElt);
         } else {

@@ -27,11 +27,11 @@ class Application {
         if (obj == null) throw new Error("Application constructed with null params.");
         var {id,name,platforms,subjects,gradeLevels,url,approvalStatus,privacyStatus} = obj;
         if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
-        if (typeof(platforms[0])=="number") platforms = platforms.map(v=>PLATFORMS[v]).filter(v=>v);
+        if (platforms&&typeof(platforms[0])=="number") platforms = platforms.map(v=>PLATFORMS[v]).filter(v=>v);
         if (typeof(gradeLevels)=="string") gradeLevels = gradeLevels.split(",").map(v=>GRADE_LEVELS[v]).filter(v=>v);
-        if (typeof(gradeLevels[0])=="number") gradeLevels = gradeLevels.map(v=>GRADE_LEVELS[v]).filter(v=>v);
+        if (gradeLevels&&typeof(gradeLevels[0])=="number") gradeLevels = gradeLevels.map(v=>GRADE_LEVELS[v]).filter(v=>v);
         if (typeof(subjects)=="string") subjects = subjects.split(",").map(v=>SUBJECTS[v]).filter(v=>v);
-        if (typeof(subjects[0])=="number") subjects = subjects.map(v=>SUBJECTS[v]).filter(v=>v);
+        if (subjects&&typeof(subjects[0])=="number") subjects = subjects.map(v=>SUBJECTS[v]).filter(v=>v);
         return new Application({id,url,name,platforms,subjects,gradeLevels,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]});
     }
     

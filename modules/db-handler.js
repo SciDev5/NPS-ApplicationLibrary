@@ -107,12 +107,13 @@ async function searchApps(searchQuery) {
         append(`approvalStatus in ('${approvalStatus.join("','")}')`);
     if (privacyStatus && privacyStatus.length && privacyStatus.every(v=>Number.isSafeInteger(v))) 
         append(`privacyStatus in ('${privacyStatus.join("','")}')`);
+    query += " ORDER BY name COLLATE NOCASE ASC";
 
     return (await asyncCMD("all",query,queryParams)).map(v=>Application.parse(v));
 }
 async function allApps() {
     if (allAppsCache) return allAppsCache.map(v=>Application.parse(v));
-    else return (allAppsCache = await asyncCMD("all",`SELECT * FROM ${APP_TABLE.NAME}`)).map(v=>Application.parse(v));
+    else return (allAppsCache = await asyncCMD("all",`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name COLLATE NOCASE ASC`)).map(v=>Application.parse(v));
 }
 
 

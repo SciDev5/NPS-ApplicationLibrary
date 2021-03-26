@@ -5,7 +5,7 @@ const APPROVAL_STATUS_NAME_MAP = {"Unknown":0,"Approved for Use":1,"Student must
 const PRIVACY_STATUS_NAME_MAP = {"Unknown":0,"Compliant":1,"Noncompliant":2,"Parent consent required":3,"Teacher Instructional Use Only":4,"No Personal Information Collected":5,"Not applicable":6}
 
 function getLPCSV_test() {
-    return fs.readFileSync("./.data/lp_apps.csv",{encoding:"utf-8"});
+    return fs.readFileSync(".data/lp_apps.csv",{encoding:"utf-8"});
 }
 
 /**@returns {Application[]}*/

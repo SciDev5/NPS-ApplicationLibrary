@@ -8,6 +8,7 @@ function init () {
         elt.callback = onSearchDomUpdate;
     searchNameInput = document.getElementById("name-search");
     searchNameInput.addEventListener("input",e=>{
+        if (!e.isTrusted) return;
         onSearchDomUpdate();
     });
 }
@@ -17,15 +18,15 @@ function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
     const translateSingle = dom.translate;
     const moreInfoButton = createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
+    const editInfoButton = createElement("a",translateSingle("application.display.editOrDelete"),{className:"edit-info",href:"/editor/"+app.id+"?lang="+window.langId});
     const moreInfoPopupCloseButton = createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
     const moreInfoPopup = createElement("div",[
-        createElement("div",[],{className:"bg"}),
+        dom.addPopupBGClickEvent(createElement("div",[],{className:"bg"})),
         createElement("div",[
             createElement("p",app.gradeLevels.map(v=>translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME)).join(),{}),
             createElement("p",app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(),{}),
             createElement("p",app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(),{}),
             createElement("a",translateSingle("application.display.moreInfoUrl"),{href:app.url}),
-            createElement("a",translateSingle("application.display.editOrDelete"),{href:"/editor/"+app.id+"?lang="+window.langId}),
             moreInfoPopupCloseButton
         ],{className:"content"})
     ],{className:"more-info-popup"});
@@ -36,6 +37,7 @@ function createAppDiv(/**@type {Application}*/app) {
         createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
         createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
         moreInfoButton,
+        window.editor?editInfoButton:null,
         moreInfoPopup
     ],{className:"app"});
     return appDiv;
@@ -51,6 +53,7 @@ function getSearch() {
     if (approvalStatus && approvalStatus.length) m.approvalStatus = approvalStatus;
     if (privacyStatus && privacyStatus.length) m.privacyStatus = privacyStatus;
     if (gradeLevels && gradeLevels.length) m.gradeLevels = gradeLevels;
+    m.gradeLevelsRequireAll = true;
     return m;
 }
 function compareArr(a,b) {
@@ -68,7 +71,7 @@ function getSearchChanged() {
 }
 function onSearchDomUpdate() {
     var changed = getSearchChanged();
-    console.log("SEARCH UPDATE ", changed);
+    //console.log("SEARCH UPDATE ", changed);
     var srp = document.getElementById("search-refresh-popup");
     if (changed)
         srp.classList.add("open");

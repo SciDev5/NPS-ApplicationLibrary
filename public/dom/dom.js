@@ -1,8 +1,13 @@
 function createElement(type,content,params) {
     var elt = document.createElement(type);
     if (typeof(content)!="object"||!(content instanceof Array)) elt.innerText = content;
-    else for (var subelt of content) elt.appendChild(subelt);
+    else for (var subelt of content) if (subelt) elt.appendChild(subelt);
     for (var i in params) elt[i] = params[i];
+    return elt;
+}
+
+function addPopupBGClickEvent(elt) {
+    elt.addEventListener("click",e=>{if(e.isTrusted)e.path[1].classList.remove("open")});
     return elt;
 }
 
@@ -37,7 +42,7 @@ function interactifySelectList(/**@type {HTMLDivElement&{callback:()=>void,name:
             }
             if (selectListElt.callback) selectListElt.callback();
             else console.log("Callback unbound: ",selectListElt);
-        } else {
+        } else if (!selectListElt.querySelector(".selectlist-contents:hover")) {
             var doOpen = !selectListElt.classList.contains("open");
             selectListElt.classList.add("revanim");
             selectListElts.forEach(v=>v.classList.remove("open"));
@@ -47,7 +52,8 @@ function interactifySelectList(/**@type {HTMLDivElement&{callback:()=>void,name:
             
         }
     });
-    selectListElt.getElementsByClassName("selectlist-contents")[0].addEventListener("mouseleave",e=>{
+    
+    selectListElt.getElementsByClassName("selectlist-contents")[0].addEventListener("mouseleave",async e=>{
         selectListElt.classList.add("revanim");
         selectListElts.forEach(v=>v.classList.remove("open"));
     });
@@ -83,6 +89,8 @@ addEventListener("load",e=>{
     document.getElementById("translate-button").addEventListener("click",e=>{
         lc.classList.add("open");
     });
+    
+    for (var elt of document.querySelectorAll(".bg")) addPopupBGClickEvent(elt);
     for (var elt of document.querySelectorAll(".language-list > .language-option:not(:nth-child(1))"))
         elt.addEventListener("click",e=>{
             var srch = new URLSearchParams(window.location.search);
@@ -93,4 +101,4 @@ addEventListener("load",e=>{
 });
 
 
-export default {createElement,selectListElts,translate};
+export default {createElement,selectListElts,translate,addPopupBGClickEvent};

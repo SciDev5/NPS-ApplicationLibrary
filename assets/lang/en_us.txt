@@ -9,6 +9,8 @@ index.search.loadingPopup    = Loading...
 index.search.noResults       = No Results
 index.search.namePlaceholder = Name
 
+index.editor.addApp          = Add Application
+
 
 # Application
 application.display.moreInfoButton = View details
@@ -22,6 +24,7 @@ editor.backToIndex  = Back to list
 editor.isSaved.saving = Saving...
 editor.isSaved.saved = Saved
 
+editor.confirmDeleteLabel = Are you sure you want to DELETE.
 editor.delete = Delete
 editor.confirmDelete = DELETE APP
 editor.cancelDelete = Cancel

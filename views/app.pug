@@ -4,13 +4,14 @@ html(lang=lang)
         title= translate("editor.pageTitle")
         script(src="/editor.js", type="module")
         link(rel="stylesheet", href="/style.css") 
-    body.theme-light
+    body(class=`theme-${theme}`)
         .header= translate("editor.header.title")
         a#back-to-index-button(href="/?lang="+lang)= translate("editor.backToIndex")
         #delete-app-button(href="/?lang="+lang)= translate("editor.delete")
         #confirm-delete-popup
             .bg 
             .confirm-delete
+                .label= translate("editor.confirmDeleteLabel")
                 button#confirm-delete-button= translate("editor.confirmDelete")
                 button#cancel-delete-button= translate("editor.cancelDelete")
         #editor

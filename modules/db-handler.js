@@ -3,6 +3,7 @@ import lpcsvUtil from "../modules/map-lpcsv-to-apparr.js";
 import { deepFreeze } from "./utils.js";
 import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
 import sqlite3 from "sqlite3";
+import { v4 as genUUID } from "uuid";
 const sqlite = sqlite3.verbose();
 const db = new sqlite.Database(":memory:");
 
@@ -66,8 +67,10 @@ async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
 }
 async function addApp(/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
+    var id = genUUID();
+    keys.push("id"); values.push(id);
     await asyncCMD("run","INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values);
-    return;
+    return id;
 }
 async function getApp(appId) {
     var v = await asyncCMD("get","SELECT * FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]);

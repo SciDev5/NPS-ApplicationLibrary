@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY} from "./modules/lang.js";
 import { authenticateEdit } from "./modules/auth.js";
+import cookieParser from "cookie-parser";
 const app = express();
 
 app.set("view engine", "pug");
@@ -11,20 +12,22 @@ app.use(express.static("./public/"));
 
 app.use(bodyParser.json({strict:false}))
 
-
+const DEFAULT_COLOR_THEME = "light";
 app.get("/",async (req,res)=>{
     var searchParams = []; // [{id:"p",name:"P",options:[{id:"1",name:"one"}]}]
     searchParams.push({id:"approval",name:"application.approvalStatus",many:true,options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))});
     searchParams.push({id:"privacy",name:"application.privacyStatus",many:true,options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
     searchParams.push({id:"gradeLevel",name:"application.gradeLevel",many:true,options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))});
     var lang = req.query["lang"] || DEFAULT_LANG;
+    var theme = req.query["theme"] || DEFAULT_COLOR_THEME;
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-    res.render("index",{searchParams,lang,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:authenticateEdit(req)});
+    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:authenticateEdit(req)});
 });
 app.get("/editor/:id",async (req,res)=>{
     var app = await database.apps.get(req.params["id"]);
     if (app == null || !authenticateEdit(req)) { res.redirect("/"); return; }
+    var theme = req.query["theme"] || DEFAULT_COLOR_THEME;
     var lang = req.query["lang"] || DEFAULT_LANG;
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
@@ -36,7 +39,7 @@ app.get("/editor/:id",async (req,res)=>{
     appInfoLists.subject = {name:"application.subject",many:true,initialState:app.subjects.map(v=>SUBJECTS.indexOf(v)),options:new Array(SUBJECTS.length).fill().map((_,i)=>({id:SUBJECTS[i],name:SUBJECTS_NAME[i]}))};
     appInfoLists.platform = {name:"application.platform",many:true,initialState:app.platforms.map(v=>PLATFORMS.indexOf(v)),options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))};
 
-    res.render("app",{app:app.toJSON(true),lang,translation,langNames:LANGUAGE_INTERNAL_NAMES,appInfoLists});
+    res.render("app",{app:app.toJSON(true),lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,appInfoLists});
 });
 app.get("/lang/:lang",async (req,res)=>{
     res.json(await getTranslationMap(req.params["lang"]));
@@ -101,8 +104,8 @@ app.post("/apps/del/:id",async(req,res)=>{
 app.post("/apps/add/",async(req,res)=>{
     if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
-        await database.apps.add(Application.parse(req.body));
-        res.json({success:true});
+        var id = await database.apps.add(Application.parse(req.body));
+        res.json({success:true,id});
     } catch (error) {
         res.status(400);
         res.json({sucess:false,reason:"error",error});

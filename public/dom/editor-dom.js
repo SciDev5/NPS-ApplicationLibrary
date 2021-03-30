@@ -23,15 +23,11 @@ function init () {
     document.getElementById("cancel-delete-button").addEventListener("click",e=>{
         if (e.isTrusted) document.getElementById("confirm-delete-popup").classList.remove("open");
     });
-    document.querySelector("#confirm-delete-popup > .bg").addEventListener("click",e=>{
-        if (e.isTrusted) document.getElementById("confirm-delete-popup").classList.remove("open");
-    });
 }
 
 function updateApp() {
     /**@type {Application}*/
     var app = window.app;
-    console.log(nameInput,nameInput.value);
     app.setName(nameInput.value);
     app.setURL(urlInput.value);
     app.setStatus(selectListElts[0].valueSingle(),selectListElts[1].valueSingle());
@@ -50,7 +46,6 @@ function showSavingStatus(saved) {
 }
 
 async function onEdit() {
-    console.log("YEET");
     showSavingStatus(false);
     updateApp();
     await callback.edit();

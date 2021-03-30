@@ -4,7 +4,7 @@ html(lang=lang,editor=editor)
         title= translate("index.pageTitle")
         script(src="/index.js", type="module")
         link(rel="stylesheet", href="style.css") 
-    body.theme-light
+    body(class=`theme-${theme}`)
         .header= translate("index.header.title")
             
         .search-container
@@ -13,7 +13,10 @@ html(lang=lang,editor=editor)
             each sp,n in searchParams
                 include includes/dropdown.pug
             button#search-refresh-button-inline(disabled)= translate("index.search.refreshButton")
-            
+        
+        if editor
+            .edit-tools-container
+                button#add-element= translate("index.editor.addApp")
         .apps-container
             #search-refresh-popup
                 = translate("index.search.refreshPopup")

@@ -13,14 +13,14 @@ async function paramFetch(uri,obj) {
 async function paramFetchPost(uri,obj,body) {
     var params = new URLSearchParams();
     for (var i in obj) params.set(i,obj[i]);
-    return await (await fetch(uri+"?"+params,{method:"post",body,headers:{"Content-Type":"application/json"}})).json();
+    return await (await fetch(uri+"?"+params,{method:"post",body:body!=undefined?JSON.stringify(body):undefined,headers:{"Content-Type":"application/json"}})).json();
 }
 async function getTranslationMap() {
     return await fetch("/lang/"+document.getElementsByTagName("html")[0].lang).then(r=>r.json());
 }
 
 async function updateApp() {
-    return await paramFetchPost("/apps/edit/"+window.appId,[],JSON.stringify(window.app.toJSON()));
+    return await paramFetchPost("/apps/edit/"+window.appId,[],window.app.toJSON());
 }
 async function deleteApp() {
     return await paramFetchPost("/apps/del/"+window.appId,[]);

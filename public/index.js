@@ -23,6 +23,11 @@ async function paramFetch(uri,obj) {
     for (var i in obj) params.set(i,obj[i]);
     return await (await fetch(uri+"?"+params,{method:"get"})).json();
 }
+async function paramFetchPost(uri,obj,body) {
+    var params = new URLSearchParams();
+    for (var i in obj) params.set(i,obj[i]);
+    return await (await fetch(uri+"?"+params,{method:"post",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}})).json();
+}
 async function getTranslationMap() {
     return await fetch("/lang/"+document.getElementsByTagName("html")[0].lang).then(r=>r.json());
 }
@@ -36,16 +41,22 @@ async function searchEvHandler(e) {
     var apps = await searchApps(search);
     indexDom.onSearchEnd(apps);
 }
+async function addAppEvHandler(e) {
+    var res = await paramFetchPost("/apps/add/",[],{name:"New App #"+Math.floor(Math.random()*10000)});
+    window.location = "/editor/"+res.id+"?lang="+window.langId;
+}
 
 addEventListener("load",async e=>{
     indexDom.init();
     var allApps = await getAllApps();
     Object.defineProperty(window,"lang",{writable:false,value:Object.freeze(await getTranslationMap())});
     Object.defineProperty(window,"langId",{writable:false,value:document.getElementsByTagName("html")[0].lang});
+    Object.defineProperty(window,"editor",{writable:false,value:!!document.getElementsByTagName("html")[0].getAttribute("editor")});
     console.log(allApps);
     indexDom.populateApps(allApps);
     document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));
     //document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseenter",searchEvHandler));
     document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("click",searchEvHandler));
-    document.getElementById("name-search").addEventListener("keyup",e1=>{console.log(e1);if (e1.key=="Enter")searchEvHandler(e1)});
+    document.getElementById("name-search").addEventListener("keyup",e1=>{if (e1.key=="Enter")searchEvHandler(e1)});
+    document.getElementById("add-element").addEventListener("click",addAppEvHandler);
 });

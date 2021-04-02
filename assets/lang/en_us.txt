@@ -18,6 +18,11 @@ application.display.moreInfoUrl    = More info
 application.display.closeInfoPopup = Close
 application.display.editOrDelete   = Edit / Delete
 
+application.infoPopup.gradeLevels = Grade Level:
+application.infoPopup.subjects    = Subjects:
+application.infoPopup.platforms   = Platforms: 
+
+
 editor.pageTitle = Edit Application
 editor.header.title = Edit Application
 editor.backToIndex  = Back to list

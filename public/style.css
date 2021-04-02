@@ -107,6 +107,7 @@ button {
     left: 0px;
     --svg-fg: var(--fg-em);
     transition: --svg-fg 0.4s, background 0.4s, border 0.4s;
+    box-shadow: 0 0 20px -6px;
 }
 #translate-button:hover {
     background: var(--bg-inv);
@@ -157,14 +158,13 @@ button {
     line-height: 40px;
     transition: background 0.2s, color 0.2s;
 }
-.language-option:hover {background: #e6e6e6;}
-.language-option:nth-child(even):hover {background: #e6e6e6;}
+.language-option:nth-child(even):hover,.language-option:hover {background: var(--bg-inv);color: var(--fg-inv);}
 .language-option:nth-child(even) {background: var(--bg-em);}
 .language-list > *:nth-child(1) {
     background: var(--bg-inv);
     color: var(--fg-inv);
 }
-.language-list > *:nth-child(1):hover {background: #883333;}
+.language-list > *:nth-child(1):hover {background: var(--fg-warn);}
 
 
 .apps-container {
@@ -255,6 +255,35 @@ button {
 }
 #apps-empty.visible {
     display: block;
+}
+
+
+.more-info-popup > .content > .grade-levels, .more-info-popup > .content > .subjects, .more-info-popup > .content > .platforms {
+    display: block;
+    margin: 10px;
+    /*border: solid var(--bg-em);
+    border-width: 0px 10px;*/
+}
+.more-info-popup > .content > div > .row {
+    color: var(--fg-em);
+}
+.more-info-popup > .content > div > .title-row {background: var(--bg-em);color: var(--fg-em);font-weight: bold;padding: 2px;}
+.more-info-popup > .content > div > .title-row-large {background: var(--bg-em);color: var(--fg-em);font-weight: bold;padding: 2px;font-size: 1.2em;}
+.more-info-popup > .content > a, .more-info-popup > .content > .close {
+    border: 1px solid var(--fg);
+    color: var(--fg-em);
+    padding: 4px;
+    background: var(--bg);
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px;
+    display: block;
+    transition: 0.2s color, 0.2s background, 0.2s color;
+}
+.more-info-popup > .content > a:hover, .more-info-popup > .content > .close:hover {
+    border-color: var(--bg-inv);
+    color: var(--fg-inv);
+    background: var(--bg-inv);
 }
 
 

@@ -13,6 +13,7 @@ function init () {
     });
 }
 
+function linkHttpsify(link) { return /https?:\/\//.test(link)?link:"https://"+link; }
 
 function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
@@ -20,13 +21,15 @@ function createAppDiv(/**@type {Application}*/app) {
     const moreInfoButton = createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
     const editInfoButton = createElement("a",translateSingle("application.display.editOrDelete"),{className:"edit-info",href:"/editor/"+app.id+"?lang="+window.langId});
     const moreInfoPopupCloseButton = createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
+    console.log(app.url,/.+/.test(app.url),/.+/.test(app.url)?createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null)
     const moreInfoPopup = createElement("div",[
         dom.addPopupBGClickEvent(createElement("div",[],{className:"bg"})),
         createElement("div",[
-            createElement("p",app.gradeLevels.map(v=>translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME)).join(),{}),
-            createElement("p",app.subjects.map(v=>translate(v,SUBJECTS,SUBJECTS_NAME)).join(),{}),
-            createElement("p",app.platforms.map(v=>translate(v,PLATFORMS,PLATFORMS_NAME)).join(),{}),
-            createElement("a",translateSingle("application.display.moreInfoUrl"),{href:app.url}),
+            createElement("div",[createElement("div",app.name,{classList:"title-row-large"})],{classList:"grade-levels"}),
+            createElement("div",[createElement("div",translateSingle("application.infoPopup.gradeLevels"),{classList:"title-row"})].concat(app.gradeLevels.map(v=>createElement("div",translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME),{classList:"row"}))),{classList:"grade-levels"}),
+            createElement("div",[createElement("div",translateSingle("application.infoPopup.subjects"),{classList:"title-row"})].concat(app.subjects.map(v=>createElement("div",translate(v,SUBJECTS,SUBJECTS_NAME),{classList:"row"}))),{classList:"subjects"}),
+            createElement("div",[createElement("div",translateSingle("application.infoPopup.platforms"),{classList:"title-row"})].concat(app.platforms.map(v=>createElement("div",translate(v,PLATFORMS,PLATFORMS_NAME),{classList:"row"}))),{classList:"platforms"}),
+            /.+/.test(app.url)?createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
             moreInfoPopupCloseButton
         ],{className:"content"})
     ],{className:"more-info-popup"});

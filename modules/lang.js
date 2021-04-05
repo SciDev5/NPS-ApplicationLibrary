@@ -2,7 +2,7 @@ import fs from "fs";
 import { deepFreeze } from "./utils.js";
 
 const DEFAULT_LANG = "en_us";
-const ALL_LANGS = ["en_us","es_es"];
+const ALL_LANGS = ["en_us","es"];
 
 const translationMapCache = {};
 

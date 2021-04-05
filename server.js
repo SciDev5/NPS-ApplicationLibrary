@@ -2,7 +2,7 @@ import database from "./modules/db-handler.js";
 import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_STATUSES_NAME, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, GRADE_LEVELS, GRADE_LEVELS_NAME, SUBJECTS, SUBJECTS_NAME } from "./public/application.js";
 import bodyParser from "body-parser";
 import express from "express";
-import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY} from "./modules/lang.js";
+import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY, ALL_LANGS} from "./modules/lang.js";
 import { authenticateEdit } from "./modules/auth.js";
 import cookieParser from "cookie-parser";
 const app = express();
@@ -18,7 +18,10 @@ app.get("/",async (req,res)=>{
     searchParams.push({id:"approval",name:"application.approvalStatus",many:true,options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))});
     searchParams.push({id:"privacy",name:"application.privacyStatus",many:true,options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
     searchParams.push({id:"gradeLevel",name:"application.gradeLevel",many:true,options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))});
-    var lang = req.query["lang"] || DEFAULT_LANG;
+    var lang = req.query["lang"];
+    if (!lang) { res.render("getlang"); return; }
+    if (!ALL_LANGS.includes(lang)) lang = DEFAULT_LANG;
+    lang = lang.toLowerCase();
     var theme = req.query["theme"] || DEFAULT_COLOR_THEME;
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;

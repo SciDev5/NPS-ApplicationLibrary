@@ -10,6 +10,7 @@ index.search.noResults       = No Results
 index.search.namePlaceholder = Name
 
 index.editor.addApp          = Add Application
+index.editor.adminPage       = Go to admin page
 
 
 # Application
@@ -41,6 +42,11 @@ editor.param.privacyStatus  = Privacy Status
 editor.param.gradeLevel     = Grade Levels
 editor.param.subject        = Subjects
 editor.param.platform       = Platform
+
+
+# Admin page
+admin.pageTitle      = Administration
+admin.header.title   = Administration
 
 # Approval Statuses
 application.approvalStatus            = Approval Status

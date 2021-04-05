@@ -1,0 +1,15 @@
+- translate = (e)=>translation[e]||e;
+html(lang=lang,editor=editor)
+    head 
+        title= translate("admin.pageTitle")
+        script(src="/lang-chooser.js")
+        script(src="/admin.js", type="module")
+        link(rel="stylesheet", href="style.css") 
+    body(class=`theme-${theme}`)
+        .header= translate("admin.header.title")
+        if editor
+            p yu kan ehdit l0l
+        else 
+            p noh 3diht 4u
+        
+        include includes/lang-container.pug

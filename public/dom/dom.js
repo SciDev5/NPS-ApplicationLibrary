@@ -78,7 +78,14 @@ addEventListener("click",e=>{
     selectListElts.forEach(v=>v.classList.remove("open"));
 });
 
-addEventListener("load",e=>{
+async function getTranslationMap() {
+    return await fetch("/lang/"+document.getElementsByTagName("html")[0].lang).then(r=>r.json());
+}
+async function init() {
+
+    Object.defineProperty(window,"lang",{writable:false,value:Object.freeze(await getTranslationMap())});
+    Object.defineProperty(window,"langId",{writable:false,value:document.getElementsByTagName("html")[0].lang});
+
     for (var elt of document.getElementsByClassName("selectlist"))
         interactifySelectList(elt);
 
@@ -98,7 +105,7 @@ addEventListener("load",e=>{
             window.location.search = srch.toString();
         });
 
-});
+}
 
 
-export default {createElement,selectListElts,translate,addPopupBGClickEvent};
+export default {createElement,selectListElts,translate,addPopupBGClickEvent,init};

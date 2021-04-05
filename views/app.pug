@@ -2,6 +2,7 @@
 html(lang=lang)
     head 
         title= translate("editor.pageTitle")
+        script(src="/lang-chooser.js")
         script(src="/editor.js", type="module")
         link(rel="stylesheet", href="/style.css") 
     body(class=`theme-${theme}`)

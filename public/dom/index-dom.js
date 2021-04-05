@@ -21,7 +21,7 @@ function createAppDiv(/**@type {Application}*/app) {
     const moreInfoButton = createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
     const editInfoButton = createElement("a",translateSingle("application.display.editOrDelete"),{className:"edit-info",href:"/editor/"+app.id+"?lang="+window.langId});
     const moreInfoPopupCloseButton = createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
-    console.log(app.url,/.+/.test(app.url),/.+/.test(app.url)?createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null)
+    //console.log(app.url,/.+/.test(app.url),/.+/.test(app.url)?createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null)
     const moreInfoPopup = createElement("div",[
         dom.addPopupBGClickEvent(createElement("div",[],{className:"bg"})),
         createElement("div",[

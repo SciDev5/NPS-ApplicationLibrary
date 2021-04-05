@@ -3,7 +3,7 @@ button#translate-button
 #language-container
     .bg
     .language-list
-        .language-option= (langNames.filter(v=>v.lang==lang)[0]||{}).name
+        .language-option= (langNames.filter(v=>v.lang.toLowerCase()==lang.toLowerCase())[0]||{}).name
         each langName in langNames
-            if langName.lang!=lang
+            if langName.lang.toLowerCase()!=lang.toLowerCase()
                 .language-option(value=langName.lang)= langName.name

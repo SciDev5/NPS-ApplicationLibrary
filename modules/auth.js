@@ -1,5 +1,10 @@
 function authenticateEdit(req) {
-    return true; // TODO
+    return !!getSignedInAdmin(req);
 }
 
-export {authenticateEdit};
+
+function signinAdmin(id, req) { req.session.userId = id; }
+function signoutAdmin(res) { res.clearCookie("admin_session"); }
+function getSignedInAdmin(req) { return req.session.userId; }
+
+export default {authenticateEdit,signinAdmin,signoutAdmin,getSignedInAdmin};

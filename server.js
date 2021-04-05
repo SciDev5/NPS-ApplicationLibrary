@@ -3,14 +3,32 @@ import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, APPROVAL_S
 import bodyParser from "body-parser";
 import express from "express";
 import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERNAL_NAMES_READY, ALL_LANGS} from "./modules/lang.js";
-import { authenticateEdit } from "./modules/auth.js";
+import auth from "./modules/auth.js";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import { v4 as UUIDv4 } from "uuid";
 const app = express();
 
 app.set("view engine", "pug");
 app.use(express.static("./public/"));
 
 app.use(bodyParser.json({strict:false}))
+app.use(cookieParser());
+
+// Create a new session middleware for admin login.
+app.use(session(
+  {
+    key: "admin_session",
+    secret: UUIDv4(),
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      expires: 24*60*60*1000,
+      secure: false
+    }
+  }
+));
+
 
 const DEFAULT_COLOR_THEME = "light";
 app.get("/",async (req,res)=>{
@@ -19,19 +37,21 @@ app.get("/",async (req,res)=>{
     searchParams.push({id:"privacy",name:"application.privacyStatus",many:true,options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
     searchParams.push({id:"gradeLevel",name:"application.gradeLevel",many:true,options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))});
     var lang = req.query["lang"];
-    if (!lang) { res.render("getlang"); return; }
     if (!ALL_LANGS.includes(lang)) lang = DEFAULT_LANG;
-    lang = lang.toLowerCase();
-    var theme = req.query["theme"] || DEFAULT_COLOR_THEME;
+    lang = lang.replace(/-/g,"_").toLowerCase();
+    var theme = req.query["theme"] || req.cookies["theme_cookie"] || DEFAULT_COLOR_THEME;
+    res.cookie("theme_cookie",theme,{maxAge:Infinity});
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:authenticateEdit(req)});
+    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:auth.authenticateEdit(req)});
 });
 app.get("/editor/:id",async (req,res)=>{
     var app = await database.apps.get(req.params["id"]);
-    if (app == null || !authenticateEdit(req)) { res.redirect("/"); return; }
-    var theme = req.query["theme"] || DEFAULT_COLOR_THEME;
+    if (app == null || !auth.authenticateEdit(req)) { res.redirect("/"); return; }
     var lang = req.query["lang"] || DEFAULT_LANG;
+    lang = lang.replace(/-/g,"_").toLowerCase();
+    var theme = req.query["theme"] || req.cookies["theme_cookie"] || DEFAULT_COLOR_THEME;
+    res.cookie("theme_cookie",theme,{maxAge:Infinity});
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
 
@@ -46,6 +66,31 @@ app.get("/editor/:id",async (req,res)=>{
 });
 app.get("/lang/:lang",async (req,res)=>{
     res.json(await getTranslationMap(req.params["lang"]));
+});
+
+
+app.post("/admin/signin", async (req,res)=>{
+    var id = UUIDv4(); 
+    if (id) {
+        auth.signinAdmin(id,req);
+        res.json({success:true});
+    } else {
+        res.json({success:false,reason:"invalid-credentials"});
+    }
+});
+app.post("/admin/signout", async (req,res)=>{
+    auth.signoutAdmin(res);
+    res.json({success:true});
+});
+app.get("/admin", async (req,res)=>{
+    var lang = req.query["lang"] || DEFAULT_LANG;
+    lang = lang.replace(/-/g,"_").toLowerCase();
+    var theme = req.query["theme"] || req.cookies["theme_cookie"] || DEFAULT_COLOR_THEME;
+    res.cookie("theme_cookie",theme,{maxAge:Infinity});
+    var translation = await getTranslationMap(lang);
+    await LANGUAGE_INTERNAL_NAMES_READY;
+
+    res.render("admin",{editor:auth.getSignedInAdmin(req),lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 
 
@@ -85,7 +130,7 @@ app.get("/apps/get/:id",async(req,res)=>{
     }
 });
 app.post("/apps/edit/:id",async(req,res)=>{
-    if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    if (!auth.authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
         await database.apps.update(req.params["id"],Application.parse(req.body));
         res.json({success:true});
@@ -95,7 +140,7 @@ app.post("/apps/edit/:id",async(req,res)=>{
     }
 });
 app.post("/apps/del/:id",async(req,res)=>{
-    if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    if (!auth.authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
         await database.apps.del(req.params["id"]);
         res.json({success:true});
@@ -105,7 +150,7 @@ app.post("/apps/del/:id",async(req,res)=>{
     }
 });
 app.post("/apps/add/",async(req,res)=>{
-    if (!authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    if (!auth.authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
         var id = await database.apps.add(Application.parse(req.body));
         res.json({success:true,id});

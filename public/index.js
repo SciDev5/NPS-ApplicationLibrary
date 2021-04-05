@@ -28,9 +28,6 @@ async function paramFetchPost(uri,obj,body) {
     for (var i in obj) params.set(i,obj[i]);
     return await (await fetch(uri+"?"+params,{method:"post",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}})).json();
 }
-async function getTranslationMap() {
-    return await fetch("/lang/"+document.getElementsByTagName("html")[0].lang).then(r=>r.json());
-}
 
 
 async function searchEvHandler(e) {
@@ -47,10 +44,9 @@ async function addAppEvHandler(e) {
 }
 
 addEventListener("load",async e=>{
+    await dom.init();
     indexDom.init();
     var allApps = await getAllApps();
-    Object.defineProperty(window,"lang",{writable:false,value:Object.freeze(await getTranslationMap())});
-    Object.defineProperty(window,"langId",{writable:false,value:document.getElementsByTagName("html")[0].lang});
     Object.defineProperty(window,"editor",{writable:false,value:!!document.getElementsByTagName("html")[0].getAttribute("editor")});
     console.log(allApps);
     indexDom.populateApps(allApps);

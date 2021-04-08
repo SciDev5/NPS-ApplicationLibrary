@@ -22,7 +22,15 @@ const APP_TABLE = {
         {name:"subjects", type:"TEXT", arrEnum:SUBJECTS, notNull:true, default: ""}
     ]
 };
-deepFreeze([APP_TABLE]);
+const ADMIN_USER_TABLE = {
+    NAME:"adminUsers",
+    COLS:[
+        {name:"id", type:"TEXT", notNull:true, default: "random()"},
+        {name:"username", type:"TEXT", primaryKey:true},
+        {name:"hashedpass", type:"TEXT", notNull:true}
+    ]
+};
+deepFreeze([APP_TABLE,ADMIN_USER_TABLE]);
 
 
 function asyncCMD(cmd,query,params) {
@@ -120,9 +128,20 @@ async function allApps() {
 }
 
 
+async function getAdminByUsername(username) {
+    return await asyncCMD("get",`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=?`,[username]);
+}
+async function createAdminAccount(username,hashedpass) {
+    var id = genUUID();
+    await asyncCMD("run",`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,[id,username,hashedpass]);
+    return id;
+}
+
+
 async function tryInitDB() {
     await Promise.all([
         asyncCMD("run","CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS),[]),
+        asyncCMD("run","CREATE TABLE IF NOT EXISTS "+ADMIN_USER_TABLE.NAME+" "+tableColsStr(ADMIN_USER_TABLE.COLS),[])
     ]);
 }
 
@@ -150,5 +169,9 @@ export default {
         add:addApp,
         del:delApp,
         update:updateApp
+    },
+    admin: {
+        getByUsername: getAdminByUsername,
+        add: createAdminAccount
     }
 }

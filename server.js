@@ -71,7 +71,7 @@ app.get("/lang/:lang",async (req,res)=>{
 
 app.post("/admin/signin", async (req,res)=>{
     var {username,password} = req.body;
-    var id = UUIDv4(); 
+    var id = auth.authCredentials(username,password);
     if (id) {
         auth.signinAdmin(id,req);
         res.json({success:true});
@@ -84,7 +84,8 @@ app.post("/admin/signout", async (req,res)=>{
     res.json({success:true});
 });
 app.post("/admin/signup", async (req,res)=>{
-    var {username,password} = req.body;
+    var {username,password,code} = req.body;
+    // TODO: CREATE ACCOUNT
     var id = UUIDv4(); 
     if (id) {
         auth.signinAdmin(id,req);

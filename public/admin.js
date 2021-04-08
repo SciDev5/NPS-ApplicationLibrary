@@ -51,7 +51,7 @@ var signupCode = null;
 addEventListener("load",async e=>{
     await dom.init();
     Object.defineProperty(window,"editor",{writable:false,value:!!document.getElementsByTagName("html")[0].getAttribute("editor")});
-    Object.defineProperty(window,"signupCode",{writable:false,value:!!document.getElementsByTagName("html")[0].getAttribute("code")}); signupCode = window["signupCode"];
+    Object.defineProperty(window,"signupCode",{writable:false,value:document.getElementsByTagName("html")[0].getAttribute("code")}); signupCode = window["signupCode"];
     adminDom.callback.signin = signin;
     adminDom.callback.signout = signout;
     adminDom.callback.signup = signup;

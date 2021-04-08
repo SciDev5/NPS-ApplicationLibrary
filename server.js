@@ -70,6 +70,7 @@ app.get("/lang/:lang",async (req,res)=>{
 
 
 app.post("/admin/signin", async (req,res)=>{
+    var {username,password} = req.body;
     var id = UUIDv4(); 
     if (id) {
         auth.signinAdmin(id,req);
@@ -82,6 +83,16 @@ app.post("/admin/signout", async (req,res)=>{
     auth.signoutAdmin(res);
     res.json({success:true});
 });
+app.post("/admin/signup", async (req,res)=>{
+    var {username,password} = req.body;
+    var id = UUIDv4(); 
+    if (id) {
+        auth.signinAdmin(id,req);
+        res.json({success:true});
+    } else {
+        res.json({success:false,reason:"invalid-credentials"});
+    }
+});
 app.get("/admin", async (req,res)=>{
     var lang = req.query["lang"] || DEFAULT_LANG;
     lang = lang.replace(/-/g,"_").toLowerCase();
@@ -89,8 +100,8 @@ app.get("/admin", async (req,res)=>{
     res.cookie("theme_cookie",theme,{maxAge:Infinity});
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-
-    res.render("admin",{editor:auth.getSignedInAdmin(req),lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
+    var code = req.query["signup-code"];
+    res.render("admin",{editor:auth.getSignedInAdmin(req),code,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 
 

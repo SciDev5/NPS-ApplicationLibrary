@@ -45,8 +45,19 @@ editor.param.platform       = Platform
 
 
 # Admin page
-admin.pageTitle      = Administration
-admin.header.title   = Administration
+admin.pageTitle                = Administration
+admin.header.title             = Administration
+
+admin.body.signinButton        = Sign In
+admin.body.signoutButton       = Sign Out
+admin.body.signupButton        = Create Account
+admin.body.usernamePlaceholder = username
+admin.body.passwordPlaceholder = password
+admin.body.backToIndex         = Back to App List
+admin.signupFailedMessage      = Signup failed. Your code was invalid or may have expired.
+admin.signinFailedMessage      = Signin failed. Incorrect username or password.
+admin.signinError              = An error occurred while trying to sign in/out (see console for details):
+admin.errorMissingCredentials  = Please enter both a username and a password.
 
 # Approval Statuses
 application.approvalStatus            = Approval Status

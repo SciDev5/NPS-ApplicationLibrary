@@ -2,6 +2,9 @@ import { Application } from "./application.js";
 import dom from "./dom/dom.js";
 import indexDom from "./dom/index-dom.js";
 
+import { paramFetchPost, paramFetch } from "./web/requests.js";
+
+
 async function searchApps(/**@type {{name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll}}*/query) {
     var {name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll} = query;
     var queryOut = {}
@@ -17,16 +20,6 @@ async function getAllApps() {
 }
 async function getApp(id) {
     return Application.parse(await (await fetch("/apps/get/"+id)).json());
-}
-async function paramFetch(uri,obj) {
-    var params = new URLSearchParams();
-    for (var i in obj) params.set(i,obj[i]);
-    return await (await fetch(uri+"?"+params,{method:"get"})).json();
-}
-async function paramFetchPost(uri,obj,body) {
-    var params = new URLSearchParams();
-    for (var i in obj) params.set(i,obj[i]);
-    return await (await fetch(uri+"?"+params,{method:"post",body:JSON.stringify(body),headers:{"Content-Type":"application/json"}})).json();
 }
 
 
@@ -54,5 +47,5 @@ addEventListener("load",async e=>{
     //document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseenter",searchEvHandler));
     document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("click",searchEvHandler));
     document.getElementById("name-search").addEventListener("keyup",e1=>{if (e1.key=="Enter")searchEvHandler(e1)});
-    document.getElementById("add-element").addEventListener("click",addAppEvHandler);
+    if(window["editor"]) document.getElementById("add-element").addEventListener("click",addAppEvHandler);
 });

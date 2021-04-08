@@ -198,7 +198,7 @@ button {
     color: var(--fg-em);
     padding: 5px 15px;
 }
-.app > .more-info, .app > .edit-info, #add-element, #goto-admin-link {
+.app > .more-info, .app > .edit-info, #add-element, #goto-admin-link, #admin-back-to-index-link, #sign-button {
     color: var(--fg-em);
     background: var(--bg);
     border: 1px solid var(--fg);
@@ -207,7 +207,7 @@ button {
     margin: 5px 5px;
     transition: color 0.2s, background 0.2s, border 0.2s;
 }
-.app > .more-info:hover, .app > .edit-info:hover, #add-element:hover, #goto-admin-link:hover {
+.app > .more-info:hover, .app > .edit-info:hover, #add-element:hover, #goto-admin-link:hover, #admin-back-to-index-link:hover, #sign-button:hover {
     border: 1px solid var(--bg-inv);
     background: var(--bg-inv);
     color: var(--fg-inv);
@@ -294,8 +294,8 @@ button {
     margin-right: 0px;
 }
 
-input, #search-refresh-button-inline {
-    color: var(--fg);
+input, #search-refresh-button-inline, #sign-button {
+    color: var(--fg-em);
     background: var(--bg);
     width: 300px;
     height: 40px;
@@ -502,13 +502,23 @@ input, #search-refresh-button-inline {
     padding: 0px 10px 10px 10px;
     text-align: center;
 }
-#add-element, #goto-admin-link {
+#add-element, #goto-admin-link, #admin-back-to-index-link {
     width: unset;
     font-size: 14px;
 }
-#goto-admin-link {
+#goto-admin-link, #admin-back-to-index-link {
     font-family: "Barlow", sans-serif;
     text-decoration: none;
+}
+#admin-back-to-index-link {
+    display: inline-block;
+    margin: 10px calc(50% - 100px);
+    width: 200px;
+    text-align: center;
+}
+#sign-button, #username, #password {
+    display: block;
+    margin: 10px calc(50% - 150px);
 }
 
 /* EDITOR STYLES */

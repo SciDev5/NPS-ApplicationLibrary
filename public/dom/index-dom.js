@@ -1,6 +1,5 @@
 import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, SUBJECTS_NAME, GRADE_LEVELS_NAME, APPROVAL_STATUSES_NAME, SUBJECTS, GRADE_LEVELS } from "../application.js";
 import dom from "./dom.js";
-const { createElement, selectListElts } = dom;
 
 var searchNameInput, last = {};
 function init () {
@@ -18,27 +17,27 @@ function linkHttpsify(link) { return /https?:\/\//.test(link)?link:"https://"+li
 function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
     const translateSingle = dom.translate;
-    const moreInfoButton = createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
-    const editInfoButton = createElement("a",translateSingle("application.display.editOrDelete"),{className:"edit-info",href:"/editor/"+app.id+"?lang="+window.langId});
-    const moreInfoPopupCloseButton = createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
-    //console.log(app.url,/.+/.test(app.url),/.+/.test(app.url)?createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null)
-    const moreInfoPopup = createElement("div",[
-        dom.addPopupBGClickEvent(createElement("div",[],{className:"bg"})),
-        createElement("div",[
-            createElement("div",[createElement("div",app.name,{classList:"title-row-large"})],{classList:"grade-levels"}),
-            createElement("div",[createElement("div",translateSingle("application.infoPopup.gradeLevels"),{classList:"title-row"})].concat(app.gradeLevels.map(v=>createElement("div",translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME),{classList:"row"}))),{classList:"grade-levels"}),
-            createElement("div",[createElement("div",translateSingle("application.infoPopup.subjects"),{classList:"title-row"})].concat(app.subjects.map(v=>createElement("div",translate(v,SUBJECTS,SUBJECTS_NAME),{classList:"row"}))),{classList:"subjects"}),
-            createElement("div",[createElement("div",translateSingle("application.infoPopup.platforms"),{classList:"title-row"})].concat(app.platforms.map(v=>createElement("div",translate(v,PLATFORMS,PLATFORMS_NAME),{classList:"row"}))),{classList:"platforms"}),
-            /.+/.test(app.url)?createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
+    const moreInfoButton = dom.createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
+    const editInfoButton = dom.createElement("a",translateSingle("application.display.editOrDelete"),{className:"edit-info",href:"/editor/"+app.id+"?lang="+window.langId});
+    const moreInfoPopupCloseButton = dom.createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
+    //console.log(app.url,/.+/.test(app.url),/.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null)
+    const moreInfoPopup = dom.createElement("div",[
+        dom.addPopupBGClickEvent(dom.createElement("div",[],{className:"bg"})),
+        dom.createElement("div",[
+            dom.createElement("div",[dom.createElement("div",app.name,{classList:"title-row-large"})],{classList:"grade-levels"}),
+            dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.gradeLevels"),{classList:"title-row"})].concat(app.gradeLevels.map(v=>dom.createElement("div",translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME),{classList:"row"}))),{classList:"grade-levels"}),
+            dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.subjects"),{classList:"title-row"})].concat(app.subjects.map(v=>dom.createElement("div",translate(v,SUBJECTS,SUBJECTS_NAME),{classList:"row"}))),{classList:"subjects"}),
+            dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.platforms"),{classList:"title-row"})].concat(app.platforms.map(v=>dom.createElement("div",translate(v,PLATFORMS,PLATFORMS_NAME),{classList:"row"}))),{classList:"platforms"}),
+            /.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
             moreInfoPopupCloseButton
         ],{className:"content"})
     ],{className:"more-info-popup"});
     moreInfoButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.add("open")});
     moreInfoPopupCloseButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.remove("open")});
-    var appDiv = createElement("div",[
-        createElement("div",app.name,{className:"name"}),
-        createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
-        createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
+    var appDiv = dom.createElement("div",[
+        dom.createElement("div",app.name,{className:"name"}),
+        dom.createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
+        dom.createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
         moreInfoButton,
         window.editor?editInfoButton:null,
         moreInfoPopup
@@ -48,9 +47,9 @@ function createAppDiv(/**@type {Application}*/app) {
 
 function getSearch() {
     var name = searchNameInput.value;
-    var approvalStatus = selectListElts[0].value().filter(v=>v.value).map(v=>APPROVAL_STATUSES.indexOf(v.name));
-    var privacyStatus = selectListElts[1].value().filter(v=>v.value).map(v=>PRIVACY_STATUSES.indexOf(v.name));
-    var gradeLevels = selectListElts[2].value().filter(v=>v.value).map(v=>GRADE_LEVELS.indexOf(v.name));
+    var approvalStatus = dom.selectListElts[0].value().filter(v=>v.value).map(v=>APPROVAL_STATUSES.indexOf(v.name));
+    var privacyStatus = dom.selectListElts[1].value().filter(v=>v.value).map(v=>PRIVACY_STATUSES.indexOf(v.name));
+    var gradeLevels = dom.selectListElts[2].value().filter(v=>v.value).map(v=>GRADE_LEVELS.indexOf(v.name));
     var m = {};
     if (name) m.name = name.trim();
     if (approvalStatus && approvalStatus.length) m.approvalStatus = approvalStatus;

@@ -1,6 +1,5 @@
 import { Application, APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, PRIVACY_STATUSES_NAME, PLATFORMS_NAME, SUBJECTS_NAME, GRADE_LEVELS_NAME, APPROVAL_STATUSES_NAME, SUBJECTS, GRADE_LEVELS } from "../application.js";
 import dom from "./dom.js";
-const {createElement,selectListElts} = dom;
 
 var nameInput, urlInput, callback = {edit:async()=>{},del:async()=>{}};
 function init () {
@@ -30,13 +29,13 @@ function updateApp() {
     var app = window.app;
     app.setName(nameInput.value);
     app.setURL(urlInput.value);
-    app.setStatus(selectListElts[0].valueSingle(),selectListElts[1].valueSingle());
+    app.setStatus(dom.selectListElts[0].valueSingle(),dom.selectListElts[1].valueSingle());
     app.clearSubjects(); 
     app.clearGradeLevels(); 
     app.clearPlatforms(); 
-    selectListElts[2].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addGradeLevel(v)); // grade
-    selectListElts[3].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addSubject(v)); // subject
-    selectListElts[4].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addPlatform(v)); // platform
+    dom.selectListElts[2].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addGradeLevel(v)); // grade
+    dom.selectListElts[3].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addSubject(v)); // subject
+    dom.selectListElts[4].value().filter(v=>v.value).map(v=>v.name).forEach(v=>app.addPlatform(v)); // platform
 }
 
 function showSavingStatus(saved) {

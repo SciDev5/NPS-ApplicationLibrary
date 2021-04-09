@@ -47,6 +47,24 @@ async function signout() {
     }
 }
 
+async function createToken() {
+    try {
+        var res = await paramFetchPost("/admin/make-token");
+        console.log(window.location.origin+"/admin?signup-code="+encodeURIComponent(res.token));
+        if (res.success) {
+            var tokenButton = document.getElementById("create-admin-token-button");
+            tokenButton.outerHTML = '<div id="'+tokenButton.id+'" class="created"><b>'+
+                dom.translate("admin.body.tokenCopyMessage")+"</b><br>"+
+                encodeURI(window.location.origin)+"/admin?signup-code="+encodeURIComponent(res.token)+'</div>';
+        } else {
+            alert(dom.translate("admin.makeTokenError"))
+        }
+    } catch (e) {
+        alert(dom.translate("admin.signinError")+"\n"+e.stack);
+        console.error(e);
+    }
+}
+
 var signupCode = null;
 addEventListener("load",async e=>{
     await dom.init();
@@ -55,6 +73,7 @@ addEventListener("load",async e=>{
     adminDom.callback.signin = signin;
     adminDom.callback.signout = signout;
     adminDom.callback.signup = signup;
+    adminDom.callback.createToken = createToken;
     await adminDom.init();
 
     var queryParams = new URLSearchParams(window.location.search);

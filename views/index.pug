@@ -7,7 +7,7 @@ html(lang=lang,editor=editor)
         link(rel="stylesheet", href="style.css") 
     body(class=`theme-${theme}`)
         .header= translate("index.header.title")
-            
+        #app-request-text!= translate("index.header.appRequestText")  
         .search-container
             .search-title= translate("index.search.title")
             input#name-search(name="name-search", placeholder=translate("index.search.namePlaceholder"))

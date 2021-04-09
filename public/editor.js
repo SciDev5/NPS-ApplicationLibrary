@@ -8,10 +8,10 @@ async function getApp(id) {
 }
 
 async function updateApp() {
-    return await paramFetchPost("/apps/edit/"+window.appId,[],window.app.toJSON());
+    return await paramFetchPost("/apps/edit/"+window.appId,window.app.toJSON());
 }
 async function deleteApp() {
-    return await paramFetchPost("/apps/del/"+window.appId,[]);
+    return await paramFetchPost("/apps/del/"+window.appId);
 }
 
 addEventListener("load",async e=>{

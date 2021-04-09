@@ -32,7 +32,7 @@ async function searchEvHandler(e) {
     indexDom.onSearchEnd(apps);
 }
 async function addAppEvHandler(e) {
-    var res = await paramFetchPost("/apps/add/",[],{name:"New App #"+Math.floor(Math.random()*10000)});
+    var res = await paramFetchPost("/apps/add/",{name:"New App #"+Math.floor(Math.random()*10000)});
     window.location = "/editor/"+res.id+"?lang="+window.langId;
 }
 

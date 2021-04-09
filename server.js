@@ -43,11 +43,11 @@ app.get("/",async (req,res)=>{
     res.cookie("theme_cookie",theme,{maxAge:Infinity});
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:auth.authenticateEdit(req)});
+    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:await auth.getSignedInAdmin(req)});
 });
 app.get("/editor/:id",async (req,res)=>{
     var app = await database.apps.get(req.params["id"]);
-    if (app == null || !auth.authenticateEdit(req)) { res.redirect("/"); return; }
+    if (app == null || !await auth.getSignedInAdmin(req)) { res.redirect("/"); return; }
     var lang = req.query["lang"] || DEFAULT_LANG;
     lang = lang.replace(/-/g,"_").toLowerCase();
     var theme = req.query["theme"] || req.cookies["theme_cookie"] || DEFAULT_COLOR_THEME;
@@ -69,9 +69,18 @@ app.get("/lang/:lang",async (req,res)=>{
 });
 
 
+app.post("/admin/make-token", async (req,res)=>{
+    if (await auth.getSignedInAdmin(req)) {
+        var token = await auth.createAdminAccountToken();
+        res.json({success:true,token});
+    } else {
+        res.json({success:false});
+    }
+});
 app.post("/admin/signin", async (req,res)=>{
     var {username,password} = req.body;
-    var id = auth.authCredentials(username,password);
+    if (!username || !password) { res.json({success:false,reason:"missing-credentials"}); return; }
+    var id = await auth.authCredentials(username.trim(),password.trim());
     if (id) {
         auth.signinAdmin(id,req);
         res.json({success:true});
@@ -85,8 +94,8 @@ app.post("/admin/signout", async (req,res)=>{
 });
 app.post("/admin/signup", async (req,res)=>{
     var {username,password,code} = req.body;
-    // TODO: CREATE ACCOUNT
-    var id = UUIDv4(); 
+    if (!username || !password) { res.json({success:false,reason:"missing-credentials"}); return; }
+    var id = auth.createAccount(code,username.trim(),password.trim());
     if (id) {
         auth.signinAdmin(id,req);
         res.json({success:true});
@@ -102,7 +111,7 @@ app.get("/admin", async (req,res)=>{
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
     var code = req.query["signup-code"];
-    res.render("admin",{editor:auth.getSignedInAdmin(req),code,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
+    res.render("admin",{editor:await auth.getSignedInAdmin(req),code,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 
 
@@ -142,7 +151,7 @@ app.get("/apps/get/:id",async(req,res)=>{
     }
 });
 app.post("/apps/edit/:id",async(req,res)=>{
-    if (!auth.authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    if (!await auth.getSignedInAdmin(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
         await database.apps.update(req.params["id"],Application.parse(req.body));
         res.json({success:true});
@@ -152,7 +161,7 @@ app.post("/apps/edit/:id",async(req,res)=>{
     }
 });
 app.post("/apps/del/:id",async(req,res)=>{
-    if (!auth.authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    if (!await auth.getSignedInAdmin(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
         await database.apps.del(req.params["id"]);
         res.json({success:true});
@@ -162,7 +171,7 @@ app.post("/apps/del/:id",async(req,res)=>{
     }
 });
 app.post("/apps/add/",async(req,res)=>{
-    if (!auth.authenticateEdit(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    if (!await auth.getSignedInAdmin(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
     try {
         var id = await database.apps.add(Application.parse(req.body));
         res.json({success:true,id});
@@ -178,6 +187,9 @@ app.listen(process.env.PORT||80,()=>{
     console.log(`SERVER LISTENING: [port ${process.env.PORT||80}]`);
 });
 
+(async()=>{
+    auth.createAccount(await auth.createAdminAccountToken(),"admin","admin");
+})();
 
 
 process.addListener("uncaughtException",(err)=>{

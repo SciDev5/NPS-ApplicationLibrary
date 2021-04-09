@@ -93,6 +93,16 @@ button {
     background: var(--bg-em);
     color: var(--fg-em);
 }
+#app-request-text {
+    text-align: center;
+    font-size: small;
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px;
+    padding-top: 0px;
+    font-weight: bold;
+    background: var(--bg-em);
+    color: var(--fg-em);
+}
 #translate-button {
     width: 60px;
     padding: 10px;
@@ -198,7 +208,7 @@ button {
     color: var(--fg-em);
     padding: 5px 15px;
 }
-.app > .more-info, .app > .edit-info, #add-element, #goto-admin-link, #admin-back-to-index-link, #sign-button {
+.app > .more-info, .app > .edit-info, #add-element, #goto-admin-link, #admin-back-to-index-link, #sign-button, #create-admin-token-button {
     color: var(--fg-em);
     background: var(--bg);
     border: 1px solid var(--fg);
@@ -207,7 +217,7 @@ button {
     margin: 5px 5px;
     transition: color 0.2s, background 0.2s, border 0.2s;
 }
-.app > .more-info:hover, .app > .edit-info:hover, #add-element:hover, #goto-admin-link:hover, #admin-back-to-index-link:hover, #sign-button:hover {
+.app > .more-info:hover, .app > .edit-info:hover, #add-element:hover, #goto-admin-link:hover, #admin-back-to-index-link:hover, #sign-button:hover, #create-admin-token-button:hover {
     border: 1px solid var(--bg-inv);
     background: var(--bg-inv);
     color: var(--fg-inv);
@@ -294,7 +304,7 @@ button {
     margin-right: 0px;
 }
 
-input, #search-refresh-button-inline, #sign-button {
+input, #search-refresh-button-inline, #sign-button, #create-admin-token-button {
     color: var(--fg-em);
     background: var(--bg);
     width: 300px;
@@ -519,6 +529,41 @@ input, #search-refresh-button-inline, #sign-button {
 #sign-button, #username, #password {
     display: block;
     margin: 10px calc(50% - 150px);
+}
+#create-admin-token-button {
+    width: 300px;
+    display: block;
+    margin: 10px calc(50% - 150px);
+}
+#create-admin-token-button.created {
+    border: 1px solid var(--fg);
+    background: none;
+    color: var(--fg-em);
+    line-height: 1.2;
+    height: unset;
+}
+#create-admin-token-button.created:hover {
+    border: 1px solid var(--fg);
+    background: none;
+    color: var(--fg);
+}
+.admin-page-text {
+    width: 300px;
+    display: block;
+    margin: 10px calc(50% - 150px);
+    font-family: 'Barlow',sans-serif;
+    font-size: 0.9em;
+    background: none;
+    color: var(--fg-em);
+    line-height: 1.2;
+    height: unset;
+}
+
+.signX-label {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px;
+    font-size: 1.2em;
 }
 
 /* EDITOR STYLES */

@@ -136,6 +136,9 @@ async function createAdminAccount(username,hashedpass) {
     await asyncCMD("run",`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,[id,username,hashedpass]);
     return id;
 }
+async function adminsExist() {
+    return !!await asyncCMD("get",`SELECT id FROM ${ADMIN_USER_TABLE.NAME}`);
+}
 
 
 async function tryInitDB() {
@@ -172,6 +175,7 @@ export default {
     },
     admin: {
         getByUsername: getAdminByUsername,
-        add: createAdminAccount
+        add: createAdminAccount,
+        anyExists: adminsExist
     }
 }

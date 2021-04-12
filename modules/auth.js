@@ -22,9 +22,9 @@ async function authCredentials(username, password) {
     } else return null;
 }
 async function createAccount(token,username,password) {
-    if (!await checkAdminAccountToken(token)) return null;
+    if (!(await isNoAdmins()) && !(await checkAdminAccountToken(token))) return null;
     var hashedpass = await new Promise((res,rej)=>bcrypt.hash(password,SALT_ROUNDS,(err,data)=>{ if (err) rej(err); else res(data); }));
-    console.log("CREATED ACCOUNT",username,hashedpass,"[ TOKEN:",token,"]");
+    console.log("!! CREATED ACCOUNT",username,hashedpass,"[ TOKEN:",token,"]");
     return await database.admin.add(username,hashedpass);
 }
 

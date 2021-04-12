@@ -4,12 +4,12 @@ import {APPROVAL_STATUSES,PRIVACY_STATUSES,Application} from "../public/applicat
 const APPROVAL_STATUS_NAME_MAP = {"Unknown":0,"Approved for Use":1,"Student must be 14+ with parent consent to create account":2,"Requires Parental/Custodian Informed Consent":3,"Active Pilot":4,"Instructional Use Only":5,"Pending":6,"Reviewed & Denied":7}
 const PRIVACY_STATUS_NAME_MAP = {"Unknown":0,"Compliant":1,"Noncompliant":2,"Parent consent required":3,"Teacher Instructional Use Only":4,"No Personal Information Collected":5,"Not applicable":6}
 
-function getLPCSV_test() {
-    return fs.readFileSync(".data/lp_apps.csv",{encoding:"utf-8"});
+function getAppsCSV() {
+    return fs.readFileSync(".data/apps.csv",{encoding:"utf-8"});
 }
 
 /**@returns {Application[]}*/
-function convertLPCSV(lp_csv) {
+function convertAppsCSV(lp_csv) {
     var s = lp_csv.trim();
     s = s.split("\n").map(v=>v.trim().split(",")); 
     s.splice(0,1);
@@ -23,4 +23,4 @@ function convertLPCSV(lp_csv) {
     return s;
 }
 
-export default {convertLPCSV,getLPCSV_test};
+export default {convertAppsCSV,getAppsCSV};

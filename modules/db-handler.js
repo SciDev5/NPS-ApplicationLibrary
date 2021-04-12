@@ -5,7 +5,7 @@ import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS,
 import sqlite3 from "sqlite3";
 import { v4 as genUUID } from "uuid";
 const sqlite = sqlite3.verbose();
-const db = new sqlite.Database(":memory:");
+const db = new sqlite.Database("./.data/.db");
 
 var allAppsCache = undefined;
 
@@ -151,16 +151,8 @@ async function tryInitDB() {
 
 (async()=>{
     await tryInitDB();
-    
-    var promises = [];
-    for (var k of lpcsvUtil.convertLPCSV(lpcsvUtil.getLPCSV_test())) {
-        for (var i = 0; Math.random()>0.3; i++) k.addPlatform(PLATFORMS[Math.floor(Math.random()*PLATFORMS.length)]);
-        for (var i = 0; Math.random()>0.3; i++) k.addSubject(SUBJECTS[Math.floor(Math.random()*SUBJECTS.length)]);
-        for (var i = 0; Math.random()>0.3; i++) k.addGradeLevel(GRADE_LEVELS[Math.floor(Math.random()*GRADE_LEVELS.length)]);
-        promises.push(addApp(k));
-    }
-    await Promise.all(promises);
-
+    if (!await asyncCMD("get","SELECT id FROM "+APP_TABLE.NAME))
+        await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
 })();
 
 export default {

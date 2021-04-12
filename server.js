@@ -110,7 +110,7 @@ app.get("/admin", async (req,res)=>{
     res.cookie("theme_cookie",theme,{maxAge:Infinity});
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
-    var code = req.query["signup-code"];
+    var code = (await auth.isNoAdmins())?"first":req.query["signup-code"];
     res.render("admin",{editor:await auth.getSignedInAdmin(req),code,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 
@@ -186,10 +186,6 @@ app.post("/apps/add/",async(req,res)=>{
 app.listen(process.env.PORT||80,()=>{
     console.log(`SERVER LISTENING: [port ${process.env.PORT||80}]`);
 });
-
-(async()=>{
-    auth.createAccount(await auth.createAdminAccountToken(),"admin","admin");
-})();
 
 
 process.addListener("uncaughtException",(err)=>{

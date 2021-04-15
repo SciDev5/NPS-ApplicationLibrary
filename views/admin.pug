@@ -7,7 +7,7 @@ html(lang=lang,editor=editor,code=code)
         link(rel="stylesheet", href="style.css") 
     body(class=`theme-${theme}`)
         .header= translate("admin.header.title")
-        a#admin-back-to-index-link(href="/")= translate("admin.body.backToIndex")
+        a#admin-back-to-index-link(href="/?lang="+lang)= translate("admin.body.backToIndex")
         if editor
             include admin-includes/signed-in.pug
         else if code

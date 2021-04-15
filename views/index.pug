@@ -18,7 +18,7 @@ html(lang=lang,editor=editor)
         if editor
             .edit-tools-container
                 button#add-element= translate("index.editor.addApp")
-                a#goto-admin-link(href="/admin")= translate("index.editor.adminPage")
+                a#goto-admin-link(href="/admin?lang="+lang)= translate("index.editor.adminPage")
         .apps-container
             #search-refresh-popup
                 = translate("index.search.refreshPopup")

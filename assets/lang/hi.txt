@@ -25,21 +25,21 @@ application.infoPopup.subjects = विषय:
 application.infoPopup.platforms = प्लेटफ़ॉर्म:
 
 
-Editor.pageTitle = अनुप्रयोग संपादित करें
-Editor.header.title = अनुप्रयोग संपादित करें
-Editor.backToIndex = सूची पर वापस
-Editor.isSaved.saving = सहेजना ...
+editor.pageTitle = अनुप्रयोग संपादित करें
+editor.header.title = अनुप्रयोग संपादित करें
+editor.backToIndex = सूची पर वापस
+editor.isSaved.saving = सहेजना ...
 editor.isSaved.saved = सहेजा गया
 
 editor.confirmDeleteLabel = क्या आप वाकई DELETE करना चाहते हैं।
-Editor.delete = हटाएँ
+editor.delete = हटाएँ
 editor.confirmDelete = DELETE APP
-Editor.cancelDelete = रद्द करें
+editor.cancelDelete = रद्द करें
 
-Editor.param.name = नाम
-Editor.param.url = URL
+editor.param.name = नाम
+editor.param.url = URL
 editor.param.approvalStatus = स्वीकृति स्थिति
-Editor.param.privacyStatus = गोपनीयता स्थिति
+editor.param.privacyStatus = गोपनीयता स्थिति
 editor.param.gradeLevel = ग्रेड स्तर
 editor.param.subject = विषय
 editor.param.platform = प्लेटफार्म
@@ -100,21 +100,21 @@ application.platform.web = वेब
 application.platform.chromebook = क्रोमबुक
 
 # ग्रेड स्तर का नाम
-application.gradLevel = ग्रेड स्तर
-application.gradLevel.preK = प्री के
-application.gradLevel.k = किंडरगार्डन
-application.gradLevel.1 = 1 ग्रेड
-application.gradLevel.2 = द्वितीय श्रेणी
-application.gradLevel.3 = तीसरा ग्रेड
-application.gradLevel.4 = चतुर्थ श्रेणी
-application.gradLevel.5 = 5 वीं कक्षा
-application.gradLevel.6 = 6 वीं कक्षा
-application.gradLevel.7 = 7 वीं कक्षा
-application.gradLevel.8 = 8 वीं कक्षा
-application.gradLevel.9 = 9 वां / फ्रेशमेन
-application.gradLevel.10 = 10 वां / सोफमोर
-application.gradLevel.11 = 11 वीं / जूनियर
-application.gradLevel.12 = 12 वीं / वरिष्ठ
+application.gradeLevel = ग्रेड स्तर
+application.gradeLevel.preK = प्री के
+application.gradeLevel.k = किंडरगार्डन
+application.gradeLevel.1 = 1 ग्रेड
+application.gradeLevel.2 = द्वितीय श्रेणी
+application.gradeLevel.3 = तीसरा ग्रेड
+application.gradeLevel.4 = चतुर्थ श्रेणी
+application.gradeLevel.5 = 5 वीं कक्षा
+application.gradeLevel.6 = 6 वीं कक्षा
+application.gradeLevel.7 = 7 वीं कक्षा
+application.gradeLevel.8 = 8 वीं कक्षा
+application.gradeLevel.9 = 9 वां / फ्रेशमेन
+application.gradeLevel.10 = 10 वां / सोफमोर
+application.gradeLevel.11 = 11 वीं / जूनियर
+application.gradeLevel.12 = 12 वीं / वरिष्ठ
 
 # विषय नाम
 application.subject = विषय

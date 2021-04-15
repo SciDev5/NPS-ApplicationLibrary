@@ -1,0 +1,128 @@
+lang =中文
+
+index.pageTitle = NPS应用程序库
+index.header.title = NPS应用程序库
+index.header.appRequestText =如果此列表中缺少您要添加的应用程序，请单击<a href="https://google.com">此处[REAL LINK TODO] </ a >提出要求。
+index.search.title =搜索
+index.search.refreshButton =刷新搜索
+index.search.refreshPopup =单击以刷新搜索。
+index.search.loadingPopup =正在加载...
+index.search.noResults =没有结果
+index.search.namePlaceholder =名称
+
+index.editor.addApp =添加应用程序
+index.editor.adminPage =转到管理页面
+
+
+＃ 应用
+application.display.moreInfoButton =查看详细信息
+application.display.moreInfoUrl =更多信息
+application.display.closeInfoPopup =关闭
+application.display.editOrDelete =编辑/删除
+
+application.infoPopup.gradeLevels =等级级别：
+application.infoPopup.subjects =主题：
+application.infoPopup.platforms =平台：
+
+
+editor.pageTitle =编辑应用程序
+editor.header.title =编辑应用程序
+editor.backToIndex =返回列表
+editor.isSaved.saving =正在保存...
+editor.isSaved.saved =已保存
+
+editor.confirmDeleteLabel =您确定要删除。
+editor.delete =删除
+editor.confirmDelete =删除APP
+editor.cancelDelete =取消
+
+editor.param.name =名字
+editor.param.url = URL
+editor.param.approvalStatus =审批状态
+editor.param.privacyStatus =隐私状态
+editor.param.gradeLevel =等级水平
+editor.param.subject =主题
+editor.param.platform =平台
+
+
+＃管理员页面
+admin.pageTitle =管理
+admin.header.title =管理
+
+admin.body.signinButton =登录
+admin.body.signoutButton =注销
+admin.body.signupButton =创建帐户
+admin.body.signinTitle =登录
+admin.body.signupTitle =创建帐户
+admin.body.usernamePlaceholder =用户名
+admin.body.passwordPlaceholder =密码
+admin.body.backToIndex =返回应用列表
+admin.signupFailedMessage =注册失败。您的代码无效或可能已过期。
+admin.signinFailedMessage =登录失败。用户名或密码错误。
+admin.signinError =尝试登录/注销时发生错误（有关详细信息，请参见控制台）：
+admin.errorMissingCredentials =请同时输入用户名和密码。
+admin.makeTokenError =错误，无法制作管理员注册令牌。
+admin.body.createTokenButton =创建管理员帐户令牌
+admin.body.tokenCopyMessage =将链接发送到新管理员：
+admin.body.adminPageMes​​sage =欢迎使用管理门户！我建议将此页面添加为书签以便重新登录。
+
+＃审批状态
+application.approvalStatus =审批状态
+application.approvalStatus.unk =未知
+application.approvalStatus.approved =已批准
+application.approvalStatus.14parent = 14+ w /父母同意
+application.approvalStatus.parentInfo =家长知情使用
+application.approvalStatus.pilot =活跃飞行员
+application.approvalStatus.instructor =仅限讲师使用
+application.approvalStatus.pending =待定
+application.approvalStatus.denied =已审核并被拒绝
+
+＃隐私状态
+application.privacyStatus =隐私状态
+application.privacyStatus.unk =未知
+application.privacyStatus.compatible =符合
+application.privacyStatus.noncompatible =不合规
+application.privacyStatus.parent =需要父母同意
+application.privacyStatus.instructor =仅限讲师使用
+application.privacyStatus.noInfo =未收集信息
+application.privacyStatus.na =不适用
+
+＃平台名称
+application.platform =平台
+application.platform.windows = Windows
+application.platform.mac = Macos
+application.platform.linux = Linux
+application.platform.androidPhone = Android手机
+application.platform.androidTablet = Android平板电脑
+application.platform.applePhone = iPhone
+application.platform.appleTablet = iPad
+application.platform.web =网站
+application.platform.chromebook = Chromebook
+
+＃年级名称
+application.gradeLevel =等级水平
+application.gradeLevel.preK = Pre K
+application.gradeLevel.k =幼儿园
+application.gradeLevel.1 = 1年级
+application.gradeLevel.2 = 2年级
+application.gradeLevel.3 =三年级
+application.gradeLevel.4 =四年级
+application.gradeLevel.5 =五年级
+application.gradeLevel.6 =六年级
+application.gradeLevel.7 =七年级
+application.gradeLevel.8 = 8年级
+application.gradeLevel.9 =第9名/新生
+application.gradeLevel.10 = 10th / Sophmore
+application.gradeLevel.11 = 11日/初中
+application.gradeLevel.12 = 12th /高级
+
+＃主题名称
+application.subject =主题
+application.subject.math =数学
+application.subject.science =科学
+application.subject.history =历史
+application.subject.english =英文
+application.subject.language =语言
+application.subject.cs =计算机科学
+application.subject.art =艺术
+application.subject.music =音乐

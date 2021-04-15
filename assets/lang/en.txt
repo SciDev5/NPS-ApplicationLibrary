@@ -1,4 +1,4 @@
-lang = English [US]
+lang = English
 
 index.pageTitle              = NPS Application Library
 index.header.title           = NPS Application Library
@@ -117,6 +117,12 @@ application.gradeLevel.11   = 11th / Junior
 application.gradeLevel.12   = 12th / Senior
 
 # Subject Names
-application.subject        = Subject
-application.subject.cool   = Cool stuff
-application.subject.uncool = Uncool stuff
+application.subject          = Subject
+application.subject.math     = Math
+application.subject.science  = Science
+application.subject.history  = History
+application.subject.english  = English
+application.subject.language = Language
+application.subject.cs       = Computer science
+application.subject.art      = Art
+application.subject.music    = Music

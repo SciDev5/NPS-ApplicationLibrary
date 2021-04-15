@@ -1,0 +1,128 @@
+lang = हिंदी
+
+index.pageTitle = एनपीएस एप्लीकेशन लाइब्रेरी
+index.header.title = एनपीएस एप्लीकेशन लाइब्रेरी
+index.header.appRequestText = यदि कोई ऐसा एप्लिकेशन है जो इस सूची से गायब है जिसे आप जोड़ने का अनुरोध करना चाहते हैं, तो <a href="https://google.com"> यहां [वास्तविक लिंक TODO] </a> यह अनुरोध करने के लिए।
+index.search.title = खोज
+index.search.refreshButton = खोज को ताज़ा करें
+index.search.refreshPopup = खोज ताज़ा करने के लिए क्लिक करें।
+index.search.loadingPopup = लोड हो रहा है ...
+index.search.noResults = कोई परिणाम नहीं
+index.search.namePlaceholder = नाम
+
+index.editor.addApp = एप्लिकेशन जोड़ें
+index.editor.adminPage = व्यवस्थापक पृष्ठ पर जाएं
+
+
+# आवेदन
+application.display.moreInfoButton = विवरण देखें
+application.display.moreInfoUrl = अधिक जानकारी
+application.display.closeInfoPopup = बंद करें
+application.display.editOrDelete = संपादित करें / हटाएं
+
+application.infoPopup.gradeLevels = ग्रेड स्तर:
+application.infoPopup.subjects = विषय:
+application.infoPopup.platforms = प्लेटफ़ॉर्म:
+
+
+Editor.pageTitle = अनुप्रयोग संपादित करें
+Editor.header.title = अनुप्रयोग संपादित करें
+Editor.backToIndex = सूची पर वापस
+Editor.isSaved.saving = सहेजना ...
+editor.isSaved.saved = सहेजा गया
+
+editor.confirmDeleteLabel = क्या आप वाकई DELETE करना चाहते हैं।
+Editor.delete = हटाएँ
+editor.confirmDelete = DELETE APP
+Editor.cancelDelete = रद्द करें
+
+Editor.param.name = नाम
+Editor.param.url = URL
+editor.param.approvalStatus = स्वीकृति स्थिति
+Editor.param.privacyStatus = गोपनीयता स्थिति
+editor.param.gradeLevel = ग्रेड स्तर
+editor.param.subject = विषय
+editor.param.platform = प्लेटफार्म
+
+
+# व्यवस्थापक पृष्ठ
+admin.pageTitle = प्रशासन
+admin.header.title = प्रशासन
+
+admin.body.signinButton = साइन इन करें
+admin.body.signoutButton = साइन आउट करें
+admin.body.signupButton = खाता बनाएँ
+admin.body.signinTitle = साइन इन करें
+admin.body.signupTitle = खाता बनाएँ
+admin.body.usernamePlaceholder = उपयोगकर्ता नाम
+admin.body.passwordPlaceholder = पासवर्ड
+admin.body.backToIndex = ऐप सूची पर वापस जाएं
+admin.signupFailedMessage = साइनअप विफल। आपका कोड अमान्य था या समाप्त हो सकता है।
+admin.signinFailedMessage = साइनइन विफल रहा। गलत उपयोगकर्ता नाम या पासवर्ड।
+admin.signinError = साइन इन / आउट करने का प्रयास करते समय एक त्रुटि हुई (विवरण के लिए कंसोल देखें):
+admin.errorMissingCredentials = कृपया उपयोगकर्ता नाम और पासवर्ड दोनों दर्ज करें।
+admin.makeTokenError = त्रुटि, व्यवस्थापक साइनअप टोकन नहीं बना सका।
+admin.body.createTokenButton = व्यवस्थापक खाता टोकन बनाएँ
+admin.body.tokenCopyMessage = नए व्यवस्थापक को लिंक भेजें:
+admin.body.adminPageMessage = व्यवस्थापक पोर्टल में आपका स्वागत है! मैं इस पृष्ठ को वापस लॉग इन करने के लिए बुकमार्क करने की सलाह देता हूं।
+
+# स्वीकृति क़ानून
+application.approvalStatus = स्वीकृति स्थिति
+application.approvalStatus.unk = अज्ञात
+application.approvalStatus.approved = स्वीकृत
+application.approvalStatus.14parent = 14+ w / अभिभावक की सहमति
+application.approvalStatus.parentInfo = माता-पिता ने उपयोग की जानकारी दी
+application.approvalStatus.pilot = सक्रिय पायलट
+application.approvalStatus.instructor = प्रशिक्षक केवल उपयोग करें
+application.approvalStatus.pending = लंबित
+application.approvalStatus.denied = समीक्षित और अस्वीकृत
+
+# गोपनीयता क़ानून
+application.privacyStatus = गोपनीयता स्थिति
+application.privacyStatus.unk = अज्ञात
+application.privacyStatus.compliant = शिकायत
+application.privacyStatus.noncompliant = गैर-योग्य
+application.privacyStatus.parent = माता-पिता की सहमति आवश्यक है
+application.privacyStatus.instructor = प्रशिक्षक केवल उपयोग करें
+application.privacyStatus.noInfo = कोई जानकारी एकत्र नहीं की गई
+application.privacyStatus.na = लागू नहीं
+
+# प्लेटफार्म नाम
+application.platform = प्लेटफार्म
+application.platform.windows = विंडोज़
+application.platform.mac = मैकोस
+application.platform.linux = लिनक्स
+application.platform.androidPhone = Android फ़ोन
+application.platform.androidTablet = Android टैबलेट
+application.platform.applePhone = iPhone
+application.platform.appleTablet = iPad
+application.platform.web = वेब
+application.platform.chromebook = क्रोमबुक
+
+# ग्रेड स्तर का नाम
+application.gradLevel = ग्रेड स्तर
+application.gradLevel.preK = प्री के
+application.gradLevel.k = किंडरगार्डन
+application.gradLevel.1 = 1 ग्रेड
+application.gradLevel.2 = द्वितीय श्रेणी
+application.gradLevel.3 = तीसरा ग्रेड
+application.gradLevel.4 = चतुर्थ श्रेणी
+application.gradLevel.5 = 5 वीं कक्षा
+application.gradLevel.6 = 6 वीं कक्षा
+application.gradLevel.7 = 7 वीं कक्षा
+application.gradLevel.8 = 8 वीं कक्षा
+application.gradLevel.9 = 9 वां / फ्रेशमेन
+application.gradLevel.10 = 10 वां / सोफमोर
+application.gradLevel.11 = 11 वीं / जूनियर
+application.gradLevel.12 = 12 वीं / वरिष्ठ
+
+# विषय नाम
+application.subject = विषय
+application.subject.math = गणित
+application.subject.science = विज्ञान
+application.subject.history = इतिहास
+application.subject.english = अंग्रेजी
+application.subject.language = भाषा
+application.subject.cs = कंप्यूटर विज्ञान
+application.subject.art = कला
+application.subject.music = संगीत

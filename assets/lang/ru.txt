@@ -1,0 +1,128 @@
+lang = русский
+
+index.pageTitle = Библиотека приложений NPS
+index.header.title = Библиотека приложений NPS
+index.header.appRequestText = Если в этом списке отсутствует приложение, которое вы хотите запросить на добавление, нажмите <a href="https://google.com"> здесь [REAL LINK TODO] </ a > запросить это.
+index.search.title = Поиск
+index.search.refreshButton = Обновить поиск
+index.search.refreshPopup = Щелкните, чтобы обновить поиск.
+index.search.loadingPopup = Загрузка ...
+index.search.noResults = Нет результатов
+index.search.namePlaceholder = Имя
+
+index.editor.addApp = Добавить приложение
+index.editor.adminPage = Перейти на страницу администратора
+
+
+# Заявление
+application.display.moreInfoButton = Подробнее
+application.display.moreInfoUrl = Подробнее
+application.display.closeInfoPopup = Закрыть
+application.display.editOrDelete = Изменить / Удалить
+
+application.infoPopup.gradeLevels = Уровень оценки:
+application.infoPopup.subjects = Субъекты:
+application.infoPopup.platforms = Платформы:
+
+
+editor.pageTitle = Редактировать приложение
+editor.header.title = Редактировать приложение
+editor.backToIndex = Вернуться к списку
+editor.isSaved.saving = Сохранение ...
+editor.isSaved.saved = Сохранено
+
+editor.confirmDeleteLabel = Вы уверены, что хотите УДАЛИТЬ.
+editor.delete = Удалить
+editor.confirmDelete = УДАЛИТЬ ПРИЛОЖЕНИЕ
+editor.cancelDelete = Отменить
+
+editor.param.name = Имя
+editor.param.url = URL
+editor.param.approvalStatus = Статус утверждения
+editor.param.privacyStatus = Статус конфиденциальности
+editor.param.gradeLevel = Уровни успеваемости
+editor.param.subject = Субъекты
+editor.param.platform = Платформа
+
+
+# Страница администратора
+admin.pageTitle = Администрация
+admin.header.title = Администрация
+
+admin.body.signinButton = Войти
+admin.body.signoutButton = Выйти
+admin.body.signupButton = Создать учетную запись
+admin.body.signinTitle = Войти
+admin.body.signupTitle = Создать учетную запись
+admin.body.usernamePlaceholder = имя пользователя
+admin.body.passwordPlaceholder = пароль
+admin.body.backToIndex = Вернуться к списку приложений
+admin.signupFailedMessage = Ошибка регистрации. Ваш код недействителен или, возможно, срок его действия истек.
+admin.signinFailedMessage = Ошибка входа. Неверное имя пользователя или пароль.
+admin.signinError = Произошла ошибка при попытке входа / выхода (подробности см. в консоли):
+admin.errorMissingCredentials = Пожалуйста, введите имя пользователя и пароль.
+admin.makeTokenError = Ошибка, не удалось создать токен регистрации администратора.
+admin.body.createTokenButton = Создать токен учетной записи администратора
+admin.body.tokenCopyMessage = Отправить ссылку новому администратору:
+admin.body.adminPageMessage = Добро пожаловать на портал администратора! Я рекомендую добавить эту страницу в закладки для повторного входа в систему.
+
+# Статусы одобрения
+application.approvalStatus = Статус утверждения
+application.approvalStatus.unk = Неизвестно
+application.approvalStatus.approved = Одобрено
+application.approvalStatus.14parent = 14+ с согласия родителей
+application.approvalStatus.parentInfo = Использование на основе информации родителями
+application.approvalStatus.pilot = Активный пилот
+application.approvalStatus.instructor = Только для инструктора
+application.approvalStatus.pending = Ожидается
+application.approvalStatus.denied = Проверено и отклонено
+
+# Статусы конфиденциальности
+application.privacyStatus = Статус конфиденциальности
+application.privacyStatus.unk = Неизвестно
+application.privacyStatus.compliant = Соответствует
+application.privacyStatus.noncompliant = Несоответствует
+application.privacyStatus.parent = Требуется согласие родителей
+application.privacyStatus.instructor = Только для инструктора
+application.privacyStatus.noInfo = Информация не собирается
+application.privacyStatus.na = Не применимо
+
+# Названия платформ
+application.platform = Платформа
+application.platform.windows = Windows
+application.platform.mac = Macos
+application.platform.linux = Linux
+application.platform.androidPhone = Телефон Android
+application.platform.androidTablet = Планшет Android
+application.platform.applePhone = iPhone
+application.platform.appleTablet = iPad
+application.platform.web = Интернет
+application.platform.chromebook = Chromebook
+
+# Название уровня оценки
+application.gradeLevel = Уровень оценки
+application.gradeLevel.preK = Предварительная версия
+application.gradeLevel.k = Детский сад
+application.gradeLevel.1 = 1-й класс
+application.gradeLevel.2 = 2-й класс
+application.gradeLevel.3 = 3-й класс
+application.gradeLevel.4 = 4-й класс
+application.gradeLevel.5 = 5 класс
+application.gradeLevel.6 = 6 класс
+application.gradeLevel.7 = 7 класс
+application.gradeLevel.8 = 8-й класс
+application.gradeLevel.9 = 9-е место / первокурсники
+application.gradeLevel.10 = 10-е / Sophmore
+application.gradeLevel.11 = 11-е место / Младший
+application.gradeLevel.12 = 12-е место / Старший
+
+# Имена субъектов
+application.subject = Тема
+application.subject.math = Математика
+application.subject.science = Наука
+application.subject.history = История
+application.subject.english = английский
+application.subject.language = Язык
+application.subject.cs = Информатика
+application.subject.art = Искусство
+application.subject.music = Музыка

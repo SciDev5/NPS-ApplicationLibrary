@@ -1,71 +1,128 @@
-lang = Español (ES)
+lang = Español
 
-index.pageTitle = Colección de aplicaciones NPS
-index.header.title = Colección de aplicaciones NPS
-index.search.title = Búscalo
-index.search.refreshButton = Actualizar búsqueda
-index.search.refreshPopup = Clic para actualizar la búsqueda
-index.search.loadingPopup = Cargando...
-index.search.noResults = No hay resultados
+index.pageTitle              = Biblioteca de aplicaciones NPS
+index.header.title           = Biblioteca de aplicaciones NPS
+index.header.appRequestText  = Si hay una aplicación que falta en esta lista y desea solicitar que se agregue, haga clic <a href="https://google.com"> aquí [REAL LINK TODO] </a> para solicitarlo.
+index.search.title           = Buscar
+index.search.refreshButton   = Actualizar búsqueda
+index.search.refreshPopup    = Haga clic para actualizar la búsqueda.
+index.search.loadingPopup    = Cargando ...
+index.search.noResults       = Sin resultados
 index.search.namePlaceholder = Nombre
+
+index.editor.addApp          = Agregar aplicación
+index.editor.adminPage       = Ir a la página de administración
 
 
 # Application
 application.display.moreInfoButton = Ver detalles
-application.display.moreInfoUrl = Más info
+application.display.moreInfoUrl    = Más información
 application.display.closeInfoPopup = Cerrar
+application.display.editOrDelete   = Editar / Eliminar
 
-# Nombres de estados de aprobación
+application.infoPopup.gradeLevels  = Nivel de grado:
+application.infoPopup.subjects     = Temas:
+application.infoPopup.platforms    = Plataformas:
+
+
+editor.pageTitle = Editar aplicación
+editor.header.title = Editar aplicación
+editor.backToIndex = Volver a la lista
+editor.isSaved.saving = Guardando ...
+editor.isSaved.saved = Guardado
+
+editor.confirmDeleteLabel = ¿Está seguro de que desea BORRAR?
+editor.delete = Eliminar
+editor.confirmDelete = BORRAR APLICACIÓN
+editor.cancelDelete = Cancelar
+
+editor.param.name = Nombre
+editor.param.url = URL
+editor.param.approvalStatus = Estado de aprobación
+editor.param.privacyStatus = Estado de privacidad
+editor.param.gradeLevel = Niveles de grado
+editor.param.subject = Temas
+editor.param.platform = Plataforma
+
+
+# Admin page
+admin.pageTitle                = Administración
+admin.header.title             = Administración
+
+admin.body.signinButton = Iniciar sesión
+admin.body.signoutButton = Cerrar sesión
+admin.body.signupButton = Crear cuenta
+admin.body.signinTitle = Iniciar sesión
+admin.body.signupTitle = Crear cuenta
+admin.body.usernamePlaceholder = nombre de usuario
+admin.body.passwordPlaceholder = contraseña
+admin.body.backToIndex = Volver a la lista de aplicaciones
+admin.signupFailedMessage = Falló el registro. Su código no es válido o puede haber caducado.
+admin.signinFailedMessage = Falló el inicio de sesión. Nombre de usuario o contraseña incorrecta.
+admin.signinError = Se produjo un error al intentar iniciar sesión / cerrar sesión (consulte la consola para obtener más detalles):
+admin.errorMissingCredentials = Ingrese un nombre de usuario y una contraseña.
+admin.makeTokenError = Error, no se pudo hacer el token de registro de administrador.
+admin.body.createTokenButton = Crear token de cuenta de administrador
+admin.body.tokenCopyMessage = Enviar enlace al nuevo administrador:
+admin.body.adminPageMessage = ¡Bienvenido al portal de administración! Recomiendo marcar esta página para volver a iniciar sesión.
+
+# Approval Statuses
 application.approvalStatus = Estado de aprobación
-application.approvalStatus.unk        = Desconocido
-application.approvalStatus.approved   = Aprobado
-application.approvalStatus.14parent   = 14+ y consentimiento de los padres
+application.approvalStatus.unk = Desconocido
+application.approvalStatus.approved = Aprobado
+application.approvalStatus.14parent = 14+ con consentimiento de los padres
 application.approvalStatus.parentInfo = Uso informado por los padres
-application.approvalStatus.pilot      = Piloto activo
+application.approvalStatus.pilot = Piloto activo
 application.approvalStatus.instructor = Solo para uso del instructor
-application.approvalStatus.pending    = Esperando una decisión
-application.approvalStatus.denied     = Revisado y negado
+application.approvalStatus.pending = Pendiente
+application.approvalStatus.denied = Revisado y denegado
 
-# Nombres de estado de privacidad
+# Privacy Statuses
 application.privacyStatus = Estado de privacidad
-application.privacyStatus.unk         = Desconocido
-application.privacyStatus.compliant   = Obediente
-application.privacyStatus.noncompliant= No conforme
-application.privacyStatus.parent      = Se requiere consentimiento de los padres
-application.privacyStatus.instructor  = Solo para uso del instructor
-application.privacyStatus.noInfo      = No se recopiló información
-application.privacyStatus.na          = No aplica
+application.privacyStatus.unk = Desconocido
+application.privacyStatus.compliant = Cumple
+application.privacyStatus.noncompliant = No conforme
+application.privacyStatus.parent = Se requiere consentimiento de los padres
+application.privacyStatus.instructor = Solo para uso del instructor
+application.privacyStatus.noInfo = No se recopiló información
+application.privacyStatus.na = No aplicable
 
-# Nombres de plataforma
+# Platform Names
 application.platform = Plataforma
-application.platform.windows          = Windows
-application.platform.mac              = Macos
-application.platform.linux            = Linux
-application.platform.androidPhone     = Teléfono Android
-application.platform.androidTablet    = Tableta Android
-application.platform.applePhone       = iPhone
-application.platform.appleTablet      = iPad
-application.platform.web              = Web
-application.platform.chromebook       = Chromebook
+application.platform.windows = Windows
+application.platform.mac = Macos
+application.platform.linux = Linux
+application.platform.androidPhone = Teléfono Android
+application.platform.androidTablet = Tableta Android
+application.platform.applePhone = iPhone
+application.platform.appleTablet = iPad
+application.platform.web = Web
+application.platform.chromebook = Chromebook
 
-# Nombres de nivel de grado
+# Grade Levels Name
 application.gradeLevel = Nivel de grado
-application.gradeLevel.preK           = Pre K
-application.gradeLevel.k              = K
-application.gradeLevel.1              = 1
-application.gradeLevel.2              = 2
-application.gradeLevel.3              = 3
-application.gradeLevel.4              = 4
-application.gradeLevel.5              = 5
-application.gradeLevel.6              = 6
-application.gradeLevel.7              = 7
-application.gradeLevel.8              = 8
-application.gradeLevel.9              = 9
-application.gradeLevel.10             = 10
-application.gradeLevel.11             = 11
-application.gradeLevel.12             = 12
+application.gradeLevel.preK = Pre K
+application.gradeLevel.k = Jardín de infancia
+application.gradeLevel.1 = 1er grado
+application.gradeLevel.2 = 2do grado
+application.gradeLevel.3 = 3er grado
+application.gradeLevel.4 = 4to grado
+application.gradeLevel.5 = 5. ° grado
+application.gradeLevel.6 = 6to grado
+application.gradeLevel.7 = 7mo grado
+application.gradeLevel.8 = 8vo grado
+application.gradeLevel.9 = 9. ° / Estudiantes de primer año
+application.gradeLevel.10 = décimo / segundo año
+application.gradeLevel.11 = 11. ° / Junior
+application.gradeLevel.12 = 12. ° / Senior
 
-# Nombres de tema
-application.subject = Tema
-application.subject.cool              = Cosas interesantes
-application.subject.uncool            = Cosas no interesantes
+# Subject Names
+application.subject = Asunto
+application.subject.math = Matemáticas
+application.subject.science = Ciencia
+application.subject.history = Historia
+application.subject.english = inglés
+application.subject.language = Idioma
+application.subject.cs = Ciencias de la computación
+application.subject.art = Arte
+application.subject.music = Música

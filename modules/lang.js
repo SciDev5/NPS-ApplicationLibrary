@@ -1,12 +1,23 @@
 import fs from "fs";
 import { deepFreeze } from "./utils.js";
 
-const DEFAULT_LANG = "en_us";
-const ALL_LANGS = ["en_us","es"];
+const DEFAULT_LANG = "en";
+const ALL_LANGS = ["en","es","hi","zh","pt","ru"];
 
 const translationMapCache = {};
 
-async function getTranslationMap(lang) {
+function getApproxLang(langRaw) {
+    if (!langRaw) return DEFAULT_LANG;
+    var lang = langRaw.trim().toLowerCase().replace("-","_");
+    if (ALL_LANGS.includes(lang)) return lang;
+    lang = lang.substr(0,lang.indexOf("_"));
+    if (ALL_LANGS.includes(lang)) return lang;
+    else return DEFAULT_LANG;
+}
+
+async function getTranslationMap(langRaw) {
+    var lang = getApproxLang(langRaw);
+    if (!lang) return null;
     if (lang in translationMapCache) return translationMapCache[lang];
     try {
         var data = await new Promise((res,rej)=>fs.readFile(`./assets/lang/${lang}.txt`,{encoding:"utf-8"},(err,str)=>{
@@ -32,4 +43,4 @@ const LANGUAGE_INTERNAL_NAMES_READY = (async ()=>{
     deepFreeze([ALL_LANGS,LANGUAGE_INTERNAL_NAMES]);
 })();
 
-export {getTranslationMap,DEFAULT_LANG,LANGUAGE_INTERNAL_NAMES,LANGUAGE_INTERNAL_NAMES_READY,ALL_LANGS};
+export {getTranslationMap,getApproxLang,DEFAULT_LANG,LANGUAGE_INTERNAL_NAMES,LANGUAGE_INTERNAL_NAMES_READY,ALL_LANGS};

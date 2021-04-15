@@ -1,0 +1,128 @@
+lang = português
+
+index.pageTitle = Biblioteca de aplicativos NPS
+index.header.title = Biblioteca de aplicativos NPS
+index.header.appRequestText = Se houver um aplicativo faltando nesta lista que você deseja solicitar para ser adicionado, clique em <a href="https://google.com"> aqui [REAL LINK TODO] </ a > para solicitá-lo.
+index.search.title = Pesquisar
+index.search.refreshButton = Atualizar pesquisa
+index.search.refreshPopup = Clique para atualizar a pesquisa.
+index.search.loadingPopup = Carregando ...
+index.search.noResults = Sem resultados
+index.search.namePlaceholder = Nome
+
+index.editor.addApp = Adicionar aplicativo
+index.editor.adminPage = Vá para a página de administração
+
+
+# Aplicativo
+application.display.moreInfoButton = Ver detalhes
+application.display.moreInfoUrl = Mais informações
+application.display.closeInfoPopup = Fechar
+application.display.editOrDelete = Editar / Excluir
+
+application.infoPopup.gradeLevels = Nível de notas:
+application.infoPopup.subjects = Assuntos:
+application.infoPopup.platforms = Plataformas:
+
+
+editor.pageTitle = Editar aplicativo
+editor.header.title = Editar aplicativo
+editor.backToIndex = Voltar à lista
+editor.isSaved.saving = Salvando ...
+editor.isSaved.saved = Salvo
+
+editor.confirmDeleteLabel = Tem certeza que deseja EXCLUIR.
+editor.delete = Excluir
+editor.confirmDelete = EXCLUIR APP
+editor.cancelDelete = Cancelar
+
+editor.param.name = Nome
+editor.param.url = URL
+editor.param.approvalStatus = Status de aprovação
+editor.param.privacyStatus = Status de privacidade
+editor.param.gradeLevel = Níveis de notas
+editor.param.subject = Assuntos
+editor.param.platform = Platform
+
+
+# Página de administração
+admin.pageTitle = Administração
+admin.header.title = Administração
+
+admin.body.signinButton = Entrar
+admin.body.signoutButton = Sair
+admin.body.signupButton = Criar conta
+admin.body.signinTitle = Entrar
+admin.body.signupTitle = Criar conta
+admin.body.usernamePlaceholder = nome de usuário
+admin.body.passwordPlaceholder = senha
+admin.body.backToIndex = Voltar à lista de aplicativos
+admin.signupFailedMessage = Falha na inscrição. Seu código era inválido ou pode ter expirado.
+admin.signinFailedMessage = Falha no login. Usuário ou senha incorretos.
+admin.signinError = Ocorreu um erro ao tentar entrar / sair (consulte o console para obter detalhes):
+admin.errorMissingCredentials = Digite um nome de usuário e uma senha.
+admin.makeTokenError = Erro, não foi possível fazer o token de inscrição do administrador.
+admin.body.createTokenButton = Criar token de conta de administrador
+admin.body.tokenCopyMessage = Enviar link para o novo administrador:
+admin.body.adminPageMessage = Bem-vindo ao portal de administração! Eu recomendo marcar esta página para fazer login novamente.
+
+# Status de aprovação
+application.approvalStatus = Status de aprovação
+application.approvalStatus.unk = Desconhecido
+application.approvalStatus.approved = Aprovado
+application.approvalStatus.14parent = 14+ c / consentimento dos pais
+application.approvalStatus.parentInfo = Pai informado uso
+application.approvalStatus.pilot = Piloto ativo
+application.approvalStatus.instructor = Apenas para uso do instrutor
+application.approvalStatus.pending = Pendente
+application.approvalStatus.denied = Revisado e negado
+
+# Status de privacidade
+application.privacyStatus = Status de privacidade
+application.privacyStatus.unk = Desconhecido
+application.privacyStatus.compliant = Compatível
+application.privacyStatus.noncompliant = Não compatível
+application.privacyStatus.parent = Consentimento dos pais necessário
+application.privacyStatus.instructor = Apenas para uso do instrutor
+application.privacyStatus.noInfo = Nenhuma informação coletada
+application.privacyStatus.na = Não aplicável
+
+# Nomes de plataforma
+application.platform = Platform
+application.platform.windows = Windows
+application.platform.mac = Macos
+application.platform.linux = Linux
+application.platform.androidPhone = Telefone Android
+application.platform.androidTablet = Tablet Android
+application.platform.applePhone = iPhone
+application.platform.appleTablet = iPad
+application.platform.web = Web
+application.platform.chromebook = Chromebook
+
+# Nome dos Níveis de Série
+application.gradeLevel = Grau de escolaridade
+application.gradeLevel.preK = Pre K
+application.gradeLevel.k = Jardim de infância
+application.gradeLevel.1 = 1ª série
+application.gradeLevel.2 = 2ª série
+application.gradeLevel.3 = 3ª série
+application.gradeLevel.4 = 4ª série
+application.gradeLevel.5 = 5ª Série
+application.gradeLevel.6 = 6ª Série
+application.gradeLevel.7 = 7ª Série
+application.gradeLevel.8 = 8ª Série
+application.gradeLevel.9 = 9º / Calouros
+application.gradeLevel.10 = 10th / Sophmore
+application.gradeLevel.11 = 11º / Junior
+application.gradeLevel.12 = 12º / Sênior
+
+# Nomes de assunto
+application.subject = Assunto
+application.subject.math = Matemática
+application.subject.science = Ciência
+application.subject.history = História
+application.subject.english = Inglês
+application.subject.language = Idioma
+application.subject.cs = Ciência da computação
+application.subject.art = Arte
+application.subject.music = Música

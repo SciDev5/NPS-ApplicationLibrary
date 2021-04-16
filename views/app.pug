@@ -1,21 +1,22 @@
 - translate = (e)=>translation[e]||e;
+doctype html
 html(lang=lang)
     head 
         title= translate("editor.pageTitle")
-        script(src="/lang-chooser.js")
+        include includes/head.pug
         script(src="/editor.js", type="module")
-        link(rel="stylesheet", href="/style.css") 
     body(class=`theme-${theme}`)
-        .header= translate("editor.header.title")
-        a#back-to-index-button(href="/?lang="+lang)= translate("editor.backToIndex")
-        #delete-app-button(href="/?lang="+lang)= translate("editor.delete")
-        #confirm-delete-popup
-            .bg 
-            .confirm-delete
-                .label= translate("editor.confirmDeleteLabel")
-                button#confirm-delete-button= translate("editor.confirmDelete")
-                button#cancel-delete-button= translate("editor.cancelDelete")
-        #editor
+        header 
+            .header= translate("editor.header.title")
+            a#back-to-index-button(href="/?lang="+lang)= translate("editor.backToIndex")
+            #delete-app-button(href="/?lang="+lang)= translate("editor.delete")
+            #confirm-delete-popup
+                .bg 
+                .confirm-delete
+                    .label= translate("editor.confirmDeleteLabel")
+                    button#confirm-delete-button= translate("editor.confirmDelete")
+                    button#cancel-delete-button= translate("editor.cancelDelete")
+        main#editor
             #issaved= translate("editor.isSaved.saved")
             .param#p-name
                 .label= translate("editor.param.name")

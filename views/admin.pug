@@ -1,18 +1,20 @@
 - translate = (e)=>translation[e]||e;
+doctype html
 html(lang=lang,editor=editor,code=code)
     head 
         title= translate("admin.pageTitle")
-        script(src="/lang-chooser.js")
+        include includes/head.pug
         script(src="/admin.js", type="module")
-        link(rel="stylesheet", href="style.css") 
     body(class=`theme-${theme}`)
-        .header= translate("admin.header.title")
-        a#admin-back-to-index-link(href="/?lang="+lang)= translate("admin.body.backToIndex")
-        if editor
-            include admin-includes/signed-in.pug
-        else if code
-            include admin-includes/signup.pug
-        else 
-            include admin-includes/signed-out.pug
+        header
+            .header= translate("admin.header.title")
+        main
+            a#admin-back-to-index-link(href="/?lang="+lang)= translate("admin.body.backToIndex")
+            if editor
+                include admin-includes/signed-in.pug
+            else if code
+                include admin-includes/signup.pug
+            else 
+                include admin-includes/signed-out.pug
 
         include includes/lang-container.pug

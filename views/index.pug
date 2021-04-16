@@ -1,31 +1,33 @@
 - translate = (e)=>translation[e]||e;
+doctype html
 html(lang=lang,editor=editor)
     head 
         title= translate("index.pageTitle")
-        script(src="/lang-chooser.js")
+        include includes/head.pug
         script(src="/index.js", type="module")
-        link(rel="stylesheet", href="style.css") 
     body(class=`theme-${theme}`)
-        .header= translate("index.header.title")
-        #app-request-text!= translate("index.header.appRequestText")  
-        .search-container
-            .search-title= translate("index.search.title")
-            input#name-search(name="name-search", placeholder=translate("index.search.namePlaceholder"))
-            each sp,n in searchParams
-                include includes/dropdown.pug
-            button#search-refresh-button-inline(disabled)= translate("index.search.refreshButton")
-        
-        if editor
-            .edit-tools-container
-                button#add-element= translate("index.editor.addApp")
-                a#goto-admin-link(href="/admin?lang="+lang)= translate("index.editor.adminPage")
-        .apps-container
-            #search-refresh-popup
-                = translate("index.search.refreshPopup")
-            #search-loading-popup
-                = translate("index.search.loadingPopup")
-            #apps-list
-                #apps-empty= translate("index.search.noResults")
+        header
+            .header= translate("index.header.title")
+            #app-request-text!= translate("index.header.appRequestText")  
+            .search-container
+                .search-title= translate("index.search.title")
+                input#name-search(name="name-search", placeholder=translate("index.search.namePlaceholder"))
+                each sp,n in searchParams
+                    include includes/dropdown.pug
+                button#search-refresh-button-inline(disabled)= translate("index.search.refreshButton")
+            
+            if editor
+                .edit-tools-container
+                    button#add-element= translate("index.editor.addApp")
+                    a#goto-admin-link(href="/admin?lang="+lang)= translate("index.editor.adminPage")
+        main
+            .apps-container
+                #search-refresh-popup
+                    = translate("index.search.refreshPopup")
+                #search-loading-popup
+                    = translate("index.search.loadingPopup")
+                #apps-list
+                    #apps-empty= translate("index.search.noResults")
         
         include includes/lang-container.pug
             

@@ -41,7 +41,7 @@ addEventListener("load",async e=>{
     indexDom.init();
     var allApps = await getAllApps();
     Object.defineProperty(window,"editor",{writable:false,value:!!document.getElementsByTagName("html")[0].getAttribute("editor")});
-    console.log(allApps);
+    //console.log(allApps);
     indexDom.populateApps(allApps);
     document.querySelectorAll("#search-refresh-button-inline").forEach(v=>v.addEventListener("click",searchEvHandler));
     //document.querySelectorAll("#search-refresh-popup").forEach(v=>v.addEventListener("mouseenter",searchEvHandler));

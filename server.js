@@ -6,8 +6,14 @@ import {getTranslationMap,DEFAULT_LANG, LANGUAGE_INTERNAL_NAMES, LANGUAGE_INTERN
 import auth from "./modules/auth.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import https from "https";
+import http from "http";
+import helmet from "helmet";
 import { v4 as UUIDv4 } from "uuid";
+import { readFileSync } from "fs";
 const app = express();
+
+app.use(helmet());
 
 app.set("view engine", "pug");
 app.use(express.static("./public/"));
@@ -178,10 +184,12 @@ app.post("/apps/add/",async(req,res)=>{
 });
 
 
+const PORT = process.env.PORT||80, PORT_HTTPS = process.env.PORT_HTTPS||443;
+const SSL_KEY = readFileSync(process.env.SSL_KEY||"./.data/ssl.key");
+const SSL_CERT = readFileSync(process.env.SSL_CERT||"./.data/ssl.crt");
 
-app.listen(process.env.PORT||80,()=>{
-    console.log(`SERVER LISTENING: [port ${process.env.PORT||80}]`);
-});
+http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
+https.createServer({key:SSL_KEY,cert:SSL_CERT},app).listen(PORT_HTTPS,()=>console.log(`HTTPS SERVER LISTENING: [port ${PORT_HTTPS}]`))
 
 
 process.addListener("uncaughtException",(err)=>{

@@ -2,7 +2,7 @@ lang = 中文
 
 index.pageTitle = NPS应用程序库
 index.header.title = NPS应用程序库
-index.header.appRequestText = 如果此列表中缺少您要添加的应用程序，请单击<a href="https://google.com">此处[REAL LINK TODO]</a>提出要求。
+index.header.appRequestText = 如果此列表中缺少您要添加的应用程序，请单击<a href="${link}">此处</a>提出要求。
 index.search.title = 搜索
 index.search.refreshButton = 刷新搜索
 index.search.refreshPopup = 单击以刷新搜索。

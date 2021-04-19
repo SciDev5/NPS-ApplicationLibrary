@@ -2,7 +2,7 @@ lang = English
 
 index.pageTitle              = NPS Application Library
 index.header.title           = NPS Application Library
-index.header.appRequestText  = If there is an application which is missing from this list which you want to request to be added, click <a href="https://google.com">here [REAL LINK TODO]</a> to request it.
+index.header.appRequestText  = If there is an application which is missing from this list which you want to request to be added, click <a href="${link}">here</a> to request it.
 index.search.title           = Search
 index.search.refreshButton   = Refresh search
 index.search.refreshPopup    = Click to refresh search.

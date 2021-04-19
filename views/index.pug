@@ -8,7 +8,7 @@ html(lang=lang,editor=editor)
     body(class=`theme-${theme}`)
         header
             .header= translate("index.header.title")
-            #app-request-text!= translate("index.header.appRequestText")  
+            #app-request-text!= translate("index.header.appRequestText").replace("${link}","https://google.com/?q=PUT%20A%20REAL%20LINK%20HERE")
             .search-container
                 .search-title= translate("index.search.title")
                 input#name-search(name="name-search", placeholder=translate("index.search.namePlaceholder"))

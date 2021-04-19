@@ -1,4 +1,4 @@
-.selectlist(name=sp.id,tabindex=0,many=sp.many,initialstate=JSON.stringify(sp.initialState)||null)
+.selectlist(name=sp.id,tabindex=0,many=sp.many?"MANY":false,initialstate=JSON.stringify(sp.initialState)||null)
     .selectlist-title= translate(sp.name)
     .selectlist-contents
         each option in sp.options

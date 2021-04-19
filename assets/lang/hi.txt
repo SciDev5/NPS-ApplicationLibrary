@@ -2,7 +2,7 @@ lang = हिंदी
 
 index.pageTitle = एनपीएस एप्लीकेशन लाइब्रेरी
 index.header.title = एनपीएस एप्लीकेशन लाइब्रेरी
-index.header.appRequestText = यदि कोई ऐसा एप्लिकेशन है जो इस सूची से गायब है जिसे आप जोड़ने का अनुरोध करना चाहते हैं, तो <a href="https://google.com"> यहां [वास्तविक लिंक TODO] </a> यह अनुरोध करने के लिए।
+index.header.appRequestText = यदि कोई ऐसा एप्लिकेशन है जो इस सूची से गायब है जिसे आप जोड़ने का अनुरोध करना चाहते हैं, तो <a href="${link}">यहां</a> यह अनुरोध करने के लिए।
 index.search.title = खोज
 index.search.refreshButton = खोज को ताज़ा करें
 index.search.refreshPopup = खोज ताज़ा करने के लिए क्लिक करें।

@@ -2,7 +2,7 @@ lang = русский
 
 index.pageTitle = Библиотека приложений NPS
 index.header.title = Библиотека приложений NPS
-index.header.appRequestText = Если в этом списке отсутствует приложение, которое вы хотите запросить на добавление, нажмите <a href="https://google.com"> здесь [REAL LINK TODO] </a> запросить это.
+index.header.appRequestText = Если в этом списке отсутствует приложение, которое вы хотите запросить на добавление, нажмите <a href="${link}">здесь</a> запросить это.
 index.search.title = Поиск
 index.search.refreshButton = Обновить поиск
 index.search.refreshPopup = Щелкните, чтобы обновить поиск.

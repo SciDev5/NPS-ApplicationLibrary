@@ -2,7 +2,7 @@ lang = Español
 
 index.pageTitle              = Biblioteca de aplicaciones NPS
 index.header.title           = Biblioteca de aplicaciones NPS
-index.header.appRequestText  = Si hay una aplicación que falta en esta lista y desea solicitar que se agregue, haga clic <a href="https://google.com"> aquí [REAL LINK TODO] </a> para solicitarlo.
+index.header.appRequestText  = Si hay una aplicación que falta en esta lista y desea solicitar que se agregue, haga clic <a href="${link}">aquí</a> para solicitarlo.
 index.search.title           = Buscar
 index.search.refreshButton   = Actualizar búsqueda
 index.search.refreshPopup    = Haga clic para actualizar la búsqueda.

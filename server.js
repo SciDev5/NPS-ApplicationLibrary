@@ -185,11 +185,15 @@ app.post("/apps/add/",async(req,res)=>{
 
 
 const PORT = process.env.PORT||80, PORT_HTTPS = process.env.PORT_HTTPS||443;
-const SSL_KEY = readFileSync(process.env.SSL_KEY||"./.data/ssl.key");
-const SSL_CERT = readFileSync(process.env.SSL_CERT||"./.data/ssl.crt");
+if (PORT == 80) { 
+    const SSL_KEY = readFileSync(process.env.SSL_KEY||"./.data/ssl.key");
+    const SSL_CERT = readFileSync(process.env.SSL_CERT||"./.data/ssl.crt");
 
-http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
-https.createServer({key:SSL_KEY,cert:SSL_CERT},app).listen(PORT_HTTPS,()=>console.log(`HTTPS SERVER LISTENING: [port ${PORT_HTTPS}]`))
+    http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
+    https.createServer({key:SSL_KEY,cert:SSL_CERT},app).listen(PORT_HTTPS,()=>console.log(`HTTPS SERVER LISTENING: [port ${PORT_HTTPS}]`))
+} else {
+    http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
+}
 
 
 process.addListener("uncaughtException",(err)=>{

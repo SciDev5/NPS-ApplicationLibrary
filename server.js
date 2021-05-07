@@ -40,8 +40,12 @@ function getTheme(req,res) {
     res.cookie("theme_cookie",theme,{maxAge:Infinity});
     return theme;
 }
+
+function getBestLang(langs) {
+    return langs.map(lId=>getApproxLang(lId)).find(v=>v!=null) || DEFAULT_LANG;
+}
 async function pageCommonInfo(req,res) {
-    var lang = getApproxLang(req.query["lang"]);
+    var lang = getApproxLang(req.query["lang"]||getBestLang(req.acceptsLanguages()));
     var theme = getTheme(req,res);
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;

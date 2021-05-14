@@ -4,7 +4,9 @@ import { deepFreeze } from "./utils.js";
 import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
 import sqlite3 from "sqlite3";
 import { v4 as genUUID } from "uuid";
+import fs from "fs";
 const sqlite = sqlite3.verbose();
+if (!fs.existsSync("./.data")) { console.log("CREATING ./.data/ "); fs.mkdirSync("./.data"); }
 const db = new sqlite.Database("./.data/.db");
 
 var allAppsCache = undefined;

@@ -70,7 +70,7 @@ async function addApp(/**@type {Application}*/app) {
     return id;
 }
 async function getApp(appId) {
-    var v = (await client.query({query:"SELECT * FROM "+APP_TABLE.NAME+" WHERE id=? LIMIT 1",values:[appId]}))[0];
+    var v = (await client.query({query:"SELECT * FROM "+APP_TABLE.NAME+" WHERE id=? LIMIT 1",values:[appId]}))[0][0];
     return v?Application.parse(v):null;
 }
 async function delApp(appId) {
@@ -107,18 +107,18 @@ async function searchApps(searchQuery) {
         append(`approvalStatus in ('${approvalStatus.join("','")}')`);
     if (privacyStatus && privacyStatus.length && privacyStatus.every(v=>Number.isSafeInteger(v))) 
         append(`privacyStatus in ('${privacyStatus.join("','")}')`);
-    query += " ORDER BY name COLLATE NOCASE ASC";
+    query += " ORDER BY name";
 
-    return (await client.query({query,values:queryParams})).map(v=>Application.parse(v));
+    return (await client.query({query,values:queryParams}))[0].map(v=>Application.parse(v));
 }
 async function allApps() {
     if (allAppsCache) return allAppsCache.map(v=>Application.parse(v));
-    else return (allAppsCache = (await client.query(`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name COLLATE NOCASE ASC`))).map(v=>Application.parse(v));
+    else return (allAppsCache = (await client.query(`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name`))[0]).map(v=>Application.parse(v));
 }
 
 
 async function getAdminByUsername(username) {
-    return (await client.query({query:`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=? LIMIT 1`,values:[username]}))[0];
+    return (await client.query({query:`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=? LIMIT 1`,values:[username]}))[0][0];
 }
 async function createAdminAccount(username,hashedpass) {
     var id = genUUID();
@@ -126,7 +126,7 @@ async function createAdminAccount(username,hashedpass) {
     return id;
 }
 async function adminsExist() {
-    return (await client.query(`SELECT id FROM ${ADMIN_USER_TABLE.NAME} LIMIT 1`)).length > 0;
+    return (await client.query(`SELECT id FROM ${ADMIN_USER_TABLE.NAME}`))[0].length > 0;
 }
 
 
@@ -142,8 +142,8 @@ async function tryInitDB() {
 
 (async()=>{
     await tryInitDB();
-    //if ((await client.query("SELECT id FROM "+APP_TABLE.NAME+" LIMIT 1")).rowCount == 0)
-    //    await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
+    if ((await client.query("SELECT id FROM "+APP_TABLE.NAME))[0].length == 0)
+        await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
 })().catch(e=>{throw e});
 
 export default {

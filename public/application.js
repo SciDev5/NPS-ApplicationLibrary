@@ -25,14 +25,14 @@ class Application {
     }
     static parse(/** @type {{id:number,name:string,platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
         if (obj == null) throw new Error("Application constructed with null params.");
-        var {id,name,platforms,subjects,gradeLevels,url,approvalStatus,privacyStatus} = obj;
+        var {id,name,platforms,subjects,gradeLevels,gradelevels,url,approvalStatus,approvalstatus,privacyStatus,privacystatus} = obj;
+        gradeLevels = gradeLevels || gradelevels; approvalStatus = approvalStatus || approvalstatus; privacyStatus = privacyStatus || privacystatus;
         if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
         if (platforms&&typeof(platforms[0])=="number") { platforms.sort(); platforms = platforms.map(v=>PLATFORMS[v]).filter(v=>v); }
         if (typeof(gradeLevels)=="string") gradeLevels = gradeLevels.split(",").map(v=>GRADE_LEVELS[v]).filter(v=>v);
         if (gradeLevels&&typeof(gradeLevels[0])=="number") { gradeLevels.sort(); gradeLevels = gradeLevels.map(v=>GRADE_LEVELS[v]).filter(v=>v); }
         if (typeof(subjects)=="string") subjects = subjects.split(",").map(v=>SUBJECTS[v]).filter(v=>v);
         if (subjects&&typeof(subjects[0])=="number") { subjects.sort(); subjects = subjects.map(v=>SUBJECTS[v]).filter(v=>v); }
-        
         return new Application({id,url,name,platforms,subjects,gradeLevels,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]});
     }
     

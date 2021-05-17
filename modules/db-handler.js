@@ -6,7 +6,7 @@ import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS,
 import pg from "pg";
 import { v4 as genUUID } from "uuid";
 import fs from "fs";
-const client = new pg.Client();
+const client = new pg.Pool();
 
 var allAppsCache = undefined;
 

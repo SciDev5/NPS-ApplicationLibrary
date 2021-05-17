@@ -1,12 +1,11 @@
-// @ts-check
 import lpcsvUtil from "../modules/map-lpcsv-to-apparr.js";
 
 import { deepFreeze } from "./utils.js";
 import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
-import pg from "pg";
+//import pg from "pg";
 import { v4 as genUUID } from "uuid";
-import fs from "fs";
-const client = new pg.Pool({connectionString:process.env.DATABASE_URL});
+import {Sequelize} from "sequelize";
+var client = new Sequelize(process.env.DATABASE_URL, {dialectOptions:{ssl:{require:true, rejectUnauthorized: false}},dialect:"sqlite"});
 
 var allAppsCache = undefined;
 
@@ -60,22 +59,22 @@ function getAppValidKVPairs(/**@type {Application}*/app) {
 async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
     values.push(appId);
-    await client.query("UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
+    await client.query({query:"UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values});
     return;
 }
 async function addApp(/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
     var id = genUUID();
     keys.push("id"); values.push(id);
-    await client.query("INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values);
+    await client.query({query:"INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values});
     return id;
 }
 async function getApp(appId) {
-    var v = (await client.query("SELECT * FROM "+APP_TABLE.NAME+" WHERE id=? LIMIT 1",[appId])).rows[0];
+    var v = (await client.query({query:"SELECT * FROM "+APP_TABLE.NAME+" WHERE id=? LIMIT 1",values:[appId]}))[0];
     return v?Application.parse(v):null;
 }
 async function delApp(appId) {
-    await client.query("DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]); return;
+    await client.query({query:"DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",values:[appId]}); return;
 }
 async function searchApps(searchQuery) {
     var {name,approvalStatus,privacyStatus,platforms,platformsRequireAll,gradeLevels,gradeLevelsRequireAll,subjects,subjectsRequireAll} = searchQuery;
@@ -110,24 +109,24 @@ async function searchApps(searchQuery) {
         append(`privacyStatus in ('${privacyStatus.join("','")}')`);
     query += " ORDER BY name COLLATE NOCASE ASC";
 
-    return (await client.query(query,queryParams)).rows.map(v=>Application.parse(v));
+    return (await client.query({query,values:queryParams})).map(v=>Application.parse(v));
 }
 async function allApps() {
     if (allAppsCache) return allAppsCache.map(v=>Application.parse(v));
-    else return (allAppsCache = (await client.query(`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name COLLATE NOCASE ASC`)).rows).map(v=>Application.parse(v));
+    else return (allAppsCache = (await client.query(`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name COLLATE NOCASE ASC`))).map(v=>Application.parse(v));
 }
 
 
 async function getAdminByUsername(username) {
-    return (await client.query(`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=? LIMIT 1`,[username])).rows[0];
+    return (await client.query({query:`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=? LIMIT 1`,values:[username]}))[0];
 }
 async function createAdminAccount(username,hashedpass) {
     var id = genUUID();
-    await client.query(`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,[id,username,hashedpass]);
+    await client.query({query:`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,values:[id,username,hashedpass]});
     return id;
 }
 async function adminsExist() {
-    return (await client.query(`SELECT id FROM ${ADMIN_USER_TABLE.NAME} LIMIT 1`)).rowCount > 0;
+    return (await client.query(`SELECT id FROM ${ADMIN_USER_TABLE.NAME} LIMIT 1`)).length > 0;
 }
 
 
@@ -135,8 +134,8 @@ async function tryInitDB() {
     //await client.connect();
 
     await Promise.all([
-        client.query("CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS),[]),
-        client.query("CREATE TABLE IF NOT EXISTS "+ADMIN_USER_TABLE.NAME+" "+tableColsStr(ADMIN_USER_TABLE.COLS),[])
+        client.query("CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS)),
+        client.query("CREATE TABLE IF NOT EXISTS "+ADMIN_USER_TABLE.NAME+" "+tableColsStr(ADMIN_USER_TABLE.COLS))
     ]);
 }
 

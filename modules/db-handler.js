@@ -1,13 +1,12 @@
+// @ts-check
 import lpcsvUtil from "../modules/map-lpcsv-to-apparr.js";
 
 import { deepFreeze } from "./utils.js";
 import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
-import sqlite3 from "sqlite3";
+import pg from "pg";
 import { v4 as genUUID } from "uuid";
 import fs from "fs";
-const sqlite = sqlite3.verbose();
-if (!fs.existsSync("./.data")) { console.log("CREATING ./.data/ "); fs.mkdirSync("./.data"); }
-const db = new sqlite.Database("./.data/.db");
+const client = new pg.Client();
 
 var allAppsCache = undefined;
 
@@ -35,17 +34,6 @@ const ADMIN_USER_TABLE = {
 deepFreeze([APP_TABLE,ADMIN_USER_TABLE]);
 
 
-function asyncCMD(cmd,query,params) {
-    if (/^(UPDATE|INSERT|DELETE)/i.test(query)) {
-        if (new RegExp(APP_TABLE.NAME).test(query)) allAppsCache = undefined;
-    }
-    return new Promise((res,rej)=>{
-        db[cmd](query,params,(err,data)=>{
-            if (err) rej(err);
-            else res(data);
-        })
-    });
-}
 
 function tableColsStr(cols) {
     var slst = [];
@@ -72,22 +60,22 @@ function getAppValidKVPairs(/**@type {Application}*/app) {
 async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
     values.push(appId);
-    await asyncCMD("run","UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
+    await client.query("UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values);
     return;
 }
 async function addApp(/**@type {Application}*/app) {
     var {keys,values} = getAppValidKVPairs(app);
     var id = genUUID();
     keys.push("id"); values.push(id);
-    await asyncCMD("run","INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values);
+    await client.query("INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values);
     return id;
 }
 async function getApp(appId) {
-    var v = await asyncCMD("get","SELECT * FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]);
+    var v = (await client.query("SELECT * FROM "+APP_TABLE.NAME+" WHERE id=? LIMIT 1",[appId])).rows[0];
     return v?Application.parse(v):null;
 }
 async function delApp(appId) {
-    await asyncCMD("run","DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]); return;
+    await client.query("DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",[appId]); return;
 }
 async function searchApps(searchQuery) {
     var {name,approvalStatus,privacyStatus,platforms,platformsRequireAll,gradeLevels,gradeLevelsRequireAll,subjects,subjectsRequireAll} = searchQuery;
@@ -122,43 +110,44 @@ async function searchApps(searchQuery) {
         append(`privacyStatus in ('${privacyStatus.join("','")}')`);
     query += " ORDER BY name COLLATE NOCASE ASC";
 
-    return (await asyncCMD("all",query,queryParams)).map(v=>Application.parse(v));
+    return (await client.query(query,queryParams)).rows.map(v=>Application.parse(v));
 }
 async function allApps() {
     if (allAppsCache) return allAppsCache.map(v=>Application.parse(v));
-    else return (allAppsCache = await asyncCMD("all",`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name COLLATE NOCASE ASC`)).map(v=>Application.parse(v));
+    else return (allAppsCache = (await client.query(`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name COLLATE NOCASE ASC`)).rows).map(v=>Application.parse(v));
 }
 
 
 async function getAdminByUsername(username) {
-    return await asyncCMD("get",`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=?`,[username]);
+    return (await client.query(`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=? LIMIT 1`,[username])).rows[0];
 }
 async function createAdminAccount(username,hashedpass) {
     var id = genUUID();
-    await asyncCMD("run",`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,[id,username,hashedpass]);
+    await client.query(`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,[id,username,hashedpass]);
     return id;
 }
 async function adminsExist() {
-    return !!await asyncCMD("get",`SELECT id FROM ${ADMIN_USER_TABLE.NAME}`);
+    return (await client.query(`SELECT id FROM ${ADMIN_USER_TABLE.NAME} LIMIT 1`)).rowCount > 0;
 }
 
 
 async function tryInitDB() {
+    await client.connect();
+
     await Promise.all([
-        asyncCMD("run","CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS),[]),
-        asyncCMD("run","CREATE TABLE IF NOT EXISTS "+ADMIN_USER_TABLE.NAME+" "+tableColsStr(ADMIN_USER_TABLE.COLS),[])
+        client.query("CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS),[]),
+        client.query("CREATE TABLE IF NOT EXISTS "+ADMIN_USER_TABLE.NAME+" "+tableColsStr(ADMIN_USER_TABLE.COLS),[])
     ]);
 }
 
 
 (async()=>{
     await tryInitDB();
-    if (!await asyncCMD("get","SELECT id FROM "+APP_TABLE.NAME))
+    if ((await client.query("SELECT id FROM "+APP_TABLE.NAME+" LIMIT 1")).rowCount == 0)
         await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
 })();
 
 export default {
-    sql: asyncCMD, 
     apps: {
         search:searchApps,
         get:getApp,

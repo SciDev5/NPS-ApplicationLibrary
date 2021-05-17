@@ -14,8 +14,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "helmet": "^4.5.0",
+    "pg": "^8.6.0",
     "pug": "^3.0.2",
-    "sqlite3": "^5.0.2",
     "uuid": "^8.3.2"
   },
   "author": "SciDev5",

@@ -202,6 +202,7 @@ if (PORT == 80) {
 
 process.addListener("uncaughtException",(err)=>{
     console.error(err);
+    console.error(err.stack);
     console.log("EXCEPTION WAS UNCAUGHT, EXITING IN 5s.");
     var t = new Date().getTime()
     while(new Date().getTime()<t+5000);

@@ -132,7 +132,7 @@ async function adminsExist() {
 
 
 async function tryInitDB() {
-    await client.connect();
+    //await client.connect();
 
     await Promise.all([
         client.query("CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS),[]),
@@ -143,9 +143,9 @@ async function tryInitDB() {
 
 (async()=>{
     await tryInitDB();
-    if ((await client.query("SELECT id FROM "+APP_TABLE.NAME+" LIMIT 1")).rowCount == 0)
-        await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
-})();
+    //if ((await client.query("SELECT id FROM "+APP_TABLE.NAME+" LIMIT 1")).rowCount == 0)
+    //    await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
+})().catch(e=>{throw e});
 
 export default {
     apps: {

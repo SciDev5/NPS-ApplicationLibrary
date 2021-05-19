@@ -196,6 +196,7 @@ button {
     font-family: 'Barlow';
     border-radius: 8px;
     box-shadow: 0 0 20px -15px;
+    overflow: hidden;
 }
 .app > .name {
     color: var(--fg-em);
@@ -279,7 +280,7 @@ button {
 }
 .more-info-popup > .content > div > .title-row {background: var(--bg-em);color: var(--fg-em);font-weight: bold;padding: 2px;}
 .more-info-popup > .content > div > .title-row-large {background: var(--bg-em);color: var(--fg-em);font-weight: bold;padding: 2px;font-size: 1.2em;}
-.more-info-popup > .content > a, .more-info-popup > .content > .close {
+.app > a, .more-info-popup > .content > .close {
     border: 1px solid var(--fg);
     color: var(--fg-em);
     padding: 4px;
@@ -290,7 +291,7 @@ button {
     display: block;
     transition: 0.2s color, 0.2s background, 0.2s color;
 }
-.more-info-popup > .content > a:hover, .more-info-popup > .content > .close:hover {
+.app > a:hover, .more-info-popup > .content > .close:hover {
     border-color: var(--bg-inv);
     color: var(--fg-inv);
     background: var(--bg-inv);

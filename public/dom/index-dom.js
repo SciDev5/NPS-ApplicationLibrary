@@ -17,9 +17,9 @@ function linkHttpsify(link) { return /https?:\/\//.test(link)?link:"https://"+li
 function createAppDiv(/**@type {Application}*/app) {
     const translate = (key,map,mapName) => window.lang[mapName[map.indexOf(key)]]||key;
     const translateSingle = dom.translate;
-    const moreInfoButton = dom.createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
+    //const moreInfoButton = dom.createElement("div",translateSingle("application.display.moreInfoButton"),{className:"more-info"});
     const editInfoButton = dom.createElement("a",translateSingle("application.display.editOrDelete"),{className:"edit-info",href:"/editor/"+app.id+"?lang="+window.langId});
-    const moreInfoPopupCloseButton = dom.createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
+    /*const moreInfoPopupCloseButton = dom.createElement("div",translateSingle("application.display.closeInfoPopup"),{className:"close"});
     //console.log(app.url,/.+/.test(app.url),/.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null)
     const moreInfoPopup = dom.createElement("div",[
         dom.addPopupBGClickEvent(dom.createElement("div",[],{className:"bg"})),
@@ -32,15 +32,15 @@ function createAppDiv(/**@type {Application}*/app) {
         ],{className:"content"})
     ],{className:"more-info-popup"});
     moreInfoButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.add("open")});
-    moreInfoPopupCloseButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.remove("open")});
+    moreInfoPopupCloseButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.remove("open")});*/
     var appDiv = dom.createElement("div",[
         dom.createElement("div",app.name,{className:"name"}),
         dom.createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
         dom.createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
-        moreInfoButton,
+        //moreInfoButton,
         /.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
-        window.editor?editInfoButton:null,
-        moreInfoPopup
+        window.editor?editInfoButton:null//,
+        //moreInfoPopup
     ],{className:"app"});
     return appDiv;
 }

@@ -6,13 +6,13 @@ const ALL_LANGS = ["en","es","hi","zh","pt","ru"];
 
 const translationMapCache = {};
 
-function getApproxLang(langRaw) {
+function getApproxLang(langRaw,returnNullIfMissing) {
     if (!langRaw) return DEFAULT_LANG;
     var lang = langRaw.trim().toLowerCase().replace("-","_");
     if (ALL_LANGS.includes(lang)) return lang;
     lang = lang.substr(0,lang.indexOf("_"));
     if (ALL_LANGS.includes(lang)) return lang;
-    else return DEFAULT_LANG;
+    else return returnNullIfMissing ? null : DEFAULT_LANG;
 }
 
 async function getTranslationMap(langRaw) {

@@ -13,6 +13,7 @@
             ],
             "program": "${workspaceFolder}\\server.js",
             "env": {
+                "DATABASE_URL":"postgres://jptoxbwncpupqc:0c03400a86f65d777980974646c96ced0806e016b2caf42fd22d7a77c0353c1d@ec2-35-171-57-132.compute-1.amazonaws.com:5432/dcvp9ogpaf67md"
             }
         }
     ]

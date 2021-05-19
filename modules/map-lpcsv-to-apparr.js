@@ -21,10 +21,10 @@ function convertAppsCSV(lp_csv) {
     s = s.map(v=>({name:v[0],approval:v[5],privacy:v[6]}));
     s = s.map(v=>({
         name:v.name,
-        approval:APPROVAL_STATUSES[APPROVAL_STATUS_NAME_MAP[v.approval]],
-        privacy:PRIVACY_STATUSES[PRIVACY_STATUS_NAME_MAP[v.privacy]]
+        approval:APPROVAL_STATUS_NAME_MAP[v.approval],
+        privacy:PRIVACY_STATUS_NAME_MAP[v.privacy]
     }));
-    s = s.map(v=>new Application({platforms:[],name:v.name,approvalStatus:v.approval,privacyStatus:v.privacy}));
+    s = s.map(v=>Application.parse({platforms:[],name:v.name,approvalStatus:v.approval,privacyStatus:v.privacy}));
     return s;
 }
 

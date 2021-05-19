@@ -49,3 +49,5 @@ addEventListener("load",async e=>{
     document.getElementById("name-search").addEventListener("keyup",e1=>{if (e1.key=="Enter")searchEvHandler(e1)});
     if(window["editor"]) document.getElementById("add-element").addEventListener("click",addAppEvHandler);
 });
+
+if (!window.location.protocol.includes("https") && window.location.hostname  !== "localhost") window.location.protocol = "https";

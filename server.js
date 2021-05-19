@@ -40,8 +40,12 @@ function getTheme(req,res) {
     res.cookie("theme_cookie",theme,{maxAge:Infinity});
     return theme;
 }
+
+function getBestLang(langs) {
+    return langs.map(lId=>getApproxLang(lId)).find(v=>v!=null) || DEFAULT_LANG;
+}
 async function pageCommonInfo(req,res) {
-    var lang = getApproxLang(req.query["lang"]);
+    var lang = getApproxLang(req.query["lang"]||getBestLang(req.acceptsLanguages()));
     var theme = getTheme(req,res);
     var translation = await getTranslationMap(lang);
     await LANGUAGE_INTERNAL_NAMES_READY;
@@ -185,15 +189,20 @@ app.post("/apps/add/",async(req,res)=>{
 
 
 const PORT = process.env.PORT||80, PORT_HTTPS = process.env.PORT_HTTPS||443;
-const SSL_KEY = readFileSync(process.env.SSL_KEY||"./.data/ssl.key");
-const SSL_CERT = readFileSync(process.env.SSL_CERT||"./.data/ssl.crt");
+if (PORT == 80) { 
+    const SSL_KEY = readFileSync(process.env.SSL_KEY||"./.data/ssl.key");
+    const SSL_CERT = readFileSync(process.env.SSL_CERT||"./.data/ssl.crt");
 
-http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
-https.createServer({key:SSL_KEY,cert:SSL_CERT},app).listen(PORT_HTTPS,()=>console.log(`HTTPS SERVER LISTENING: [port ${PORT_HTTPS}]`))
+    http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
+    https.createServer({key:SSL_KEY,cert:SSL_CERT},app).listen(PORT_HTTPS,()=>console.log(`HTTPS SERVER LISTENING: [port ${PORT_HTTPS}]`))
+} else {
+    http.createServer(app).listen(PORT,()=>console.log(`HTTP SERVER LISTENING: [port ${PORT}]`))
+}
 
 
 process.addListener("uncaughtException",(err)=>{
     console.error(err);
+    console.error(err.stack);
     console.log("EXCEPTION WAS UNCAUGHT, EXITING IN 5s.");
     var t = new Date().getTime()
     while(new Date().getTime()<t+5000);

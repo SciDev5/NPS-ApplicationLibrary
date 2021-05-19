@@ -107,7 +107,7 @@ async function searchApps(searchQuery) {
         ) SELECT word FROM split WHERE word!='') WHERE word in ('${arr.join("','")}')) `+(reqAll?`== ${arr.length}`:"> 0")
     );
     
-    if (name) append("name LIKE ?",`%${name}%`)
+    if (name) append("UPPER(name) LIKE ?",`%${name.toUpperCase()}%`)
     if (platforms && platforms.length && platforms.every(v=>Number.isSafeInteger(v)))
         appendArr("platforms",platforms,platformsRequireAll);
     if (gradeLevels && gradeLevels.length && gradeLevels.every(v=>Number.isSafeInteger(v)))

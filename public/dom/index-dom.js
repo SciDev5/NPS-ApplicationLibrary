@@ -28,7 +28,6 @@ function createAppDiv(/**@type {Application}*/app) {
             dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.gradeLevels"),{classList:"title-row"})].concat(app.gradeLevels.map(v=>dom.createElement("div",translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME),{classList:"row"}))),{classList:"grade-levels"}),
             dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.subjects"),{classList:"title-row"})].concat(app.subjects.map(v=>dom.createElement("div",translate(v,SUBJECTS,SUBJECTS_NAME),{classList:"row"}))),{classList:"subjects"}),
             dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.platforms"),{classList:"title-row"})].concat(app.platforms.map(v=>dom.createElement("div",translate(v,PLATFORMS,PLATFORMS_NAME),{classList:"row"}))),{classList:"platforms"}),
-            /.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
             moreInfoPopupCloseButton
         ],{className:"content"})
     ],{className:"more-info-popup"});
@@ -39,6 +38,7 @@ function createAppDiv(/**@type {Application}*/app) {
         dom.createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
         dom.createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
         moreInfoButton,
+        /.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
         window.editor?editInfoButton:null,
         moreInfoPopup
     ],{className:"app"});

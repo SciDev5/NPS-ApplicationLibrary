@@ -50,4 +50,4 @@ addEventListener("load",async e=>{
     if(window["editor"]) document.getElementById("add-element").addEventListener("click",addAppEvHandler);
 });
 
-if (window.location.protocol !== "https" && window.location.hostname  !== "localhost") window.location.protocol = "https";
+if (!window.location.protocol.includes("https") && window.location.hostname  !== "localhost") window.location.protocol = "https";

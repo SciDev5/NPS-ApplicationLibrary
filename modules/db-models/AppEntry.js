@@ -14,7 +14,6 @@ App.init({
     grades: { type: DataTypes.ARRAY(DataTypes.ENUM(GRADE_LEVELS)), defaultValue: [], allowNull: false },
     subjects: { type: DataTypes.ARRAY(DataTypes.ENUM(SUBJECTS)), defaultValue: [], allowNull: false }
 },{
-    tableName:"applications_test",
     sequelize
 });
 App.sync();

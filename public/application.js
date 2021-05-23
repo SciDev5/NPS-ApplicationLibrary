@@ -11,29 +11,28 @@ const GRADE_LEVELS_NAME = ["preK","k","1","2","3","4","5","6","7","8","9","10","
 const SUBJECTS_NAME = ["math", "science","history","english","language","cs","art","music"].map(v=>"application.subject."+v);
 
 class Application {
-    constructor(/** @type {{id?:number,name:string,platforms:string[],gradeLevels:string[],subjects:string[],url?:string,approvalStatus:string,privacyStatus:string}} */ obj) {
+    constructor(/** @type {{id?:number,name:string,platforms:string[],grades:string[],subjects:string[],url?:string,approval:string,privacy:string}} */ obj) {
         if (obj == null) throw new Error("Application constructed with null params.");
-        var {id,name,platforms,gradeLevels,subjects,url,approvalStatus,privacyStatus} = obj;
+        var {id,name,platforms,grades,subjects,url,approval,privacy} = obj;
         this.id = id;
         this.name = name || "unnamed";
         this.url = url || "";
         this.platforms = platforms || [];
-        this.gradeLevels = gradeLevels || [];
+        this.grades = grades || [];
         this.subjects = subjects || [];
-        this.approvalStatus = approvalStatus || APPROVAL_STATUSES[0];
-        this.privacyStatus = privacyStatus || APPROVAL_STATUSES[0];
+        this.approval = approval || APPROVAL_STATUSES[0];
+        this.privacy = privacy || APPROVAL_STATUSES[0];
     }
-    static parse(/** @type {{id:number,name:string,platforms:string|number[],url:string,approvalStatus:number,privacyStatus:number}} */ obj) {
+    static parse(/** @type {{id:number,name:string,platforms:string|number[],url:string,approval:number,privacy:number}} */ obj) {
         if (obj == null) throw new Error("Application constructed with null params.");
-        var {id,name,platforms,subjects,gradeLevels,gradelevels,url,approvalStatus,approvalstatus,privacyStatus,privacystatus} = obj;
-        gradeLevels = gradeLevels || gradelevels; approvalStatus = approvalStatus || approvalstatus; privacyStatus = privacyStatus || privacystatus;
+        var {id,name,platforms,subjects,grades,grades,url,approval,privacy} = obj;
         if (typeof(platforms)=="string") platforms = platforms.split(",").map(v=>PLATFORMS[v]).filter(v=>v);
         if (platforms&&typeof(platforms[0])=="number") { platforms.sort(); platforms = platforms.map(v=>PLATFORMS[v]).filter(v=>v); }
-        if (typeof(gradeLevels)=="string") gradeLevels = gradeLevels.split(",").map(v=>GRADE_LEVELS[v]).filter(v=>v);
-        if (gradeLevels&&typeof(gradeLevels[0])=="number") { gradeLevels.sort(); gradeLevels = gradeLevels.map(v=>GRADE_LEVELS[v]).filter(v=>v); }
+        if (typeof(grades)=="string") grades = grades.split(",").map(v=>GRADE_LEVELS[v]).filter(v=>v);
+        if (grades&&typeof(grades[0])=="number") { grades.sort(); grades = grades.map(v=>GRADE_LEVELS[v]).filter(v=>v); }
         if (typeof(subjects)=="string") subjects = subjects.split(",").map(v=>SUBJECTS[v]).filter(v=>v);
         if (subjects&&typeof(subjects[0])=="number") { subjects.sort(); subjects = subjects.map(v=>SUBJECTS[v]).filter(v=>v); }
-        return new Application({id,url,name,platforms,subjects,gradeLevels,approvalStatus:APPROVAL_STATUSES[approvalStatus],privacyStatus:PRIVACY_STATUSES[privacyStatus]});
+        return new Application({id,url,name,platforms,subjects,grades,approval:APPROVAL_STATUSES[approval],privacy:PRIVACY_STATUSES[privacy]});
     }
     
 
@@ -51,19 +50,19 @@ class Application {
     }
     clearSubjects() { this.subjects.splice(0); }
 
-    addGradeLevel(gradeLevel) { if (GRADE_LEVELS.includes(gradeLevel) && !this.gradeLevels.includes(gradeLevel)) this.gradeLevels.push(gradeLevel); }
-    removeGradeLevel(gradeLevel) {
-        var i = this.gradeLevels.indexOf(gradeLevel);
-        if (i != -1) this.gradeLevels.splice(i,1);
+    addGradeLevel(grade) { if (GRADE_LEVELS.includes(grade) && !this.grades.includes(grade)) this.grades.push(grade); }
+    removeGradeLevel(grade) {
+        var i = this.grades.indexOf(grade);
+        if (i != -1) this.grades.splice(i,1);
     }
-    clearGradeLevels() { this.gradeLevels.splice(0); }
+    clearGradeLevels() { this.grades.splice(0); }
 
 
-    setStatus(approvalStatus,privacyStatus) {
-        if (approvalStatus && APPROVAL_STATUSES.includes(approvalStatus))
-            this.approvalStatus = approvalStatus;
-        if(privacyStatus && PRIVACY_STATUSES.includes(privacyStatus)) 
-            this.privacyStatus = privacyStatus;
+    setStatus(approval,privacy) {
+        if (approval && APPROVAL_STATUSES.includes(approval))
+            this.approval = approval;
+        if(privacy && PRIVACY_STATUSES.includes(privacy)) 
+            this.privacy = privacy;
     }
     setName(name) {
         if (typeof(name)=="string"&&name.length>0)
@@ -74,19 +73,19 @@ class Application {
             this.url = url;
     }
 
-    toJSON(keepArraysSeparate) {
-        var platformIds = this.platforms.map(v=>PLATFORMS.indexOf(v)).filter(v=>v>=0);
-        var gradeLevelIds = this.gradeLevels.map(v=>GRADE_LEVELS.indexOf(v)).filter(v=>v>=0);
-        var subjectIds = this.subjects.map(v=>SUBJECTS.indexOf(v)).filter(v=>v>=0);
+    toJSON(keepArraysSeparate,dontCastIds) {
+        var platformIds = dontCastIds?this.platforms.map(v=>v):this.platforms.map(v=>PLATFORMS.indexOf(v)).filter(v=>v>=0);
+        var gradeIds = dontCastIds?this.grades.map(v=>v):this.grades.map(v=>GRADE_LEVELS.indexOf(v)).filter(v=>v>=0);
+        var subjectIds = dontCastIds?this.subjects.map(v=>v):this.subjects.map(v=>SUBJECTS.indexOf(v)).filter(v=>v>=0);
         return {
             id: this.id,
             name: this.name,
             url: this.url,
-            approvalStatus: APPROVAL_STATUSES.indexOf(this.approvalStatus),
-            privacyStatus: PRIVACY_STATUSES.indexOf(this.privacyStatus),
+            approval: dontCastIds?this.approval:APPROVAL_STATUSES.indexOf(this.approval),
+            privacy: dontCastIds?this.privacy:PRIVACY_STATUSES.indexOf(this.privacy),
             platforms: keepArraysSeparate?platformIds:platformIds.join(),
             subjects: keepArraysSeparate?subjectIds:subjectIds.join(),
-            gradeLevels: keepArraysSeparate?gradeLevelIds:gradeLevelIds.join()
+            grades: keepArraysSeparate?gradeIds:gradeIds.join()
         };
     }
 
@@ -94,10 +93,10 @@ class Application {
         return JSON.stringify({
             name: this.name,
             url: this.url,
-            approvalStatus: this.approvalStatus,
-            privacyStatus: this.privacyStatus,
+            approval: this.approval,
+            privacy: this.privacy,
             platforms: this.platforms,
-            gradeLevels: this.gradeLevels,
+            grades: this.grades,
             subjects: this.subjects
         });
     }

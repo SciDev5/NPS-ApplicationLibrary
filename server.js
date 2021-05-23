@@ -11,7 +11,6 @@ import http from "http";
 import helmet from "helmet";
 import { v4 as UUIDv4 } from "uuid";
 import { readFileSync } from "fs";
-import dbNew from "./modules/db-new.js";
 const app = express();
 
 app.use(helmet());
@@ -68,9 +67,9 @@ app.get("/editor/:id",async (req,res)=>{
     var {lang,theme,translation} = await pageCommonInfo(req,res);
 
     var appInfoLists = {};
-    appInfoLists.approval = {name:"application.approvalStatus",many:false,initialState:APPROVAL_STATUSES.indexOf(app.approvalStatus),options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))};
-    appInfoLists.privacy = {name:"application.privacyStatus",many:false,initialState:PRIVACY_STATUSES.indexOf(app.privacyStatus),options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))};
-    appInfoLists.gradeLevel = {name:"application.gradeLevel",many:true,initialState:app.gradeLevels.map(v=>GRADE_LEVELS.indexOf(v)),options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))};
+    appInfoLists.approval = {name:"application.approvalStatus",many:false,initialState:APPROVAL_STATUSES.indexOf(app.approval),options:new Array(APPROVAL_STATUSES.length).fill().map((_,i)=>({id:APPROVAL_STATUSES[i],name:APPROVAL_STATUSES_NAME[i]}))};
+    appInfoLists.privacy = {name:"application.privacyStatus",many:false,initialState:PRIVACY_STATUSES.indexOf(app.privacy),options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))};
+    appInfoLists.gradeLevel = {name:"application.gradeLevel",many:true,initialState:app.grades.map(v=>GRADE_LEVELS.indexOf(v)),options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))};
     appInfoLists.subject = {name:"application.subject",many:true,initialState:app.subjects.map(v=>SUBJECTS.indexOf(v)),options:new Array(SUBJECTS.length).fill().map((_,i)=>({id:SUBJECTS[i],name:SUBJECTS_NAME[i]}))};
     appInfoLists.platform = {name:"application.platform",many:true,initialState:app.platforms.map(v=>PLATFORMS.indexOf(v)),options:new Array(PLATFORMS.length).fill().map((_,i)=>({id:PLATFORMS[i],name:PLATFORMS_NAME[i]}))};
 
@@ -122,29 +121,31 @@ app.get("/admin", async (req,res)=>{
 });
 
 
-app.get("/test/:name",async(req,res)=>{
-    res.json(await dbNew.app.search({name:req.params["name"]}));
+app.get("/apps/destroy",(req,res)=>{
+    database.apps.destroy();
+    res.send("DESTROYED ALL APP ENTRIES");
 });
-app.get("/test",async(req,res)=>{
-    res.json(await dbNew.app.all());
-});
-app.get("/testmake/:name",async(req,res)=>{
-    res.json(await dbNew.app.make({name:req.params["name"]}));
-});
+
 
 app.get("/apps/search",async(req,res)=>{
     try {
-        var {name,platforms,subjects,gradeLevels,approvalStatus,privacyStatus,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll} = req.query;
-        if (!name&&!platforms&&!approvalStatus&&!privacyStatus&&!gradeLevels&&!subjects) {res.send(await database.apps.getAll()); return}
+        var {name,platforms,subjects,grades,approval,privacy,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll} = req.query;
+        if (!name&&!platforms&&!approval&&!privacy&&!grades&&!subjects) {res.send(await database.apps.getAll()); return}
         if (platforms) platforms = JSON.parse(platforms);
-        if (gradeLevels) gradeLevels = JSON.parse(gradeLevels);
+        if (platforms instanceof Array) platforms=platforms.map(i=>PLATFORMS[i]).filter(Boolean); else platforms = undefined;
+        if (grades) grades = JSON.parse(grades);
+        if (grades instanceof Array) grades=grades.map(i=>GRADE_LEVELS[i]).filter(Boolean); else grades = undefined;
         if (subjects) subjects = JSON.parse(subjects);
-        if (approvalStatus) approvalStatus = JSON.parse(approvalStatus);
-        if (privacyStatus) privacyStatus = JSON.parse(privacyStatus);
+        if (subjects instanceof Array) subjects=subjects.map(i=>PLATFORMS[i]).filter(Boolean); else subjects = undefined;
+        if (approval) approval = JSON.parse(approval);
+        if (approval instanceof Array) approval=approval.map(i=>APPROVAL_STATUSES[i]).filter(Boolean); else approval = undefined;
+        if (privacy) privacy = JSON.parse(privacy);
+        if (privacy instanceof Array) privacy=privacy.map(i=>PRIVACY_STATUSES[i]).filter(Boolean); else privacy = undefined;
         platformsRequireAll = platformsRequireAll=="true"||platformsRequireAll==true;
         gradeLevelsRequireAll = gradeLevelsRequireAll=="true"||gradeLevelsRequireAll==true;
         subjectsRequireAll = subjectsRequireAll=="true"||subjectsRequireAll==true;
-        res.send(await database.apps.search({name,platforms,gradeLevels,subjects,approvalStatus,privacyStatus,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll}));
+        console.log({name,platforms,grades,subjects,approval,privacy,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll});
+        res.send(await database.apps.search({name,platforms,grades,subjects,approval,privacy,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll}));
     } catch (e) {
         res.status(400);
         console.error(e);

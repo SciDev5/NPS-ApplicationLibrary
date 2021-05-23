@@ -8,7 +8,6 @@ Admin.init({
     username: { type: DataTypes.STRING, allowNull: false },
     hashedpass: { type: DataTypes.STRING, allowNull: false }
 },{
-    tableName:"adminUsers_test",
     sequelize
 });
 Admin.sync();

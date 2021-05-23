@@ -24,7 +24,7 @@ function convertAppsCSV(lp_csv) {
         approval:APPROVAL_STATUS_NAME_MAP[v.approval],
         privacy:PRIVACY_STATUS_NAME_MAP[v.privacy]
     }));
-    s = s.map(v=>Application.parse({platforms:[],name:v.name,approvalStatus:v.approval,privacyStatus:v.privacy}));
+    s = s.map(v=>Application.parse({platforms:[],name:v.name,approval:v.approval,privacy:v.privacy}));
     return s;
 }
 

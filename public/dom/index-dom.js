@@ -25,7 +25,7 @@ function createAppDiv(/**@type {Application}*/app) {
         dom.addPopupBGClickEvent(dom.createElement("div",[],{className:"bg"})),
         dom.createElement("div",[
             dom.createElement("div",[dom.createElement("div",app.name,{classList:"title-row-large"})],{classList:"grade-levels"}),
-            dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.gradeLevels"),{classList:"title-row"})].concat(app.gradeLevels.map(v=>dom.createElement("div",translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME),{classList:"row"}))),{classList:"grade-levels"}),
+            dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.grades"),{classList:"title-row"})].concat(app.grades.map(v=>dom.createElement("div",translate(v,GRADE_LEVELS,GRADE_LEVELS_NAME),{classList:"row"}))),{classList:"grade-levels"}),
             dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.subjects"),{classList:"title-row"})].concat(app.subjects.map(v=>dom.createElement("div",translate(v,SUBJECTS,SUBJECTS_NAME),{classList:"row"}))),{classList:"subjects"}),
             dom.createElement("div",[dom.createElement("div",translateSingle("application.infoPopup.platforms"),{classList:"title-row"})].concat(app.platforms.map(v=>dom.createElement("div",translate(v,PLATFORMS,PLATFORMS_NAME),{classList:"row"}))),{classList:"platforms"}),
             moreInfoPopupCloseButton
@@ -35,10 +35,10 @@ function createAppDiv(/**@type {Application}*/app) {
     moreInfoPopupCloseButton.addEventListener("click",e=>{if(e.isTrusted)moreInfoPopup.classList.remove("open")});*/
     var appDiv = dom.createElement("div",[
         dom.createElement("div",app.name,{className:"name"}),
-        dom.createElement("div",translate(app.approvalStatus,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approvalStatus}),
-        dom.createElement("div",translate(app.privacyStatus,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacyStatus}),
+        dom.createElement("div",translate(app.approval,APPROVAL_STATUSES,APPROVAL_STATUSES_NAME),{className:"status as-"+app.approval}),
+        dom.createElement("div",translate(app.privacy,PRIVACY_STATUSES,PRIVACY_STATUSES_NAME),{className:"status ps-"+app.privacy}),
         //moreInfoButton,
-        /.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url)}):null,
+        /.+/.test(app.url)?dom.createElement("a",translateSingle("application.display.moreInfoUrl"),{href:linkHttpsify(app.url),target:"_blank"}):null,
         window.editor?editInfoButton:null//,
         //moreInfoPopup
     ],{className:"app"});

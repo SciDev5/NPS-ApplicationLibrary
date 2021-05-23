@@ -7,4 +7,11 @@ function deepFreeze(obj,frozenIn) {
     return obj;
 }
 
-export {deepFreeze};
+function isStringInArray(array,str) {
+    return str && typeof(str)==="string"&&array.includes(str);
+}
+function isStringArrayInArray(array,arrayToCheck) {
+    return arrayToCheck && (arrayToCheck instanceof Array) && arrayToCheck.every(v=>isStringInArray(array,v));
+}
+
+export {deepFreeze,isStringInArray,isStringArrayInArray};

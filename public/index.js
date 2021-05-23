@@ -9,9 +9,9 @@ async function searchApps(/**@type {{name,gradeLevels,approvalStatus,privacyStat
     var {name,gradeLevels,approvalStatus,privacyStatus,gradeLevelsRequireAll} = query;
     var queryOut = {}
     if(name)queryOut.name=name;
-    if(gradeLevels)queryOut.gradeLevels=JSON.stringify(gradeLevels);
-    if(approvalStatus)queryOut.approvalStatus=JSON.stringify(approvalStatus);
-    if(privacyStatus)queryOut.privacyStatus=JSON.stringify(privacyStatus);
+    if(gradeLevels)queryOut.grades=JSON.stringify(gradeLevels);
+    if(approvalStatus)queryOut.approval=JSON.stringify(approvalStatus);
+    if(privacyStatus)queryOut.privacy=JSON.stringify(privacyStatus);
     queryOut.gradeLevelsRequireAll=!!gradeLevelsRequireAll;
     return (await paramFetch("/apps/search",queryOut)).map(v=>Application.parse(v));
 }

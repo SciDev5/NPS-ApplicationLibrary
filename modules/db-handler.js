@@ -1,162 +1,105 @@
-import lpcsvUtil from "../modules/map-lpcsv-to-apparr.js";
+import Sequelize from "sequelize";
+import { Application, APPROVAL_STATUSES, GRADE_LEVELS, PLATFORMS, PRIVACY_STATUSES, SUBJECTS } from "../public/application.js";
+import Admin from "./db-models/Admin.js";
+import App from "./db-models/AppEntry.js";
+import { isStringInArray, isStringArrayInArray } from "./utils.js";
+import lpcsvUtil from "./map-lpcsv-to-apparr.js";
+const { Op } = Sequelize;
 
-import { deepFreeze } from "./utils.js";
-import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
-//import pg from "pg";
-import { v4 as genUUID } from "uuid";
-import client from "./sequelize.js";
+function App_modelToClass(v) {
+    return new Application({
+        id: v.id,
+        name: v.name,
+        approval: v.approval,
+        privacy: v.privacy,
+        platforms: v.platforms,
+        grades: v.grades,
+        subjects: v.subjects,
+        url: v.url
+    });
+}
 
-var allAppsCache = undefined;
+async function App_all() {
+    return (await App.findAll()).map(App_modelToClass);
+}
+async function App_search(query) { 
+    var {name,approval,privacy,platforms,platformsRequireAll,grades,gradeLevelsRequireAll,subjects,subjectsRequireAll} = query;
+    var where = {};
+    if (name && typeof(name)==="string") 
+        where.name = Sequelize.where(Sequelize.fn("LOWER",Sequelize.col("App.name")), Op.like, `%${name.toLowerCase()}%` );
+    if (isStringArrayInArray(APPROVAL_STATUSES, approval)) where.approval = { [Op.in]: approval };
+    if (isStringArrayInArray(PRIVACY_STATUSES, privacy)) where.privacy = { [Op.in]: privacy };
+    if (isStringArrayInArray(PLATFORMS, platforms)) where.platforms = {[Op.contains]:platforms};
+    if (isStringArrayInArray(GRADE_LEVELS, grades)) where.grades = {[Op.contains]:grades};
+    if (isStringArrayInArray(SUBJECTS, subjects)) where.subjects = {[Op.contains]:subjects};
+    return (await App.findAll({where})).map(App_modelToClass);
+}
+async function App_make(query) {
+    var {name,approval,privacy,platforms,grades,subjects} = query;
+    var value = {};
+    if (name && typeof(name)==="string")              value.name = name;
+    if (isStringInArray(APPROVAL_STATUSES, approval)) value.approval = approval;
+    if (isStringInArray(PRIVACY_STATUSES, privacy))   value.privacy = privacy;
+    if (isStringArrayInArray(PLATFORMS, platforms))   value.platforms = platforms;
+    if (isStringArrayInArray(GRADE_LEVELS, grades))   value.grades = grades;
+    if (isStringArrayInArray(SUBJECTS, subjects))     value.subjects = subjects;
+    return (await App.create(value)).id;
+}
+async function App_get(id) {
+    return App_modelToClass(await App.findByPk(id));
+}
+async function App_del(id) {
+    await (await App.findByPk(id)).destroy();
+}
+async function App_update(id,query) {
+    var {name,approval,privacy,platforms,grades,subjects,url} = query;
+    var appData = {};
+    if (name && typeof(name)==="string")              appData.name = name;
+    if (typeof(url)==="string")                       appData.url = url;
+    if (isStringInArray(APPROVAL_STATUSES, approval)) appData.approval = approval;
+    if (isStringInArray(PRIVACY_STATUSES, privacy))   appData.privacy = privacy;
+    if (isStringArrayInArray(PLATFORMS, platforms))   appData.platforms = platforms;
+    if (isStringArrayInArray(GRADE_LEVELS, grades))   appData.grades = grades;
+    if (isStringArrayInArray(SUBJECTS, subjects))     appData.subjects = subjects;
+    var app = (await App.update(appData,{where:{id}}))[1][0];
+    return App_modelToClass(app);
+}
 
-const APP_TABLE = {
-    NAME:"applications",
-    COLS:[
-        {name:"id", type:"TEXT", primaryKey:true, default: "random()"},
-        {name:"name", type:"TEXT", notNull:true},
-        {name:"url", type:"TEXT"},
-        {name:"approvalStatus", type:"INT", enum:APPROVAL_STATUSES, notNull:true, default: 0},
-        {name:"privacyStatus", type:"INT", enum:PRIVACY_STATUSES, notNull:true, default: 0},
-        {name:"platforms", type:"TEXT", arrEnum:PLATFORMS, notNull:true, default: ""},
-        {name:"gradeLevels", type:"TEXT", arrEnum:GRADE_LEVELS, notNull:true, default: ""},
-        {name:"subjects", type:"TEXT", arrEnum:SUBJECTS, notNull:true, default: ""}
-    ]
-};
-const ADMIN_USER_TABLE = {
-    NAME:"adminUsers",
-    COLS:[
-        {name:"id", type:"TEXT", notNull:true, default: "random()"},
-        {name:"username", type:"TEXT", primaryKey:true},
-        {name:"hashedpass", type:"TEXT", notNull:true}
-    ]
-};
-deepFreeze([APP_TABLE,ADMIN_USER_TABLE]);
+async function Admin_getByUsername(username) {
+    return await Admin.findOne({name:username});
+}
+async function Admin_add(username,hashedpass) {
+    return (await Admin.create({username,hashedpass})).id;
+}
+async function Admin_anyExists() {
+    return (await Admin.findOne()) != null;
+}
 
+async function Destroy() {
+    await App.destroy({where:{}});
+}
 
-
-function tableColsStr(cols) {
-    var slst = [];
-    for (var col of cols) {
-        var clst = typeof(col.type)=="string"?[col.name,col.type]:[col.name,"TEXT"];
-        if (col.enum) clst.push("CHECK("+col.name+" >= 0 AND "+col.name+" < "+col.enum.length+")")
-        if (col.notNull) clst.push("NOT NULL");
-        if (col.primaryKey) clst.push("PRIMARY KEY");
-        if (col.unique) clst.push("UNIQUE");
-        if (col.default) clst.push("DEFAULT("+col.default+")");
-        slst.push(clst.join(" "));
+(async()=>{ // TODO replace with better system
+    if ((await App.findOne()) == null) {
+        var apps = lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(v=>v.toJSON(true,true));
+        await App.bulkCreate(apps,{});
     }
-    return `(${slst.join(", ")})`;
-}
-
-function getAppValidKVPairs(/**@type {Application}*/app) {
-    var keys = [], values = [], appjson = app.toJSON(); const allowedKeys = ["name","url","approvalStatus","privacyStatus","platforms","subjects","gradeLevels"];
-    for (var key in appjson) if (allowedKeys.includes(key)) {
-        keys.push(key);
-        values.push(appjson[key]);
-    }
-    return {keys,values};
-}
-async function updateApp(/**@type {string}*/appId,/**@type {Application}*/app) {
-    var {keys,values} = getAppValidKVPairs(app);
-    values.push(appId);
-    await client.query({query:"UPDATE "+APP_TABLE.NAME+" SET "+keys.map(s=>`${s}=?`).join(",")+" WHERE id=?",values});
-    return;
-}
-async function addApp(/**@type {Application}*/app) {
-    var {keys,values} = getAppValidKVPairs(app);
-    var id = genUUID();
-    keys.push("id"); values.push(id);
-    await client.query({query:"INSERT INTO "+APP_TABLE.NAME+" ("+keys.join(",")+") VALUES ("+new Array(keys.length).fill("?").join(",")+")",values});
-    return id;
-}
-async function getApp(appId) {
-    var v = (await client.query({query:"SELECT * FROM "+APP_TABLE.NAME+" WHERE id=? LIMIT 1",values:[appId]}))[0][0];
-    return v?Application.parse(v):null;
-}
-async function delApp(appId) {
-    await client.query({query:"DELETE FROM "+APP_TABLE.NAME+" WHERE id=?",values:[appId]}); return;
-}
-async function searchApps(searchQuery) {
-    var {name,approvalStatus,privacyStatus,platforms,platformsRequireAll,gradeLevels,gradeLevelsRequireAll,subjects,subjectsRequireAll} = searchQuery;
-    var queryParams = [];
-    var query = "SELECT * FROM "+APP_TABLE.NAME;
-    var n = 0;
-    var append = (qstr,qprm)=>{
-        if (n++ == 0) query += " WHERE "+qstr;
-        else query += " AND "+qstr;
-        if (qprm) queryParams.push(qprm);
-    };
-    var appendArr = (pname,arr,reqAll)=>append(`(SELECT COUNT(*) FROM (
-        WITH split(word, str) AS (
-            SELECT '', ${pname}||','
-            UNION ALL SELECT
-            substr(str, 0, instr(str, ',')),
-            substr(str, instr(str, ',')+1)
-            FROM split WHERE str!=''
-        ) SELECT word FROM split WHERE word!='') WHERE word in ('${arr.join("','")}')) `+(reqAll?`== ${arr.length}`:"> 0")
-    );
-    
-    if (name) append("UPPER(name) LIKE ?",`%${name.toUpperCase()}%`)
-    if (platforms && platforms.length && platforms.every(v=>Number.isSafeInteger(v)))
-        appendArr("platforms",platforms,platformsRequireAll);
-    if (gradeLevels && gradeLevels.length && gradeLevels.every(v=>Number.isSafeInteger(v)))
-        appendArr("gradeLevels",gradeLevels,gradeLevelsRequireAll);
-    if (subjects && subjects.length && subjects.every(v=>Number.isSafeInteger(v)))
-        appendArr("subjects",subjects,subjectsRequireAll);
-    if (approvalStatus && approvalStatus.length && approvalStatus.every(v=>Number.isSafeInteger(v))) 
-        append(`approvalStatus in ('${approvalStatus.join("','")}')`);
-    if (privacyStatus && privacyStatus.length && privacyStatus.every(v=>Number.isSafeInteger(v))) 
-        append(`privacyStatus in ('${privacyStatus.join("','")}')`);
-    query += " ORDER BY name";
-
-    return (await client.query({query,values:queryParams}))[0].map(v=>Application.parse(v));
-}
-async function allApps() {
-    if (allAppsCache) return allAppsCache.map(v=>Application.parse(v));
-    else return (allAppsCache = (await client.query(`SELECT * FROM ${APP_TABLE.NAME} ORDER BY name`))[0]).map(v=>Application.parse(v));
-}
-
-
-async function getAdminByUsername(username) {
-    return (await client.query({query:`SELECT * FROM ${ADMIN_USER_TABLE.NAME} WHERE username=? LIMIT 1`,values:[username]}))[0][0];
-}
-async function createAdminAccount(username,hashedpass) {
-    var id = genUUID();
-    await client.query({query:`INSERT INTO ${ADMIN_USER_TABLE.NAME} (id,username,hashedpass) VALUES (?,?,?)`,values:[id,username,hashedpass]});
-    return id;
-}
-async function adminsExist() {
-    return (await client.query(`SELECT id FROM ${ADMIN_USER_TABLE.NAME}`))[0].length > 0;
-}
-
-
-async function tryInitDB() {
-    //await client.connect();
-
-    await Promise.all([
-        client.query("CREATE TABLE IF NOT EXISTS "+APP_TABLE.NAME+" "+tableColsStr(APP_TABLE.COLS)),
-        client.query("CREATE TABLE IF NOT EXISTS "+ADMIN_USER_TABLE.NAME+" "+tableColsStr(ADMIN_USER_TABLE.COLS))
-    ]);
-}
-
-
-(async()=>{
-    await tryInitDB();
-    if ((await client.query("SELECT id FROM "+APP_TABLE.NAME))[0].length == 0)
-        await Promise.all(lpcsvUtil.convertAppsCSV(lpcsvUtil.getAppsCSV()).map(app=>addApp(app)));
 })().catch(e=>{throw e});
 
-export default {
+const dbNew = {
     apps: {
-        search:searchApps,
-        get:getApp,
-        getAll:allApps,
-        add:addApp,
-        del:delApp,
-        update:updateApp
+        search: App_search,
+        add: App_make,
+        getAll: App_all,
+        get: App_get,
+        del: App_del,
+        update: App_update,
+        destroy: Destroy
     },
     admin: {
-        getByUsername: getAdminByUsername,
-        add: createAdminAccount,
-        anyExists: adminsExist
+        getByUsername: Admin_getByUsername,
+        add: Admin_add,
+        anyExists: Admin_anyExists
     }
 }
+export default dbNew;

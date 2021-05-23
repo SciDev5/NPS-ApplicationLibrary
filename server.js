@@ -121,12 +121,6 @@ app.get("/admin", async (req,res)=>{
 });
 
 
-app.get("/apps/destroy",(req,res)=>{
-    database.apps.destroy();
-    res.send("DESTROYED ALL APP ENTRIES");
-});
-
-
 app.get("/apps/search",async(req,res)=>{
     try {
         var {name,platforms,subjects,grades,approval,privacy,platformsRequireAll,gradeLevelsRequireAll,subjectsRequireAll} = req.query;

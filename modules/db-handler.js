@@ -75,9 +75,6 @@ async function Admin_anyExists() {
     return (await Admin.findOne()) != null;
 }
 
-async function Destroy() {
-    await App.destroy({where:{}});
-}
 
 (async()=>{ // TODO replace with better system
     if ((await App.findOne()) == null) {
@@ -93,8 +90,7 @@ const dbNew = {
         getAll: App_all,
         get: App_get,
         del: App_del,
-        update: App_update,
-        destroy: Destroy
+        update: App_update
     },
     admin: {
         getByUsername: Admin_getByUsername,

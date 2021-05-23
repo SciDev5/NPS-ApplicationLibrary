@@ -4,8 +4,7 @@ import { deepFreeze } from "./utils.js";
 import { APPROVAL_STATUSES, PRIVACY_STATUSES, PLATFORMS, SUBJECTS, GRADE_LEVELS, Application } from "../public/application.js";
 //import pg from "pg";
 import { v4 as genUUID } from "uuid";
-import {Sequelize} from "sequelize";
-var client = new Sequelize(process.env.DATABASE_URL, {dialectOptions:{ssl:{require:true, rejectUnauthorized: false}},dialect:"sqlite"});
+import client from "./sequelize.js";
 
 var allAppsCache = undefined;
 

@@ -11,6 +11,7 @@ import http from "http";
 import helmet from "helmet";
 import { v4 as UUIDv4 } from "uuid";
 import { readFileSync } from "fs";
+import dbNew from "./modules/db-new.js";
 const app = express();
 
 app.use(helmet());
@@ -120,6 +121,16 @@ app.get("/admin", async (req,res)=>{
     res.render("admin",{editor:await auth.getSignedInAdmin(req),code,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES});
 });
 
+
+app.get("/test/:name",async(req,res)=>{
+    res.json(await dbNew.app.search({name:req.params["name"]}));
+});
+app.get("/test",async(req,res)=>{
+    res.json(await dbNew.app.all());
+});
+app.get("/testmake/:name",async(req,res)=>{
+    res.json(await dbNew.app.make({name:req.params["name"]}));
+});
 
 app.get("/apps/search",async(req,res)=>{
     try {

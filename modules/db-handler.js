@@ -20,7 +20,7 @@ function App_modelToClass(v) {
 }
 
 async function App_all() {
-    return (await App.findAll()).map(App_modelToClass);
+    return (await App.findAll({order:[["name","ASC"]]})).map(App_modelToClass);
 }
 async function App_search(query) { 
     var {name,approval,privacy,platforms,platformsRequireAll,grades,gradeLevelsRequireAll,subjects,subjectsRequireAll} = query;
@@ -32,7 +32,7 @@ async function App_search(query) {
     if (isStringArrayInArray(PLATFORMS, platforms)) where.platforms = {[Op.contains]:platforms};
     if (isStringArrayInArray(GRADE_LEVELS, grades)) where.grades = {[Op.contains]:grades};
     if (isStringArrayInArray(SUBJECTS, subjects)) where.subjects = {[Op.contains]:subjects};
-    return (await App.findAll({where})).map(App_modelToClass);
+    return (await App.findAll({where,order:[["name","ASC"]]})).map(App_modelToClass);
 }
 async function App_make(query) {
     var {name,approval,privacy,platforms,grades,subjects} = query;

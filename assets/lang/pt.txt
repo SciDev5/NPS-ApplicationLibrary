@@ -126,3 +126,4 @@ application.subject.language = Idioma
 application.subject.cs = Ciência da computação
 application.subject.art = Arte
 application.subject.music = Música
+application.subject.sel      = SEL

@@ -126,3 +126,4 @@ application.subject.language = Язык
 application.subject.cs = Информатика
 application.subject.art = Искусство
 application.subject.music = Музыка
+application.subject.sel      = SEL

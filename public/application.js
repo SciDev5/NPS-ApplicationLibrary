@@ -2,13 +2,13 @@ const APPROVAL_STATUSES = ["UNK","APPROVED","14_PARENTAL_CONSENT","PARENT_INFORM
 const PRIVACY_STATUSES = ["UNK","COMPLIANT","NONCOMPLIANT","PARENTAL_CONSENT","INSTRUCTOR_ONLY","NO_INFO_COLLECTED","NOT_APPLICABLE"];
 const PLATFORMS = ["WINDOWS","MACOS","LINUX","ANDROID_PHONE","ANDROID_TABLET","IOS_PHONE","IOS_TABLET","WEB","CHROMEBOOK"];
 const GRADE_LEVELS = ["PRE_K","K","1","2","3","4","5","6","7","8","9","10","11","12"];
-const SUBJECTS = ["MATH","SCIENCE","HISTORY","ENGLISH","LANGUAGE","CS","ART","MUSIC"];
+const SUBJECTS = ["MATH","SCIENCE","HISTORY","ENGLISH","LANGUAGE","CS","ART","MUSIC","SEL"];
 
 const APPROVAL_STATUSES_NAME = ["unk","approved","14parent","parentInfo","pilot","instructor","pending","denied"].map(v=>"application.approvalStatus."+v);
 const PRIVACY_STATUSES_NAME = ["unk","compliant","noncompliant","parent","instructor","noInfo","na"].map(v=>"application.privacyStatus."+v);
 const PLATFORMS_NAME = ["windows","mac","linux","androidPhone","androidTablet","applePhone","appleTablet","web","chromebook"].map(v=>"application.platform."+v);
 const GRADE_LEVELS_NAME = ["preK","k","1","2","3","4","5","6","7","8","9","10","11","12"].map(v=>"application.gradeLevel."+v);
-const SUBJECTS_NAME = ["math", "science","history","english","language","cs","art","music"].map(v=>"application.subject."+v);
+const SUBJECTS_NAME = ["math", "science","history","english","language","cs","art","music","sel"].map(v=>"application.subject."+v);
 
 class Application {
     constructor(/** @type {{id?:number,name:string,platforms:string[],grades:string[],subjects:string[],url?:string,approval:string,privacy:string}} */ obj) {

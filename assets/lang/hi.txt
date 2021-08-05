@@ -126,3 +126,4 @@ application.subject.language = भाषा
 application.subject.cs = कंप्यूटर विज्ञान
 application.subject.art = कला
 application.subject.music = संगीत
+application.subject.sel      = SEL

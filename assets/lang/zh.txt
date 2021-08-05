@@ -126,3 +126,4 @@ application.subject.language = 语言
 application.subject.cs = 计算机科学
 application.subject.art = 艺术
 application.subject.music = 音乐
+application.subject.sel      = SEL

@@ -209,7 +209,7 @@ button {
     color: var(--fg-em);
     padding: 5px 15px;
 }
-.app > .more-info, .app > .edit-info, #add-element, #goto-admin-link, #admin-back-to-index-link, #sign-button, #create-admin-token-button {
+.app > .more-info, .app > .edit-info, #add-element, #goto-admin-link, #download-csv-link, #download-json-link, #admin-back-to-index-link, #sign-button, #create-admin-token-button {
     color: var(--fg-em);
     background: var(--bg);
     border: 1px solid var(--fg);
@@ -218,7 +218,7 @@ button {
     margin: 5px 5px;
     transition: color 0.2s, background 0.2s, border 0.2s;
 }
-.app > .more-info:hover, .app > .edit-info:hover, #add-element:hover, #goto-admin-link:hover, #admin-back-to-index-link:hover, #sign-button:hover, #create-admin-token-button:hover {
+.app > .more-info:hover, .app > .edit-info:hover, #add-element:hover, #goto-admin-link:hover, #download-csv-link:hover, #download-json-link:hover, #admin-back-to-index-link:hover, #sign-button:hover, #create-admin-token-button:hover {
     border: 1px solid var(--bg-inv);
     background: var(--bg-inv);
     color: var(--fg-inv);
@@ -513,11 +513,11 @@ input, #search-refresh-button-inline, #sign-button, #create-admin-token-button {
     padding: 0px 10px 10px 10px;
     text-align: center;
 }
-#add-element, #goto-admin-link, #admin-back-to-index-link {
+#add-element, #goto-admin-link, #download-csv-link, #download-json-link, #admin-back-to-index-link {
     width: unset;
     font-size: 14px;
 }
-#goto-admin-link, #admin-back-to-index-link {
+#goto-admin-link, #download-csv-link, #download-json-link, #admin-back-to-index-link {
     font-family: "Barlow", sans-serif;
     text-decoration: none;
 }

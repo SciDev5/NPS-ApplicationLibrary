@@ -59,7 +59,7 @@ app.get("/",async (req,res)=>{
     searchParams.push({id:"privacy",name:"application.privacyStatus",many:true,options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
     searchParams.push({id:"gradeLevel",name:"application.gradeLevel",many:true,options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))});
     var {lang,theme,translation} = await pageCommonInfo(req,res);
-    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:await auth.getSignedInAdmin(req)});
+    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:true ||(req.query.hasOwnProperty("noedit")?false:await auth.getSignedInAdmin(req))}); // TODO revert
 });
 app.get("/editor/:id",async (req,res)=>{
     var app = await database.apps.get(req.params["id"]);
@@ -192,6 +192,69 @@ app.post("/apps/add/",async(req,res)=>{
         res.json({sucess:false,reason:"error",error});
     }
 });
+
+/////// JANKY CODE HERE TO HOLD US OVER UNTIL V2 RELEASES
+app.post("/apps.json",async(req,res)=>{
+    await appsImport(req,res,v=>v);
+});
+async function appsExport(res,type,encode) {
+    try {
+        const data = encode((await database.apps.getAll()).map(v=>v.toJSON(false,true)));
+        res.header("Content-Type",type);
+        res.send(data);
+    } catch (e) {
+        console.error(e);
+        res.status(400);
+        res.send(e);
+    }
+}
+async function appsImport(req,res,decode) {
+    if (!await auth.getSignedInAdmin(req)) { res.json({success:false,reason:"unauthenticated"}); return; }
+    try {
+        const data = decode(req.body);
+        if (!(data instanceof Array)) throw new Error("body not of type array")
+        var ress = data.map(v=>database.apps.add(Application.parse(v)));
+        var ids = [];
+        for (var id of ress) ids.push(await id);
+        res.json({success:true,ids});
+    } catch (error) {
+        res.status(400);
+        res.json({sucess:false,reason:"error",error});
+    }
+}
+const APPS_ENT_ORDER = ["id","name","url","approval","privacy","platforms","subjects","grades"];
+/**
+ * @param {{[key:string]:string}[]} data
+ * @param {string[]} keys
+ * @param {string} separator
+ * @param {(v:string)=>string} preprocess*/
+ function xsvSerialize(data,keys,separator,preprocess) {
+    var lines = data.map(v=>keys.map(key=>preprocess(v[key])));
+    lines = [keys, ...lines];
+    return lines.map(v=>v.join(separator)).join("\n");
+}
+/**
+ * @param {string} data
+ * @param {string} separator*/
+function xsvDeserialize(data,separator) {
+    var lines = data.split("\n").map(v=>v.split(separator));
+    var keys = lines.splice(0,1)[0];
+    return lines.map(line=>Object.fromEntries(line.map((v,i)=>[keys[i],v])));
+}
+app.get("/apps.json",async(req,res)=>{
+    appsExport(res,"application/json",vs=>JSON.stringify(vs));
+});
+app.get("/apps.csv",async(req,res)=>{
+    appsExport(res,"text/csv",vs=>xsvSerialize(vs,APPS_ENT_ORDER,",",v=>{
+        if (/,|"/.test(v))
+            return `"${v.replace(/"/g,'""')}"`;
+        else return v;
+    }));
+});
+app.get("/apps.tsv",async(req,res)=>{
+    appsExport(res,"text/tab-separated-values",vs=>xsvSerialize(vs,APPS_ENT_ORDER,"\t",v=>v));
+});
+//////////\\\\
 
 
 const PORT = process.env.PORT||80, PORT_HTTPS = process.env.PORT_HTTPS||443;

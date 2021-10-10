@@ -20,6 +20,8 @@ html(lang=lang,editor=editor)
                 .edit-tools-container
                     button#add-element= translate("index.editor.addApp")
                     a#goto-admin-link(href="/admin?lang="+lang)= translate("index.editor.adminPage")
+                    a#download-csv-link(href="/apps.csv")= translate("index.editor.downloadCSV")
+                    a#download-json-link(href="/apps.json")= translate("index.editor.downloadJSON")
         main
             .apps-container
                 #search-refresh-popup

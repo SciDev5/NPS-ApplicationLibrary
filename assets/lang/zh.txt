@@ -12,6 +12,8 @@ index.search.namePlaceholder = 名称
 
 index.editor.addApp = 添加应用程序
 index.editor.adminPage = 转到管理页面
+index.editor.downloadCSV = 导出 CSV
+index.editor.downloadJSON = 导出 JSON
 
 
 ＃ 应用

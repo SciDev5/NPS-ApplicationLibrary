@@ -12,6 +12,8 @@ index.search.namePlaceholder = Name
 
 index.editor.addApp          = Add Application
 index.editor.adminPage       = Go to admin page
+index.editor.downloadCSV     = Export CSV
+index.editor.downloadJSON    = Export JSON
 
 
 # Application

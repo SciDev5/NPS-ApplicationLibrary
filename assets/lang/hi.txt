@@ -12,6 +12,8 @@ index.search.namePlaceholder = नाम
 
 index.editor.addApp = एप्लिकेशन जोड़ें
 index.editor.adminPage = व्यवस्थापक पृष्ठ पर जाएं
+index.editor.downloadCSV = निर्यात CSV
+index.editor.downloadJSON = निर्यात JSON
 
 
 # आवेदन

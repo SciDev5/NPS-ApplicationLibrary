@@ -59,7 +59,7 @@ app.get("/",async (req,res)=>{
     searchParams.push({id:"privacy",name:"application.privacyStatus",many:true,options:new Array(PRIVACY_STATUSES.length).fill().map((_,i)=>({id:PRIVACY_STATUSES[i],name:PRIVACY_STATUSES_NAME[i]}))});
     searchParams.push({id:"gradeLevel",name:"application.gradeLevel",many:true,options:new Array(GRADE_LEVELS.length).fill().map((_,i)=>({id:GRADE_LEVELS[i],name:GRADE_LEVELS_NAME[i]}))});
     var {lang,theme,translation} = await pageCommonInfo(req,res);
-    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:true ||(req.query.hasOwnProperty("noedit")?false:await auth.getSignedInAdmin(req))}); // TODO revert
+    res.render("index",{searchParams,lang,theme,translation,langNames:LANGUAGE_INTERNAL_NAMES,editor:req.query.hasOwnProperty("noedit")?false:await auth.getSignedInAdmin(req)});
 });
 app.get("/editor/:id",async (req,res)=>{
     var app = await database.apps.get(req.params["id"]);

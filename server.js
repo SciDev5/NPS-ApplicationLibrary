@@ -199,7 +199,7 @@ app.post("/apps.json",async(req,res)=>{
 });
 async function appsExport(res,type,encode) {
     try {
-        const data = encode((await database.apps.getAll()).map(v=>v.toJSON(false,true)));
+        const data = encode((await database.apps.getAll()).map(v=>v.toJSON(true,true)));
         res.header("Content-Type",type);
         res.send(data);
     } catch (e) {
